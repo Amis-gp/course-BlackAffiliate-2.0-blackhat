@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug LocalStorage</title>
+</head>
+<body>
+    <h1>Debug LocalStorage</h1>
+    <button onclick="showStorage()">Показати дані</button>
+    <button onclick="clearStorage()">Очистити дані</button>
+    <div id="output"></div>
+
+    <script>
+        function showStorage() {
+            const output = document.getElementById('output');
+            let html = '<h2>Дані в localStorage:</h2>';
+            
+            const users = localStorage.getItem('users');
+            const requests = localStorage.getItem('registrationRequests');
+            const currentUser = localStorage.getItem('currentUser');
+            
+            html += '<h3>Користувачі:</h3>';
+            html += '<pre>' + (users || 'Немає даних') + '</pre>';
+            
+            html += '<h3>Запити на реєстрацію:</h3>';
+            html += '<pre>' + (requests || 'Немає даних') + '</pre>';
+            
+            html += '<h3>Поточний користувач:</h3>';
+            html += '<pre>' + (currentUser || 'Немає даних') + '</pre>';
+            
+            output.innerHTML = html;
+        }
+        
+        function clearStorage() {
+            localStorage.clear();
+            alert('localStorage очищено');
+            showStorage();
+        }
+        
+        // Показати дані при завантаженні
+        showStorage();
+    </script>
+</body>
+</html>

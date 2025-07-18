@@ -35,8 +35,7 @@ export default function CourseNavigation({ currentLessonId, onLessonSelect }: Co
 
   return (
     <div className="w-80 bg-gray-900 border-r border-gray-800 h-screen overflow-y-auto">
-      <div className="p-6">
-        <h2 className="text-xl font-bold text-primary mb-6">Course Navigation</h2>
+      <div className="p-4">
         
         <div className="space-y-2">
           {courseData.map((section) => {

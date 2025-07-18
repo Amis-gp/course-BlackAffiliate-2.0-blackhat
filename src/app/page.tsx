@@ -3,12 +3,16 @@
 import { useState } from 'react';
 import CourseNavigation from '@/components/CourseNavigation';
 import LessonContent from '@/components/LessonContent';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import { courseData } from '@/data/courseData';
-import { Menu, X } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Menu, X, Settings, LogOut } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Home() {
   const [currentLessonId, setCurrentLessonId] = useState<string>('lesson-1-1');
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const { user, logout, isAdmin } = useAuth();
 
   const getCurrentLesson = () => {
     for (const section of courseData) {
@@ -53,56 +57,92 @@ export default function Home() {
   const hasNext = currentLessonIndex < allLessons.length - 1;
 
   return (
-    <div className="flex h-screen bg-black">
-      <div className={`fixed inset-0 z-50 lg:relative lg:z-auto transition-transform duration-300 ${
-        isMobileNavOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-      }`}>
-        <CourseNavigation 
-          currentLessonId={currentLessonId}
-          onLessonSelect={handleLessonSelect}
-        />
-      </div>
+    <ProtectedRoute>
+      <div className="min-h-screen bg-background flex">
+        {/* Mobile Navigation Overlay */}
+        {isMobileNavOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setIsMobileNavOpen(false)} />
+        )}
+        
+        {/* Sidebar Navigation */}
+        <div className={`fixed lg:static inset-y-0 left-0 z-50 w-80 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+          isMobileNavOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
+          <div className="flex items-center justify-between p-4 border-b border-gray-700">
+            <h2 className="text-lg font-semibold text-white lg:block hidden">Course Navigation</h2>
+            <h2 className="text-lg font-semibold text-white lg:hidden">Course Navigation</h2>
+            <button
+              onClick={() => setIsMobileNavOpen(false)}
+              className="text-gray-400 hover:text-white lg:hidden"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          
+          
+          
+          <CourseNavigation 
+            currentLessonId={currentLessonId} 
+            onLessonSelect={(lessonId) => {
+              setCurrentLessonId(lessonId);
+              setIsMobileNavOpen(false);
+            }} 
+          />{/* User Info and Controls */}
+          <div className="p-4 border-t border-gray-700">
+            <div className="text-sm text-gray-400 mb-2">Увійшли як:</div>
+            <div className="text-white font-medium mb-3">{user?.email}</div>
+            <div className="flex flex-col gap-2">
+              {isAdmin() && (
+                <Link href="/admin" className="flex items-center gap-2 text-sm bg-primary hover:bg-red-700 px-3 py-2 rounded-lg transition-colors">
+                  <Settings className="w-4 h-4" />
+                  Адмін панель
+                </Link>
+              )}
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 text-sm bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                Вийти
+              </button>
+            </div>
+          </div>
+        </div>
 
-      {isMobileNavOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setIsMobileNavOpen(false)}
-        />
-      )}
-
-      <div className="flex-1 flex flex-col">
-        <header className="bg-gray-900 border-b border-gray-800 p-4 lg:hidden">
-          <div className="flex items-center justify-between">
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col">
+          {/* Mobile Header */}
+          <div className="lg:hidden bg-gray-900 border-b border-gray-700 p-4 flex justify-between items-center">
             <button
               onClick={() => setIsMobileNavOpen(true)}
-              className="text-white hover:text-primary transition-colors"
+              className="text-white hover:text-gray-300"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="text-lg font-bold text-primary">BlackAffiliate 2.0</h1>
-            <div className="w-6" />
+            <div className="flex items-center gap-2">
+              {isAdmin() && (
+                <Link href="/admin" className="text-primary hover:text-red-400">
+                  <Settings className="w-5 h-5" />
+                </Link>
+              )}
+              <button onClick={logout} className="text-gray-400 hover:text-white">
+                <LogOut className="w-5 h-5" />
+              </button>
+            </div>
           </div>
-        </header>
 
-        <main className="flex-1 overflow-hidden flex flex-col">
-          <LessonContent 
-            lesson={currentLesson}
-            onPreviousLesson={handlePreviousLesson}
-            onNextLesson={handleNextLesson}
-            hasPrevious={hasPrevious}
-            hasNext={hasNext}
-          />
-        </main>
+          {/* Lesson Content */}
+          <div className="flex-1">
+            <LessonContent 
+              lesson={currentLesson}
+              onPreviousLesson={handlePreviousLesson}
+              onNextLesson={handleNextLesson}
+              hasPrevious={hasPrevious}
+              hasNext={hasNext}
+            />
+          </div>
+        </div>
       </div>
-
-      {isMobileNavOpen && (
-        <button
-          onClick={() => setIsMobileNavOpen(false)}
-          className="fixed top-4 right-4 z-50 bg-gray-900 text-white p-2 rounded-lg lg:hidden"
-        >
-          <X className="w-6 h-6" />
-        </button>
-      )}
-    </div>
+    </ProtectedRoute>
   );
 }
