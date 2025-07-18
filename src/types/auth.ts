@@ -37,6 +37,7 @@ export interface AuthState {
 }
 
 export interface AuthContextType extends AuthState {
+  isInitializing: boolean;
   login: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string; isPending?: boolean; requestId?: string }>;
   logout: () => void;
   isAdmin: () => boolean;

@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, role } = await request.json();
+    const { email, password, name, role } = await request.json();
     
     const existingUser = await db.user.findUnique({
       where: { email }
@@ -40,7 +40,9 @@ export async function POST(request: NextRequest) {
       data: {
         email,
         password,
-        role: role || 'user'
+        name: name || email,
+        role: role || 'user',
+        isApproved: true
       }
     });
     

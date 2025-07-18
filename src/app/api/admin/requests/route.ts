@@ -27,7 +27,8 @@ export async function POST(request: NextRequest) {
           email: requestToApprove.email,
           password: requestToApprove.password,
           name: requestToApprove.name,
-          role: 'user'
+          role: 'user',
+          isApproved: true
         }
       });
       

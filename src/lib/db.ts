@@ -15,6 +15,7 @@ interface User {
   role: string;
   isApproved: boolean;
   createdAt: Date;
+  lastLogin?: Date;
 }
 
 interface RegistrationRequest {
@@ -122,6 +123,11 @@ export async function initializeDatabase() {
 
 export const db = {
   user: {
+    findUnique: async (options: { where: { email: string } }) => {
+      const users = readUsers();
+      return users.find(user => user.email === options.where.email) || null;
+    },
+
     findFirst: async (options: { where: Partial<User> }) => {
       const users = readUsers();
       const { where } = options;
@@ -145,8 +151,26 @@ export const db = {
       return foundUser || null;
     },
     
-    findMany: async () => {
-      return readUsers();
+    findMany: async (options?: { select?: any; orderBy?: any }) => {
+      let users = readUsers();
+      
+      if (options?.orderBy?.createdAt === 'desc') {
+        users = users.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      }
+      
+      if (options?.select) {
+        return users.map(user => {
+          const selected: any = {};
+          Object.keys(options.select).forEach(key => {
+            if (options.select[key] && user.hasOwnProperty(key)) {
+              selected[key] = user[key as keyof User];
+            }
+          });
+          return selected;
+        });
+      }
+      
+      return users;
     },
     
     create: async (options: { data: Omit<User, 'id' | 'createdAt'> }) => {
