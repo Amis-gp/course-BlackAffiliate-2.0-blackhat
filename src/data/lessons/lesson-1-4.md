@@ -1,0 +1,1 @@
+Essential terminology and concepts you need to master in affiliate marketing.

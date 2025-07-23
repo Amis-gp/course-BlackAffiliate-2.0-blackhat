@@ -3,45 +3,45 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Ініціалізація бази даних...');
+  console.log('Initializing the database...');
   
-  // Перевіряємо чи існує адміністратор
+  // Check if the administrator exists
   const adminExists = await prisma.user.findFirst({
     where: { role: 'admin' }
   });
 
   if (!adminExists) {
-    // Створюємо адміністратора
+    // Create an administrator
     await prisma.user.create({
       data: {
         email: 'stepan@advantage-agency.co',
         password: 'admin',
-        name: 'Степан Адміністратор',
+        name: 'Stepan Administrator',
         role: 'admin'
       }
     });
-    console.log('✅ Створено адміністратора: stepan@advantage-agency.co / admin');
+    console.log('✅ Administrator created: stepan@advantage-agency.co / admin');
 
-    // Створюємо тестового користувача
+    // Create a test user
     await prisma.user.create({
       data: {
         email: 'user@example.com',
         password: 'user123',
-        name: 'Тестовий користувач',
+        name: 'Test User',
         role: 'user'
       }
     });
-    console.log('✅ Створено тестового користувача: user@example.com / user123');
+    console.log('✅ Test user created: user@example.com / user123');
   } else {
-    console.log('ℹ️ Адміністратор вже існує');
+    console.log('ℹ️ Administrator already exists');
   }
   
-  console.log('✅ База даних готова до роботи!');
+  console.log('✅ The database is ready to work!');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Помилка ініціалізації:', e);
+    console.error('❌ Initialization error:', e);
     process.exit(1);
   })
   .finally(async () => {

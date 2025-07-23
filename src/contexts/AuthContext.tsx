@@ -96,13 +96,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           console.error('💥 AuthContext: Error parsing error response:', parseError);
           return {
             success: false,
-            message: 'Помилка сервера. Спробуйте ще раз.',
+            message: 'Server error. Please try again.',
           };
         }
         
         const result = {
           success: false,
-          message: data.message || 'Помилка входу. Спробуйте ще раз.',
+          message: data.message || 'Login error. Please try again.',
           isPending: data.isPending,
           requestId: data.requestId,
         };
@@ -119,7 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error('💥 AuthContext: Error parsing success response:', parseError);
         return {
           success: false,
-          message: 'Помилка обробки відповіді сервера.',
+          message: 'Error processing server response.',
         };
       }
 
@@ -142,7 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: true };
     } catch (error) {
       console.error('💥 AuthContext: Catch block - Login error:', error);
-      return { success: false, message: 'Не вдалося з\'єднатися з сервером. Перевірте інтернет-з\'єднання.' };
+      return { success: false, message: 'Could not connect to the server. Check your internet connection.' };
     } finally {
       console.log('🏁 AuthContext: Setting isLoading to false');
       setIsLoading(false);
@@ -206,9 +206,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json();
       
       if (data.success) {
-        // Відправляємо повідомлення в Telegram якщо створено новий запит
+        // Send a message to Telegram if a new request is created
         if (data.request) {
-          const message = `🔔 Новий запит на реєстрацію\n\n📧 Email: ${data.request.email}\n📅 Дата: ${new Date(data.request.createdAt).toLocaleDateString('uk-UA')}, ${new Date(data.request.createdAt).toLocaleTimeString('uk-UA')}\n\n⏳ Очікує підтвердження адміністратора`;
+          const message = `🔔 New registration request\n\n📧 Email: ${data.request.email}\n📅 Date: ${new Date(data.request.createdAt).toLocaleDateString('en-US')}, ${new Date(data.request.createdAt).toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
           await sendTelegramNotification(message);
         }
         
@@ -219,7 +219,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
       return false;
     } catch (error) {
-      console.error('Помилка реєстрації:', error);
+      console.error('Registration error:', error);
       setIsLoading(false);
       return false;
     }
@@ -246,7 +246,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setRegistrationRequests(formattedRequests);
       }
     } catch (error) {
-      console.error('Помилка завантаження запитів:', error);
+      console.error('Error loading requests:', error);
     }
   };
 
@@ -266,7 +266,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setRegistrationRequests(prev => prev.filter(r => r.id !== requestId));
         
         if (data.request) {
-          const message = `✅ <b>Реєстрацію підтверджено</b>\n\n📧 Email: ${data.request.email}\n👤 Користувач тепер має доступ до курсу`;
+          const message = `✅ <b>Registration approved</b>\n\n📧 Email: ${data.request.email}\n👤 The user now has access to the course`;
           await sendTelegramNotification(message);
         }
         
@@ -275,7 +275,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       return false;
     } catch (error) {
-      console.error('Помилка підтвердження реєстрації:', error);
+      console.error('Error approving registration:', error);
       return false;
     }
   };
@@ -296,7 +296,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setRegistrationRequests(prev => prev.filter(r => r.id !== requestId));
         
         if (data.request) {
-          const message = `❌ <b>Реєстрацію відхилено</b>\n\n📧 Email: ${data.request.email}`;
+          const message = `❌ <b>Registration rejected</b>\n\n📧 Email: ${data.request.email}`;
           await sendTelegramNotification(message);
         }
         
@@ -305,7 +305,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       return false;
     } catch (error) {
-      console.error('Помилка відхилення реєстрації:', error);
+      console.error('Error rejecting registration:', error);
       return false;
     }
   };
@@ -324,13 +324,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       return {
         success: data.success,
-        message: data.message || (data.success ? 'Нагадування відправлено' : 'Помилка відправки')
+        message: data.message || (data.success ? 'Reminder sent' : 'Error sending')
       };
     } catch (error) {
-      console.error('Помилка нагадування:', error);
+      console.error('Reminder error:', error);
       return {
         success: false,
-        message: 'Помилка відправки нагадування'
+        message: 'Error sending reminder'
       };
     }
   };

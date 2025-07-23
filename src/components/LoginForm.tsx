@@ -34,7 +34,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
 
     if (!credentials.email || !credentials.password) {
       console.log('⚠️ LoginForm: Empty fields validation failed');
-      setError('Будь ласка, заповніть всі поля');
+      setError('Please fill in all fields');
       return;
     }
 
@@ -57,7 +57,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
         setError('');
       } else if (!result.success) {
         console.log('❌ LoginForm: Login failed, setting error message');
-        const errorMessage = result.message || 'Невірний email або пароль.';
+        const errorMessage = result.message || 'Invalid email or password.';
         console.log('📝 LoginForm: Error message:', errorMessage);
         setError(errorMessage);
         setIsPending(false);
@@ -65,7 +65,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
       }
     } catch (err) {
       console.error('💥 LoginForm: Catch block - Login error in component:', err);
-      setError('Сталася помилка при спробі входу. Спробуйте ще раз.');
+      setError('An error occurred while trying to log in. Please try again.');
       setIsPending(false);
       setRequestId(null);
     }
@@ -81,7 +81,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
       setRemindMessage(result.message);
     } catch (err) {
       console.error('Remind error:', err);
-      setRemindMessage('Помилка відправки нагадування');
+      setRemindMessage('Error sending reminder');
     }
   };
 
@@ -89,8 +89,8 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-white mb-2">Вхід до курсу</h2>
-          <p className="text-gray-400">Введіть свої дані для доступу</p>
+          <h2 className="text-3xl font-bold text-white mb-2">Course Login</h2>
+          <p className="text-gray-400">Enter your credentials to access</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -105,7 +105,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
                 type="email"
                 value={credentials.email}
                 onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
-                className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 bg-[#0f1012] border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="your@email.com"
                 required
               />
@@ -114,7 +114,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-              Пароль
+              Password
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -123,8 +123,8 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
                 type={showPassword ? 'text' : 'password'}
                 value={credentials.password}
                 onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
-                className="w-full pl-10 pr-12 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Введіть пароль"
+                className="w-full pl-10 pr-12 py-3 bg-[#0f1012] border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Enter your password"
                 required
               />
               <button
@@ -148,13 +148,13 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
 
           {isPending && (
             <div className="bg-yellow-900/50 border border-yellow-700 text-yellow-300 px-4 py-3 rounded-lg">
-              <p className="mb-3">Ваш акаунт ще не підтверджений адміністратором. Очікуйте підтвердження.</p>
+              <p className="mb-3">Your account has not yet been approved by the administrator. Please wait for confirmation.</p>
               <button
                 type="button"
                 onClick={handleRemindAdmin}
                 className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
-                Нагадати про себе
+                Remind Admin
               </button>
               {remindMessage && (
                 <p className="mt-2 text-sm text-yellow-200">{remindMessage}</p>
@@ -167,18 +167,18 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
             disabled={isLoading}
             className="w-full bg-primary hover:bg-red-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
           >
-            {isLoading ? 'Вхід...' : 'Увійти'}
+            {isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
         <div className="text-center">
           <p className="text-gray-400 text-sm mb-4">
-            Немає акаунту?{' '}
+            Don't have an account?{' '}
             <button
               onClick={onRegisterClick}
               className="text-primary hover:text-red-400 transition-colors font-medium"
             >
-              Зареєструватися
+              Register
             </button>
           </p>
           

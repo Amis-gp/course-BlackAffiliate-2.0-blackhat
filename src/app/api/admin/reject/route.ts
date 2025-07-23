@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     const requestToReject = requests.find(req => req.id === requestId);
     
     if (!requestToReject) {
-      return NextResponse.json({ success: false, message: 'Запит не знайдено' }, { status: 404 });
+      return NextResponse.json({ success: false, message: 'Request not found' }, { status: 404 });
     }
     
     await db.registrationRequest.delete({
@@ -18,10 +18,10 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({ 
       success: true, 
-      message: 'Запит відхилено',
+      message: 'Request rejected',
       request: requestToReject
     });
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }

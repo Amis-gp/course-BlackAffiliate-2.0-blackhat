@@ -17,7 +17,7 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
   if (isInitializing) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-xl">Завантаження...</div>
+        <div className="text-white text-xl">Loading...</div>
       </div>
     );
   }
@@ -37,8 +37,8 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Доступ заборонено</h1>
-          <p className="text-gray-400">У вас немає прав адміністратора для доступу до цієї сторінки</p>
+          <h1 className="text-2xl font-bold text-white mb-4">Access denied</h1>
+          <p className="text-gray-400">You do not have administrator rights to access this page</p>
         </div>
       </div>
     );

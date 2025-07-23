@@ -24,13 +24,13 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Паролі не співпадають');
+      setError('Passwords do not match');
       setIsLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Пароль повинен містити мінімум 6 символів');
+      setError('Password must be at least 6 characters long');
       setIsLoading(false);
       return;
     }
@@ -46,10 +46,10 @@ export default function RegisterForm() {
           setIsRegistered(true);
         }
       } else {
-        setError('Користувач з таким email вже існує');
+        setError('User with this email already exists');
       }
     } catch (error) {
-      setError('Помилка при реєстрації. Спробуйте ще раз.');
+      setError('Registration error. Please try again.');
     }
 
     setIsLoading(false);
@@ -59,25 +59,25 @@ export default function RegisterForm() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center px-4">
         <div className="max-w-md w-full">
-          <div className="bg-gray-900 rounded-lg p-8 text-center">
+          <div className="bg-[#0f1012] rounded-lg p-8 text-center">
             <div className="bg-green-600/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-500" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
-              {isResent ? 'Запит повторно надіслано!' : 'Запит надіслано!'}
+              {isResent ? 'Request Resent!' : 'Request Sent!'}
             </h2>
             <p className="text-gray-300 mb-6">
               {isResent 
-                ? 'Ваш запит на реєстрацію повторно надіслано адміністратору. Запит вже існує і очікує підтвердження.'
-                : 'Ваш запит на реєстрацію надіслано адміністратору. Ви отримаєте доступ до курсу після підтвердження.'
+                ? 'Your registration request has been resent to the administrator. The request already exists and is awaiting approval.'
+                : 'Your registration request has been sent to the administrator. You will get access to the course after approval.'
               }
             </p>
             <div className="bg-gray-800 rounded-lg p-4 mb-6">
-              <p className="text-sm text-gray-400 mb-2">Ваш email:</p>
+              <p className="text-sm text-gray-400 mb-2">Your email:</p>
               <p className="text-white font-medium">{formData.email}</p>
             </div>
             <p className="text-sm text-gray-400">
-              Адміністратор отримав сповіщення в Telegram і розгляне ваш запит найближчим часом.
+              The administrator has been notified via Telegram and will review your request shortly.
             </p>
           </div>
         </div>
@@ -89,15 +89,15 @@ export default function RegisterForm() {
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Реєстрація</h1>
-          <p className="text-gray-400">Створіть акаунт для доступу до курсу</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Registration</h1>
+          <p className="text-gray-400">Create an account to access the course</p>
         </div>
 
-        <div className="bg-gray-900 rounded-lg p-8">
+        <div className="bg-[#0f1012] rounded-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email адреса
+                Email address
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -114,7 +114,7 @@ export default function RegisterForm() {
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Пароль
+                Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -123,7 +123,7 @@ export default function RegisterForm() {
                   value={formData.password}
                   onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                   className="w-full pl-10 pr-12 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Введіть пароль"
+                  placeholder="Enter your password"
                   required
                   minLength={6}
                 />
@@ -139,7 +139,7 @@ export default function RegisterForm() {
 
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Підтвердження паролю
+                Confirm Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -148,7 +148,7 @@ export default function RegisterForm() {
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                   className="w-full pl-10 pr-12 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Повторіть пароль"
+                  placeholder="Repeat your password"
                   required
                   minLength={6}
                 />
@@ -178,7 +178,7 @@ export default function RegisterForm() {
               ) : (
                 <>
                   <UserPlus className="w-5 h-5" />
-                  Зареєструватися
+                  Register
                 </>
               )}
             </button>
@@ -186,9 +186,9 @@ export default function RegisterForm() {
 
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
-              Вже маєте акаунт?{' '}
+              Already have an account?{' '}
               <a href="/" className="text-primary hover:text-red-400 transition-colors">
-                Увійти
+                Login
               </a>
             </p>
           </div>

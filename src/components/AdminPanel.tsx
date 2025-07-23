@@ -27,7 +27,7 @@ export default function AdminPanel() {
         setUsers(data.users);
       }
     } catch (error) {
-      console.error('Помилка завантаження користувачів:', error);
+      console.error('Error loading users:', error);
     }
   };
 
@@ -56,17 +56,17 @@ export default function AdminPanel() {
         setNewUser({ email: '', password: '', role: 'user' });
         setShowAddForm(false);
       } else {
-        alert(data.message || 'Помилка створення користувача');
+        alert(data.message || 'Error creating user');
       }
     } catch (error) {
-      console.error('Помилка створення користувача:', error);
-      alert('Помилка створення користувача');
+      console.error('Error creating user:', error);
+      alert('Error creating user');
     }
   };
 
   const handleDeleteUser = async (userId: string) => {
     if (userId === user?.id) {
-      alert('Ви не можете видалити свій власний акаунт');
+      alert('You cannot delete your own account');
       return;
     }
     
@@ -80,11 +80,11 @@ export default function AdminPanel() {
       if (data.success) {
         await loadUsers();
       } else {
-        alert(data.message || 'Помилка видалення користувача');
+        alert(data.message || 'Error deleting user');
       }
     } catch (error) {
-      console.error('Помилка видалення користувача:', error);
-      alert('Помилка видалення користувача');
+      console.error('Error deleting user:', error);
+      alert('Error deleting user');
     }
   };
 
@@ -108,22 +108,22 @@ export default function AdminPanel() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Адміністративна панель</h1>
-            <p className="text-gray-400">Управління користувачами курсу</p>
+            <h1 className="text-3xl font-bold mb-2">Admin Panel</h1>
+            <p className="text-gray-400">Manage course users</p>
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
             <div className="text-left sm:text-right w-full sm:w-auto">
-              <p className="text-sm text-gray-400">Увійшли як</p>
+              <p className="text-sm text-gray-400">Logged in as</p>
               <p className="font-medium">{user?.email}</p>
             </div>
             <Link href="/" className="flex items-center justify-center w-full sm:w-auto gap-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition-colors">
               <ArrowLeft className="w-4 h-4" />
-              Назад до курсу
+              Back to course
             </Link>
           </div>
         </div>
 
-        <div className="bg-gray-900 rounded-lg p-4 sm:p-6">
+        <div className="bg-[#0f1012] rounded-lg p-4 sm:p-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div className="flex flex-wrap gap-2">
               <button
@@ -134,7 +134,7 @@ export default function AdminPanel() {
                     : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                 }`}
               >
-                Користувачі ({users.length})
+                Users ({users.length})
               </button>
               <button
                 onClick={() => setActiveTab('requests')}
@@ -145,7 +145,7 @@ export default function AdminPanel() {
                 }`}
               >
                 <Bell className="w-4 h-4" />
-                Запити
+                Requests
                 {registrationRequests.length > 0 && (
                   <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center ml-2">
                     {registrationRequests.length}
@@ -159,14 +159,14 @@ export default function AdminPanel() {
                 className="flex items-center gap-2 bg-primary hover:bg-red-700 px-4 py-2 rounded-lg transition-colors w-full md:w-auto justify-center"
               >
                 <Plus className="w-4 h-4" />
-                {showAddForm ? 'Сховати форму' : 'Додати користувача'}
+                {showAddForm ? 'Hide Form' : 'Add User'}
               </button>
             )}
           </div>
 
           {activeTab === 'users' && showAddForm && (
             <div className="bg-gray-800 rounded-lg p-4 mb-6">
-              <h3 className="text-lg font-medium mb-4">Новий користувач</h3>
+              <h3 className="text-lg font-medium mb-4">New User</h3>
               <form onSubmit={handleAddUser} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -184,29 +184,29 @@ export default function AdminPanel() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Пароль
+                      Password
                     </label>
                     <input
                       type="password"
                       value={newUser.password}
                       onChange={(e) => setNewUser(prev => ({ ...prev, password: e.target.value }))}
                       className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Пароль"
+                      placeholder="Password"
                       required
                     />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Роль
+                    Role
                   </label>
                   <select
                     value={newUser.role}
                     onChange={(e) => setNewUser(prev => ({ ...prev, role: e.target.value as 'admin' | 'user' }))}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
                   >
-                    <option value="user">Користувач</option>
-                    <option value="admin">Адміністратор</option>
+                    <option value="user">User</option>
+                    <option value="admin">Administrator</option>
                   </select>
                 </div>
                 <div className="flex gap-2">
@@ -214,14 +214,14 @@ export default function AdminPanel() {
                     type="submit"
                     className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors"
                   >
-                    Створити
+                    Create
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowAddForm(false)}
                     className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg transition-colors"
                   >
-                    Скасувати
+                    Cancel
                   </button>
                 </div>
               </form>
@@ -243,19 +243,19 @@ export default function AdminPanel() {
                         {userItem.role === 'admin' && (
                           <div className="flex items-center gap-1 bg-primary/20 text-primary px-2 py-1 rounded text-xs">
                             <Shield className="w-3 h-3" />
-                            Адмін
+                            Admin
                           </div>
                         )}
                       </div>
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-gray-400 mt-2">
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
-                          <span>Створено: {new Date(userItem.createdAt).toLocaleDateString('uk-UA')}</span>
+                          <span>Created: {new Date(userItem.createdAt).toLocaleDateString('en-US')}</span>
                         </div>
                         {userItem.lastLogin && (
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4" />
-                            <span>Останній вхід: {new Date(userItem.lastLogin).toLocaleDateString('uk-UA')}</span>
+                            <span>Last login: {new Date(userItem.lastLogin).toLocaleDateString('en-US')}</span>
                           </div>
                         )}
                       </div>
@@ -265,10 +265,10 @@ export default function AdminPanel() {
                     onClick={() => handleDeleteUser(userItem.id)}
                     disabled={userItem.id === user?.id}
                     className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed p-2 rounded-lg transition-colors w-full md:w-auto flex items-center justify-center gap-2"
-                    title={userItem.id === user?.id ? 'Не можна видалити свій акаунт' : 'Видалити користувача'}
+                    title={userItem.id === user?.id ? 'You cannot delete your own account' : 'Delete user'}
                   >
                     <Trash2 className="w-4 h-4" />
-                    <span className="md:hidden">Видалити</span>
+                    <span className="md:hidden">Delete</span>
                   </button>
                 </div>
               ))}
@@ -280,7 +280,7 @@ export default function AdminPanel() {
               {registrationRequests.length === 0 ? (
                 <div className="text-center py-8">
                   <Clock className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                  <p className="text-gray-400">Немає запитів на реєстрацію</p>
+                  <p className="text-gray-400">No registration requests</p>
                 </div>
               ) : (
                 registrationRequests.map((request) => (
@@ -296,12 +296,12 @@ export default function AdminPanel() {
                             <span className="font-medium break-all">{request.email}</span>
                             <div className="flex items-center gap-1 bg-orange-600/20 text-orange-500 px-2 py-1 rounded text-xs">
                               <Clock className="w-3 h-3" />
-                              Очікує
+                              Pending
                             </div>
                           </div>
                           <div className="flex items-center gap-2 text-sm text-gray-400 mt-2">
                             <Calendar className="w-4 h-4" />
-                            <span>Запит від: {new Date(request.createdAt).toLocaleString('uk-UA')}</span>
+                            <span>Request from: {new Date(request.createdAt).toLocaleString('en-US')}</span>
                           </div>
                         </div>
                       </div>
@@ -309,18 +309,18 @@ export default function AdminPanel() {
                         <button
                           onClick={() => handleApproveRequest(request.id)}
                           className="bg-green-600 hover:bg-green-700 p-2 rounded-lg transition-colors flex-1 flex items-center justify-center gap-2"
-                          title="Підтвердити реєстрацію"
+                          title="Approve registration"
                         >
                           <Check className="w-4 h-4" />
-                          <span className="md:hidden">Підтвердити</span>
+                          <span className="md:hidden">Approve</span>
                         </button>
                         <button
                           onClick={() => handleRejectRequest(request.id)}
                           className="bg-red-600 hover:bg-red-700 p-2 rounded-lg transition-colors flex-1 flex items-center justify-center gap-2"
-                          title="Відхилити реєстрацію"
+                          title="Reject registration"
                         >
                           <X className="w-4 h-4" />
-                          <span className="md:hidden">Відхилити</span>
+                          <span className="md:hidden">Reject</span>
                         </button>
                       </div>
                     </div>

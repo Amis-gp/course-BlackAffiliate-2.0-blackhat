@@ -1,8 +1,12 @@
 'use client';
 
-import { Play, FileText, HelpCircle, Download, ExternalLink } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Play, FileText, HelpCircle, Download } from 'lucide-react';
 import { Lesson } from '@/data/courseData';
 import Footer from '@/components/Footer';
+import { useProgress } from '@/contexts/ProgressContext';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface LessonContentProps {
   lesson: Lesson;
@@ -13,6 +17,50 @@ interface LessonContentProps {
 }
 
 export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, hasPrevious, hasNext }: LessonContentProps) {
+  const { completeLesson } = useProgress();
+  const [content, setContent] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const startTime = Date.now();
+
+    return () => {
+      const endTime = Date.now();
+      const timeSpent = endTime - startTime;
+
+      if (timeSpent >= 10000) {
+        completeLesson(lesson.id);
+      }
+    };
+  }, [lesson.id, completeLesson]);
+
+  useEffect(() => {
+    if (lesson.contentPath) {
+      setIsLoading(true);
+      setError(null);
+      fetch(`/api/lessons/${lesson.id}`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('Failed to fetch lesson content');
+          }
+          return res.json();
+        })
+        .then(data => {
+          setContent(data.content);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setError('Could not load lesson content. Please try again later.');
+          setIsLoading(false);
+        });
+    } else {
+      setContent('Content for this lesson will be available soon.');
+      setIsLoading(false);
+    }
+  }, [lesson.id, lesson.contentPath]);
+
   const getLessonTypeInfo = (type: Lesson['type']) => {
     switch (type) {
       case 'lesson':
@@ -64,7 +112,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
 
         {lesson.videoUrl && (
           <div className="mb-8">
-            <div className="aspect-video bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
+            <div className="aspect-video bg-[#0f1012] rounded-lg border border-gray-800 overflow-hidden">
               <video 
                 className="w-full h-full object-cover"
                 controls
@@ -77,18 +125,24 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
           </div>
         )}
 
-        <div className="prose prose-invert max-w-none">
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
+        <div className="prose prose-lg max-w-none dark:prose-invert">
+          <div className="bg-[#0f1012] border border-gray-800 rounded-lg p-6 mb-8">
             <h3 className="text-xl font-semibold text-primary mb-4">Lesson Overview</h3>
             <div className="text-gray-300 leading-relaxed whitespace-pre-line prose prose-invert max-w-none">
-              <div dangerouslySetInnerHTML={{
-                __html: (lesson.content || 'Content for this lesson will be available soon.')
-                  .replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary font-semibold">$1</strong>')
-                  .replace(/## (.*?)\n/g, '<h2 class="text-xl font-bold text-primary mt-8 -mb-4">$1</h2>')
-                  .replace(/\n\n/g, '</p><p class="mb-4">')
-                  .replace(/^(.)/g, '<p class="mb-4">$1')
-                  .replace(/(.*)$/g, '$1</p>')
-              }} />
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : error ? (
+                <p className="text-red-500">{error}</p>
+              ) : (
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    img: ({node, ...props}) => <img {...props} className="rounded-lg mx-auto" />
+                  }}
+                >
+                  {content}
+                </ReactMarkdown>
+              )}
             </div>
           </div>
         </div>
@@ -98,7 +152,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
             <h3 className="text-xl font-semibold text-primary mb-4">Additional Materials</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {lesson.files.map((file, index) => (
-                <div key={index} className="bg-gray-900 border border-gray-800 rounded-lg p-4 flex items-center justify-between">
+                <div key={index} className="bg-[#0f1012] border border-gray-800 rounded-lg p-4 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <FileText className="w-5 h-5 text-primary" />
                     <span className="text-white">{file}</span>

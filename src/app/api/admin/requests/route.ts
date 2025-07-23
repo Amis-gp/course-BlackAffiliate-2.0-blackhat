@@ -6,7 +6,7 @@ export async function GET() {
     const requests = await db.registrationRequest.findMany();
     return NextResponse.json({ success: true, requests });
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }
 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       const requestToApprove = requests.find(req => req.id === requestId);
       
       if (!requestToApprove) {
-        return NextResponse.json({ success: false, message: 'Запит не знайдено' }, { status: 404 });
+        return NextResponse.json({ success: false, message: 'Request not found' }, { status: 404 });
       }
       
       await db.user.create({
@@ -36,17 +36,17 @@ export async function POST(request: NextRequest) {
         where: { id: requestId }
       });
       
-      return NextResponse.json({ success: true, message: 'Запит підтверджено' });
+      return NextResponse.json({ success: true, message: 'Request approved' });
     } else if (action === 'reject') {
       await db.registrationRequest.delete({
         where: { id: requestId }
       });
       
-      return NextResponse.json({ success: true, message: 'Запит відхилено' });
+      return NextResponse.json({ success: true, message: 'Request rejected' });
     }
     
-    return NextResponse.json({ success: false, message: 'Невідома дія' }, { status: 400 });
+    return NextResponse.json({ success: false, message: 'Unknown action' }, { status: 400 });
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }

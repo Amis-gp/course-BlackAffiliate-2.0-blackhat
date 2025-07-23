@@ -19,8 +19,8 @@ export async function GET(request: NextRequest) {
     
     return NextResponse.json({ success: true, users });
   } catch (error) {
-    console.error('Помилка отримання користувачів:', error);
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    console.error('Error fetching users:', error);
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     });
     
     if (existingUser) {
-      return NextResponse.json({ success: false, message: 'Користувач з таким email вже існує' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'User with this email already exists' }, { status: 400 });
     }
     
     const newUser = await db.user.create({
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({ 
       success: true, 
-      message: 'Користувача створено',
+      message: 'User created',
       user: {
         id: newUser.id,
         email: newUser.email,
@@ -57,8 +57,8 @@ export async function POST(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Помилка створення користувача:', error);
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    console.error('Error creating user:', error);
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }
 
@@ -68,16 +68,16 @@ export async function DELETE(request: NextRequest) {
     const userId = searchParams.get('id');
     
     if (!userId) {
-      return NextResponse.json({ success: false, message: 'ID користувача не вказано' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'User ID not specified' }, { status: 400 });
     }
     
     await db.user.delete({
       where: { id: userId }
     });
     
-    return NextResponse.json({ success: true, message: 'Користувача видалено' });
+    return NextResponse.json({ success: true, message: 'User deleted' });
   } catch (error) {
-    console.error('Помилка видалення користувача:', error);
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    console.error('Error deleting user:', error);
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }

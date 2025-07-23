@@ -34,14 +34,10 @@ export default function Footer() {
       name: 'Blog',
       url: 'https://www.advantage-agency.co/blog'
     },
-    {
-      name: 'Cases',
-      url: 'https://www.advantage-agency.co/cases'
-    }
   ];
 
   return (
-    <footer className="bg-gray-900 text-white mt-10">
+    <footer className="bg-[#0f1012] text-white mt-10">
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">

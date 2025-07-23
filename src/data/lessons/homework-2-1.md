@@ -1,0 +1,1 @@
+Practical exercises for account management and antidetect browser setup.

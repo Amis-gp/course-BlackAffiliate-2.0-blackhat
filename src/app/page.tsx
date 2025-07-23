@@ -6,6 +6,7 @@ import LessonContent from '@/components/LessonContent';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { courseData } from '@/data/courseData';
 import { useAuth } from '@/contexts/AuthContext';
+import { ProgressProvider } from '@/contexts/ProgressContext';
 import { Menu, X, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
 
@@ -58,6 +59,7 @@ export default function Home() {
 
   return (
     <ProtectedRoute>
+      <ProgressProvider>
       <div className="min-h-screen bg-background flex">
         {/* Mobile Navigation Overlay */}
         {isMobileNavOpen && (
@@ -65,7 +67,7 @@ export default function Home() {
         )}
         
         {/* Sidebar Navigation */}
-        <div className={`fixed lg:static inset-y-0 left-0 z-50 w-80 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        <div className={`fixed lg:static inset-y-0 left-0 z-50 w-80 bg-[#0f1012] transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isMobileNavOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
           <div className="flex items-center justify-between p-4 border-b border-gray-700">
@@ -89,13 +91,13 @@ export default function Home() {
             }} 
           />{/* User Info and Controls */}
           <div className="p-4 border-t border-gray-700">
-            <div className="text-sm text-gray-400 mb-2">Увійшли як:</div>
+            <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
             <div className="text-white font-medium mb-3">{user?.email}</div>
             <div className="flex flex-col gap-2">
               {isAdmin() && (
                 <Link href="/admin" className="flex items-center gap-2 text-sm bg-primary hover:bg-red-700 px-3 py-2 rounded-lg transition-colors">
                   <Settings className="w-4 h-4" />
-                  Адмін панель
+                  Admin Panel
                 </Link>
               )}
               <button
@@ -103,7 +105,7 @@ export default function Home() {
                 className="flex items-center gap-2 text-sm bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg transition-colors"
               >
                 <LogOut className="w-4 h-4" />
-                Вийти
+                Logout
               </button>
             </div>
           </div>
@@ -112,7 +114,7 @@ export default function Home() {
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
           {/* Mobile Header */}
-          <div className="lg:hidden bg-gray-900 border-b border-gray-700 p-4 flex justify-between items-center">
+          <div className="lg:hidden bg-[#0f1012] border-b border-gray-700 p-4 flex justify-between items-center">
             <button
               onClick={() => setIsMobileNavOpen(true)}
               className="text-white hover:text-gray-300"
@@ -143,6 +145,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      </ProgressProvider>
     </ProtectedRoute>
   );
 }

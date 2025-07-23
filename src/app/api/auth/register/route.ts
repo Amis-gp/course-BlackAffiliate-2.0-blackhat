@@ -10,14 +10,14 @@ export async function POST(request: NextRequest) {
     });
     
     if (existingUser) {
-      return NextResponse.json({ success: false, message: 'Користувач з таким email вже існує' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'User with this email already exists' }, { status: 400 });
     }
     
     const requests = await db.registrationRequest.findMany();
     const existingRequest = requests.find(req => req.email === email);
     
     if (existingRequest) {
-      return NextResponse.json({ success: true, message: 'Запит вже існує' });
+      return NextResponse.json({ success: true, message: 'Request already exists' });
     }
     
     const newRequest = await db.registrationRequest.create({
@@ -30,6 +30,6 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({ success: true, request: newRequest });
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }

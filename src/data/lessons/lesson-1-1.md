@@ -1,0 +1,7 @@
+If you're here, you probably already know that Affiliate Marketing is not just a way to make money online. It's a strategic approach where every step matters, and every decision can be the "key" to success. And if you want to master this field, be prepared for challenges and constant change.
+
+Affiliate Marketing is not just about advertising products or services. It's about "bypassing the system," leveraging its full potential. And let's be clear: sometimes you will have to overcome obstacles, break some rules (but always within reason!), and work with high risks, all while focusing on the outcome. This field is not for those seeking easy paths, but if you're ready for serious work, success will follow.
+
+During this training, you'll come across terms and phrases that might not translate directly into English. They'll likely sound like jargon or slang of the industry, but don't worry – this is a common practice in the traffic arbitrage world, where we all know how to work around the system. If something isn't entirely clear – feel free to ask, we're here to help.
+
+With the flexibility in ad settings and limitless geo-targeting opportunities, traffic arbitrage is very popular today, especially in the CIS markets. But don't think it's going to be easy – you'll always need to stay on top of things and find the best strategies for each niche. Ready to get started?

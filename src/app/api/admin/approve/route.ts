@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     const requestToApprove = requests.find(req => req.id === requestId);
     
     if (!requestToApprove) {
-      return NextResponse.json({ success: false, message: 'Запит не знайдено' }, { status: 404 });
+      return NextResponse.json({ success: false, message: 'Request not found' }, { status: 404 });
     }
     
     await db.user.create({
@@ -28,10 +28,10 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({ 
       success: true, 
-      message: 'Запит підтверджено',
+      message: 'Request approved',
       request: requestToApprove
     });
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }

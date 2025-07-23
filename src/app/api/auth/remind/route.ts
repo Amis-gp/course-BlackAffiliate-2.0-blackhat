@@ -15,12 +15,12 @@ export async function POST(request: NextRequest) {
     });
     
     if (!registrationRequest) {
-      return NextResponse.json({ success: false, message: 'Запит не знайдено' }, { status: 404 });
+      return NextResponse.json({ success: false, message: 'Request not found' }, { status: 404 });
     }
     
-    // Відправляємо нагадування в Telegram
+    // Send reminder to Telegram
     if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
-      const message = `🔔 <b>Нагадування про реєстрацію</b>\n\n📧 Email: ${registrationRequest.email}\n👤 Ім'я: ${registrationRequest.name}\n📅 Дата запиту: ${new Date(registrationRequest.createdAt).toLocaleDateString('uk-UA')}\n\n⏰ Користувач нагадує про себе та очікує підтвердження`;
+      const message = `🔔 <b>Registration Reminder</b>\n\n📧 Email: ${registrationRequest.email}\n👤 Name: ${registrationRequest.name}\n📅 Request date: ${new Date(registrationRequest.createdAt).toLocaleDateString('en-US')}\n\n⏰ The user is reminding about themselves and is waiting for confirmation`;
       console.log('Sending Telegram message:', message);
 
       try {
@@ -40,20 +40,20 @@ export async function POST(request: NextRequest) {
         console.log('Telegram API response:', responseData);
 
         if (response.ok) {
-          return NextResponse.json({ success: true, message: 'Нагадування відправлено адміністратору' });
+          return NextResponse.json({ success: true, message: 'Reminder sent to administrator' });
         } else {
           console.error('Telegram API error:', responseData);
-          return NextResponse.json({ success: false, message: 'Помилка відправки нагадування' }, { status: 500 });
+          return NextResponse.json({ success: false, message: 'Error sending reminder' }, { status: 500 });
         }
       } catch (error) {
         console.error('Failed to send Telegram notification:', error);
-        return NextResponse.json({ success: false, message: 'Помилка відправки нагадування' }, { status: 500 });
+        return NextResponse.json({ success: false, message: 'Error sending reminder' }, { status: 500 });
       }
     } else {
-      return NextResponse.json({ success: true, message: 'Нагадування зареєстровано (Telegram не налаштований)' });
+      return NextResponse.json({ success: true, message: 'Reminder registered (Telegram not configured)' });
     }
   } catch (error) {
-    console.error('Помилка нагадування:', error);
-    return NextResponse.json({ success: false, message: 'Помилка сервера' }, { status: 500 });
+    console.error('Reminder error:', error);
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }
