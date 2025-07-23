@@ -25,8 +25,9 @@ export async function GET(
     return NextResponse.json({ error: 'Lesson not found' }, { status: 404 });
   }
 
+  const filePath = path.join(process.cwd(), 'src', lesson.contentPath.replace('@/', ''));
+  
   try {
-    const filePath = path.join(process.cwd(), 'src', lesson.contentPath.replace('@/', ''));
     const content = await fs.readFile(filePath, 'utf-8');
 
     const headings: { level: number; text: string; slug: string }[] = [];
@@ -46,6 +47,14 @@ export async function GET(
     return NextResponse.json({ content, headings });
   } catch (error) {
     console.error(`Failed to read lesson content for ${lessonId}:`, error);
-    return NextResponse.json({ error: 'Failed to load lesson content' }, { status: 500 });
+    console.error('File path attempted:', filePath);
+    console.error('Working directory:', process.cwd());
+    console.error('Lesson object:', lesson);
+    return NextResponse.json({ 
+      error: 'Failed to load lesson content',
+      details: error instanceof Error ? error.message : 'Unknown error',
+      lessonId,
+      filePath
+    }, { status: 500 });
   }
 }
