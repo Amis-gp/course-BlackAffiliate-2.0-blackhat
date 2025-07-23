@@ -16,7 +16,7 @@ export default function LessonPage() {
   const { user, logout, isAdmin } = useAuth();
   const params = useParams();
   const router = useRouter();
-  const currentLessonId = params.id as string;
+  const currentLessonId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const getCurrentLesson = () => {
     for (const section of courseData) {

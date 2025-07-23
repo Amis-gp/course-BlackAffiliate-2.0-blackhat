@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import { useProgress } from '@/contexts/ProgressContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 interface LessonContentProps {
   lesson: Lesson;
@@ -156,7 +157,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
           <div className="bg-[#0f1012] border border-gray-800 rounded-lg p-6 mb-8">
             <h3 className="text-xl font-semibold text-primary mb-4">Lesson Overview</h3>
             
-            <div className="text-gray-300 leading-relaxed whitespace-pre-line prose prose-invert max-w-none">
+            <div className="text-gray-300 leading-relaxed prose prose-invert max-w-none">
               {isLoading ? (
                 <p>Loading...</p>
               ) : error ? (
@@ -164,6 +165,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
               ) : (
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
                   components={{
                     img: ({node, ...props}) => <img {...props} className="rounded-lg mx-auto" />,
                     h1: ({node, ...props}) => (

@@ -8,9 +8,9 @@ import { visit } from 'unist-util-visit';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const lessonId = params.id;
+  const { id: lessonId } = await params;
 
   let lesson;
   for (const section of courseData) {

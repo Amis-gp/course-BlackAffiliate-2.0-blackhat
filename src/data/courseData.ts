@@ -67,12 +67,6 @@ export const courseData: Section[] = [
         contentPath: '@/data/lessons/lesson-1-8.md'
       },
       {
-        id: 'lesson-1-9',
-        title: 'Choosing the Right Offer',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-1-9.md'
-      },
-      {
         id: 'homework-1-1',
         title: 'Practical Homework',
         type: 'homework',
