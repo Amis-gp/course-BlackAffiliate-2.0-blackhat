@@ -25,7 +25,7 @@ export async function GET(
     return NextResponse.json({ error: 'Lesson not found' }, { status: 404 });
   }
 
-  const filePath = path.join(process.cwd(), 'src', lesson.contentPath.replace('@/', ''));
+  const filePath = path.resolve(process.cwd(), 'src', lesson.contentPath.replace('@/', ''));
   
   try {
     const content = await fs.readFile(filePath, 'utf-8');

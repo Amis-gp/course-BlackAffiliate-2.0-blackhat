@@ -7,6 +7,7 @@
 - **Видалено `rewrites` з `next.config.js`**: Усунуто конфлікт з плагіном Netlify.
 - **Видалено `redirects` з `netlify.toml`**: Маршрутизація API повністю керується плагіном.
 - **In-Memory База Даних**: Забезпечує роботу API на read-only файловій системі Netlify.
+- **Виправлено шляхи до файлів уроків**: Замінено `path.join` на `path.resolve` для коректного читання файлів у середовищі Netlify, що вирішило помилки 500.
 
 ## Конфігураційні файли
 
@@ -61,6 +62,9 @@ curl https://your-site.netlify.app/api/users/stepan001
 
 # Перевірка API запитів (має повернути порожній масив)
 curl https://your-site.netlify.app/api/admin/requests
+
+# Перевірка API уроку (має повернути вміст уроку)
+curl https://your-site.netlify.app/api/lessons/lesson-1-1
 ```
 
 Якщо проблеми залишаться, перевірте логи функцій безпосередньо в дашборді Netlify для отримання детальної інформації про помилки під час виконання.
