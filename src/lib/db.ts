@@ -2,7 +2,10 @@
 let fs: any;
 let path: any;
 
-if (typeof window === 'undefined') {
+// Check if we're in Netlify Functions environment
+const isNetlify = process.env.NETLIFY === 'true';
+
+if (typeof window === 'undefined' && !isNetlify) {
   fs = require('fs');
   path = require('path');
 }
@@ -26,8 +29,13 @@ interface RegistrationRequest {
   createdAt: Date;
 }
 
+// In-memory storage for Netlify Functions
+let memoryUsers: User[] = [];
+let memoryRequests: RegistrationRequest[] = [];
+let isInitialized = false;
+
 function ensureDataDir() {
-  if (typeof window !== 'undefined') return;
+  if (typeof window !== 'undefined' || isNetlify) return;
   
   const DATA_DIR = path.join(process.cwd(), 'data');
   const USERS_FILE = path.join(DATA_DIR, 'users.json');
@@ -46,8 +54,42 @@ function ensureDataDir() {
   }
 }
 
+function initializeMemoryData() {
+  if (isInitialized) return;
+  
+  // Initialize with default data for Netlify
+  memoryUsers = [
+    {
+      id: 'admin001',
+      email: 'admin@example.com',
+      password: 'admin123',
+      name: 'Admin',
+      role: 'admin',
+      isApproved: true,
+      createdAt: new Date('2024-01-01')
+    },
+    {
+      id: 'stepan001',
+      email: 'stepan@example.com',
+      password: 'stepan123',
+      name: 'Stepan',
+      role: 'user',
+      isApproved: true,
+      createdAt: new Date('2024-01-02')
+    }
+  ];
+  
+  memoryRequests = [];
+  isInitialized = true;
+}
+
 function readUsers(): User[] {
   if (typeof window !== 'undefined') return [];
+  
+  if (isNetlify) {
+    initializeMemoryData();
+    return memoryUsers;
+  }
   
   try {
     const USERS_FILE = path.join(process.cwd(), 'data', 'users.json');
@@ -63,12 +105,22 @@ function readUsers(): User[] {
 function writeUsers(users: User[]): void {
   if (typeof window !== 'undefined') return;
   
+  if (isNetlify) {
+    memoryUsers = users;
+    return;
+  }
+  
   const USERS_FILE = path.join(process.cwd(), 'data', 'users.json');
   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 }
 
 function readRequests(): RegistrationRequest[] {
   if (typeof window !== 'undefined') return [];
+  
+  if (isNetlify) {
+    initializeMemoryData();
+    return memoryRequests;
+  }
   
   try {
     const REQUESTS_FILE = path.join(process.cwd(), 'data', 'requests.json');
@@ -82,6 +134,11 @@ function readRequests(): RegistrationRequest[] {
 function writeRequests(requests: RegistrationRequest[]): void {
   if (typeof window !== 'undefined') return;
   
+  if (isNetlify) {
+    memoryRequests = requests;
+    return;
+  }
+  
   const REQUESTS_FILE = path.join(process.cwd(), 'data', 'requests.json');
   fs.writeFileSync(REQUESTS_FILE, JSON.stringify(requests, null, 2));
 }
@@ -92,6 +149,11 @@ function generateId(): string {
 
 export async function initializeDatabase() {
   if (typeof window !== 'undefined') return;
+  
+  if (isNetlify) {
+    initializeMemoryData();
+    return;
+  }
   
   ensureDataDir();
   

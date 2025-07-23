@@ -1,52 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, initializeDatabase } from '@/lib/db';
 
 export async function GET() {
   try {
+    // Initialize database for Netlify
+    await initializeDatabase();
+    
+    console.log('📋 API: Fetching registration requests');
     const requests = await db.registrationRequest.findMany();
-    return NextResponse.json({ success: true, requests });
+    console.log('✅ API: Found requests:', requests.length);
+    return NextResponse.json(requests);
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+    console.error('💥 Error fetching requests:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { action, requestId } = await request.json();
+    // Initialize database for Netlify
+    await initializeDatabase();
     
-    if (action === 'approve') {
-      const requests = await db.registrationRequest.findMany();
-      const requestToApprove = requests.find(req => req.id === requestId);
-      
-      if (!requestToApprove) {
-        return NextResponse.json({ success: false, message: 'Request not found' }, { status: 404 });
-      }
-      
-      await db.user.create({
-        data: {
-          email: requestToApprove.email,
-          password: requestToApprove.password,
-          name: requestToApprove.name,
-          role: 'user',
-          isApproved: true
-        }
-      });
-      
-      await db.registrationRequest.delete({
-        where: { id: requestId }
-      });
-      
-      return NextResponse.json({ success: true, message: 'Request approved' });
-    } else if (action === 'reject') {
-      await db.registrationRequest.delete({
-        where: { id: requestId }
-      });
-      
-      return NextResponse.json({ success: true, message: 'Request rejected' });
+    const { email, password, name } = await request.json();
+    console.log('📝 API: Creating registration request for:', email);
+    
+    // Check if user already exists
+    const existingUser = await db.user.findUnique({ where: { email } });
+    if (existingUser) {
+      console.log('❌ API: User already exists:', email);
+      return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }
     
-    return NextResponse.json({ success: false, message: 'Unknown action' }, { status: 400 });
+    // Check if request already exists
+    const existingRequest = await db.registrationRequest.findFirst({ where: { email } });
+    if (existingRequest) {
+      console.log('❌ API: Registration request already exists:', email);
+      return NextResponse.json({ error: 'Registration request already exists' }, { status: 400 });
+    }
+    
+    const newRequest = await db.registrationRequest.create({
+      data: { email, password, name }
+    });
+    
+    console.log('✅ API: Registration request created:', newRequest.id);
+    return NextResponse.json(newRequest, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+    console.error('💥 Error creating request:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

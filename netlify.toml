@@ -7,11 +7,16 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  NEXT_PRIVATE_TARGET = "server"
+
+[functions]
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/___netlify-handler"
   status = 200
+  force = true
 
 [[headers]]
   for = "/api/*"
