@@ -1,22 +1,16 @@
-# Розгортання на Netlify - Оновлено
+# Розгортання на Netlify - Фінальна версія
 
-Цей проект налаштований для розгортання на Netlify з підтримкою API Routes та in-memory базою даних.
+Цей проект налаштований для розгортання на Netlify. Всі конфігурації оптимізовані для автоматичної роботи з плагіном `@netlify/plugin-nextjs`.
 
-## Ключові зміни для Netlify
+## Ключові виправлення
 
-### 1. In-Memory База Даних
-- Файлова система не працює в Netlify Functions
-- Реалізовано in-memory сховище для користувачів та запитів
-- Автоматична ініціалізація з тестовими даними
-
-### 2. Тестові Користувачі
-Автоматично створюються:
-- **Admin**: `admin@example.com` / `admin123`
-- **Stepan**: `stepan@example.com` / `stepan123` (ID: stepan001)
+- **Видалено `rewrites` з `next.config.js`**: Усунуто конфлікт з плагіном Netlify.
+- **Видалено `redirects` з `netlify.toml`**: Маршрутизація API повністю керується плагіном.
+- **In-Memory База Даних**: Забезпечує роботу API на read-only файловій системі Netlify.
 
 ## Конфігураційні файли
 
-### 1. netlify.toml
+### 1. `netlify.toml`
 ```toml
 [build]
   command = "npm run build"
@@ -27,81 +21,46 @@
 
 [build.environment]
   NODE_VERSION = "18"
-  NEXT_PRIVATE_TARGET = "server"
 
-[functions]
-  node_bundler = "esbuild"
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/___netlify-handler"
-  status = 200
-  force = true
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
 ```
 
-### 2. Оновлена База Даних (src/lib/db.ts)
-- Автоматичне визначення Netlify середовища
-- In-memory сховище замість файлової системи
-- Ініціалізація з тестовими даними
+### 2. `next.config.js`
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  poweredByHeader: false,
+  reactStrictMode: true,
+  trailingSlash: true,
+  images: {
+    unoptimized: true
+  }
+}
 
-## Кроки розгортання
+module.exports = nextConfig
+```
 
-1. **Підключіть репозиторій до Netlify:**
-   - Увійдіть в Netlify Dashboard
-   - Натисніть "New site from Git"
-   - Виберіть ваш репозиторій
+## Наступні кроки для розгортання
 
-2. **Налаштування збірки:**
-   - Build command: `npm run build`
-   - Publish directory: `.next`
-   - Node version: 18 (автоматично з .nvmrc)
-
-3. **Змінні середовища:**
-   ```
-   NETLIFY=true (автоматично встановлюється)
-   ```
-
-## API Ендпоінти
-
-Доступні маршрути:
-- `GET /api/users/stepan001` - отримати користувача
-- `GET /api/admin/requests` - список запитів реєстрації
-- `POST /api/admin/requests` - створити запит реєстрації
-- `GET /api/lessons/[id]` - отримати урок
-
-## Важливі зауваження
-
-- **Дані тимчасові**: При кожному перезапуску функції дані скидаються
-- **Логування**: Розширене логування для діагностики
-- **CORS**: Налаштований для всіх доменів
-- **Автоініціалізація**: База даних ініціалізується автоматично
-
-## Діагностика проблем
-
-1. **Перевірте логи функцій** в Netlify Dashboard > Functions
-2. **Тестові дані** завжди доступні після розгортання
-3. **API відповіді** включають детальне логування
-4. **Користувач stepan001** завжди існує для тестування
+1.  **Зробіть `commit` та `push`** всіх останніх змін до вашого GitHub репозиторію.
+2.  **Netlify автоматично запустить нову збірку** та розгорне оновлену версію сайту.
+3.  **Перевірте API ендпоінти** після завершення розгортання. Помилки 404 мають зникнути.
 
 ## Тестування після розгортання
 
+Використовуйте `curl` або ваш браузер для перевірки:
+
 ```bash
-# Тест API користувача
+# Перевірка API користувача (має повернути дані користувача Stepan)
 curl https://your-site.netlify.app/api/users/stepan001
 
-# Тест API запитів
+# Перевірка API запитів (має повернути порожній масив)
 curl https://your-site.netlify.app/api/admin/requests
 ```
 
-## Обмеження
-
-- Дані не зберігаються між сесіями
-- Для production потрібна зовнішня база даних
-- In-memory сховище підходить тільки для демонстрації
-
-## Наступні кроки
-
-1. Зробіть commit та push змін до репозиторію
-2. Netlify автоматично перезбудує сайт
-3. Перевірте API ендпоінти після розгортання
-4. Користувач `stepan001` буде доступний для тестування
+Якщо проблеми залишаться, перевірте логи функцій безпосередньо в дашборді Netlify для отримання детальної інформації про помилки під час виконання.
