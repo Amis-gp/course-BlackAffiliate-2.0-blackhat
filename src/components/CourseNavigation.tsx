@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { ChevronDown, ChevronRight, Play, FileText, HelpCircle } from 'lucide-react';
 import { courseData, Section, Lesson } from '@/data/courseData';
 import { useProgress } from '@/contexts/ProgressContext';
 
 interface CourseNavigationProps {
   currentLessonId?: string;
-  onLessonSelect: (lessonId: string) => void;
+  onLessonSelect?: (lessonId: string) => void; // Made optional
 }
 
 export default function CourseNavigation({ currentLessonId, onLessonSelect }: CourseNavigationProps) {
@@ -60,9 +61,10 @@ export default function CourseNavigation({ currentLessonId, onLessonSelect }: Co
                 {isExpanded && (
                   <div className="border-t border-gray-800">
                     {section.lessons.map((lesson, index) => (
-                      <button
+                      <Link
+                        href={`/lesson/${lesson.id}`}
                         key={lesson.id}
-                        onClick={() => onLessonSelect(lesson.id)}
+                        onClick={() => onLessonSelect && onLessonSelect(lesson.id)}
                         className={`w-full p-3 text-left flex items-center space-x-3 hover:bg-gray-800 transition-colors duration-200 ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'} ${currentLessonId === lesson.id ? 'bg-primary/20 border-r-2 border-primary' : ''}`}>
                         <span className={`${isLessonCompleted(lesson.id) ? 'text-gray-600' : 'text-primary'}`}>
                           {getLessonIcon(lesson.type)}
@@ -71,7 +73,7 @@ export default function CourseNavigation({ currentLessonId, onLessonSelect }: Co
                           <div className="text-sm text-gray-400">#{index + 1}</div>
                           <div className={`text-sm ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'}`}>{lesson.title}</div>
                         </div>
-                      </button>
+                      </Link>
                     ))}
                   </div>
                 )}
