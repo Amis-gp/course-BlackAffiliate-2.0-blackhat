@@ -27,7 +27,11 @@
 ### Виправлення імені файлу
 
 - **Проблема:** Розгортання завершувалося з помилкою `Invalid filename 'lessons/original/#1.4 Security on the Internet.md'. Deployed filenames cannot contain # or ? characters`.
-- **Рішення:** Додано директорію `public/lessons/original/` до `.gitignore`, щоб виключити файли з неприпустимими символами з процесу збірки та розгортання.
+- **Рішення:** 
+  1. Видалено файли з неприпустимими символами з git кешу за допомогою `git rm -r --cached`
+  2. Додано директорії `public/lessons/original/` та `src/data/lessons/original/` до `.gitignore`
+  3. Закомічено зміни для остаточного видалення файлів з git репозиторію
+- **Причина:** `.gitignore` не працює для файлів, які вже відстежуються git репозиторієм
 
 ### 4. Конфігурація Netlify
 - **Файл**: `netlify.toml`
