@@ -23,26 +23,18 @@ export default function Footer() {
 
   const quickLinks = [
     {
-      name: 'Cold Email',
-      url: 'https://www.advantage-agency.co/cold-email'
-    },
-    {
-      name: 'Scraping',
-      url: 'https://www.advantagescrape.com'
-    },
-    {
       name: 'Blog',
       url: 'https://www.advantage-agency.co/blog'
     },
   ];
 
   return (
-    <footer className="bg-[#0f1012] text-white mt-10">
+    <footer className="bg-[#0f1012] text-white mt-auto">
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
             <div className="flex items-center space-x-2 -ml-2">
-              <img src="/img/logo.webp" width={100} alt="BlackAffiliate 2.0" />
+              <img src="/img/logo.webp" width={120} alt="BlackAffiliate 2.0" />
             </div>
             <p className="text-gray-400 text-sm">
               Master the art of affiliate marketing with our comprehensive course
@@ -50,24 +42,7 @@ export default function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Contact Us</h3>
-            <div className="space-y-2">
-              <a 
-                href="mailto:stepan@advantage-agency.co"
-                className="flex items-center space-x-2 text-gray-400 hover:text-primary transition-colors"
-              >
-                <Mail className="w-4 h-4" />
-                <span className="text-sm">stepan@advantage-agency.co</span>
-              </a>
-              <a 
-                href="tel:+13393688255"
-                className="flex items-center space-x-2 text-gray-400 hover:text-primary transition-colors"
-              >
-                <Phone className="w-4 h-4" />
-                <span className="text-sm">+1 (339) 368-82-55</span>
-              </a>
-            </div>
-            
+            <h3 className="text-lg font-semibold text-white">Follow Us</h3>
             <div className="flex space-x-4">
               {socialLinks.map((social) => (
                 <a
@@ -86,7 +61,7 @@ export default function Footer() {
 
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Quick Links</h3>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2">
               {quickLinks.map((link) => (
                 <a
                   key={link.name}

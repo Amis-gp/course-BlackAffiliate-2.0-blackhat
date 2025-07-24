@@ -96,8 +96,8 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
   const typeInfo = getLessonTypeInfo(lesson.type);
 
   return (
-    <div className='flex-1 overflow-y-auto flex justify-between flex-col'>
-      <div className="max-w-4xl mx-auto pb-8 pt-4 px-4 sm:p-8 w-full">
+    <div className='flex-1 overflow-y-auto flex flex-col min-h-full'>
+      <div className="max-w-4xl mx-auto pb-8 pt-4 px-4 sm:p-8 w-full flex-1">
           <div className="w-full">
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-4">
@@ -275,8 +275,8 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
             Next Lesson →
           </button>
         </div>
+        </div>
       </div>
-    </div>
       <Footer />
     </div>
   );
