@@ -31,11 +31,6 @@
     Cache-Control = "public, max-age=3600"
     Content-Type = "text/plain; charset=utf-8"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
 [dev]
   command = "npm run dev"
   port = 3000
