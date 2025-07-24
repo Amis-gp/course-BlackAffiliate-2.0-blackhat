@@ -87,9 +87,19 @@ export async function GET(
     const processor = unified().use(remarkParse);
     const tree = processor.parse(fileContent);
 
+    const slugCounts: { [key: string]: number } = {};
+
     visit(tree, 'heading', (node: any) => {
       const text = node.children.map((child: any) => child.value).join('');
-      const slug = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+      let slug = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+
+      if (slugCounts[slug]) {
+        slugCounts[slug]++;
+        slug = `${slug}-${slugCounts[slug]}`;
+      } else {
+        slugCounts[slug] = 1;
+      }
+
       headings.push({
         level: node.depth,
         text,

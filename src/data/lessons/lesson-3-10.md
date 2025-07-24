@@ -1,1 +1,0 @@
-Standard operating procedure for connecting ad accounts to Business Manager.

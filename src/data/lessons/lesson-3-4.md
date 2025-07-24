@@ -1,1 +1,0 @@
-Fundamental principles of working effectively with affiliate networks.

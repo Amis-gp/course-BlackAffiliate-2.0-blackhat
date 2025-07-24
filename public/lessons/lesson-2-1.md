@@ -1,1 +1,3 @@
-Set up comprehensive tracking systems for your Facebook accounts and campaign statistics.
+<div class="mb-8" style="aspect-ratio: 16/9;">
+  <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/xMqmCd_uFdo?si=YMC8cDhNnZAgsZ-F" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>

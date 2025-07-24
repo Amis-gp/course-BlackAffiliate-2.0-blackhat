@@ -1,1 +1,0 @@
-Hands-on practice with cloaking techniques and implementation.

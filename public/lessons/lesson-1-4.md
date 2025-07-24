@@ -1,6 +1,6 @@
 # Security on the Internet: Tailored for Affiliate Marketing
 
-![image1](/img/1.4/image-1.webp)
+![image1](/img/1.4/image1.webp)
 
 Welcome to the "security" part of affiliate marketing! Now, we're not talking about generic internet security, no no — we're focusing on the kind of security you need to thrive in this game. And when it comes to affiliate marketing and traffic arbitrage, you're playing in a whole different arena. Here, you're not just dealing with ads and budgets — you're also handling a web of risk, complexity, and often a bit of sneaky navigation to keep your campaigns running smoothly. So, let's dive in!
 
@@ -10,7 +10,7 @@ In the world of traffic arbitrage, you're often working with gray-hat offers —
 
 But don't worry, there's a whole arsenal of tricks you can use to protect your campaigns and keep things rolling. Let's break it down, step by step.
 
-![image2](/img/1.4/image-2.webp)
+![image2](/img/1.4/image2.webp)
 
 ## Proxies: Your Secret Weapon
 
@@ -24,7 +24,7 @@ One mobile proxy can handle up to 10 Facebook profiles, which is pretty neat. Yo
 
 ## The Facebook Account Dance: Bans and Blocks Are Normal
 
-![image3](/img/1.4/image-3.webp)
+![image3](/img/1.4/image3.webp)
 
 Here's the reality check: Facebook accounts WILL get banned. It's part of the process, especially when you're pushing gray-area offers. When you work with ads that fall outside of Facebook's strict content guidelines (say hello to your gambling, Nutra, or other sensitive verticals), the platform's automated systems will start sniffing around. And yes, they'll often ban accounts, ad managers, or even entire campaigns.
 

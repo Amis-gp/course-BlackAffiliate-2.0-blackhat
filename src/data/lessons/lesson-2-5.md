@@ -1,1 +1,0 @@
-Step-by-step guide to configuring proxies in antidetect browsers.

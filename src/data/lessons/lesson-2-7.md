@@ -1,1 +1,0 @@
-Techniques for warming up and maintaining Facebook accounts.

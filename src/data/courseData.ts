@@ -80,69 +80,57 @@ export const courseData: Section[] = [
     lessons: [
       {
         id: 'lesson-2-1',
-        title: 'Spreadsheet tracker of FB accounts and script for statistics',
+        title: 'What is an antidetect browser?',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-1.md'
       },
       {
         id: 'lesson-2-2',
-        title: 'Types of bans on Facebook',
+        title: '#Proxy for work',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-2.md'
       },
       {
         id: 'lesson-2-3',
-        title: 'What is an antidetect browser?',
+        title: 'Working with Facebook Agency Accounts',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-3.md'
       },
       {
         id: 'lesson-2-4',
-        title: 'What is a proxy server, why is it needed?',
+        title: 'Work with fb accounts, old',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-4.md'
       },
       {
         id: 'lesson-2-5',
-        title: 'Adding a proxy to the anti-detection browser.',
+        title: 'Types of bans on Facebook',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-5.md'
       },
       {
         id: 'lesson-2-6',
-        title: 'Preparation of FB accounts',
+        title: 'Pixel FB settings',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-6.md'
       },
       {
         id: 'lesson-2-7',
-        title: 'Farming FB Account',
+        title: 'Setting up a Keitaro tracker',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-7.md'
       },
       {
         id: 'lesson-2-8',
-        title: 'Downloading any landings/sites',
+        title: 'Cloaking FB',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-8.md'
       },
       {
         id: 'lesson-2-9',
-        title: 'Setting up a Keitaro',
+        title: 'Spreadsheet tracker of FB accounts and script for statistics',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-9.md'
-      },
-      {
-        id: 'lesson-2-10',
-        title: 'Cloaking FB',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-2-10.md'
-      },
-      {
-        id: 'lesson-2-11',
-        title: 'Pre-landing',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-2-11.md'
       },
       {
         id: 'homework-2-1',
@@ -152,7 +140,7 @@ export const courseData: Section[] = [
       },
       {
         id: 'homework-2-2',
-        title: 'Homework - Cloaking',
+        title: 'Homework - Cloaking / Tracking',
         type: 'homework',
         contentPath: '@/data/lessons/homework-2-2.md'
       }

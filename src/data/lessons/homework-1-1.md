@@ -1,1 +1,0 @@
-Apply the concepts learned in this section with practical exercises.

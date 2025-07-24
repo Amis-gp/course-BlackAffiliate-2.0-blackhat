@@ -1,1 +1,0 @@
-Methods for acquiring and setting up landing pages for your campaigns.
