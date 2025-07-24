@@ -12,11 +12,14 @@ export async function GET(
 ) {
   const { id: lessonId } = await params;
 
-  console.log('=== LESSON API DEBUG START ===');
+  console.log('=== NETLIFY LESSON API DEBUG START ===');
   console.log('Requested lesson ID:', lessonId);
   console.log('Process CWD:', process.cwd());
   console.log('Environment:', process.env.NODE_ENV);
   console.log('Platform:', process.platform);
+  console.log('Netlify:', process.env.NETLIFY);
+  console.log('Lambda task root:', process.env.LAMBDA_TASK_ROOT);
+  console.log('__dirname:', __dirname);
 
   let lesson;
   for (const section of courseData) {
@@ -44,9 +47,6 @@ export async function GET(
   ];
 
   console.log('Trying possible file paths:', possiblePaths);
-  console.log('__dirname:', __dirname);
-  console.log('Netlify env:', process.env.NETLIFY);
-  console.log('Lambda task root:', process.env.LAMBDA_TASK_ROOT);
 
   let filePath: string | null = null;
   let fileContent: string | null = null;
@@ -58,7 +58,7 @@ export async function GET(
       console.log('Path exists:', testPath);
       fileContent = await fs.readFile(testPath, 'utf-8');
       filePath = testPath;
-      console.log('Successfully read file from:', testPath, 'Content length:', fileContent.length);
+      console.log('Successfully read file from:', testPath);
       break;
     } catch (error) {
       console.log('Path failed:', testPath, 'Error:', (error as any)?.code || error);
@@ -79,7 +79,7 @@ export async function GET(
       }
     }, { status: 404 });
   }
-  
+
   try {
     console.log('Processing file content, length:', fileContent.length);
 
@@ -98,29 +98,18 @@ export async function GET(
     });
 
     console.log('Successfully processed lesson content');
-    console.log('=== LESSON API DEBUG END ===');
+    console.log('=== NETLIFY LESSON API DEBUG END ===');
     return NextResponse.json({ content: fileContent, headings });
   } catch (error) {
-    console.error('=== LESSON API ERROR ===');
-    console.error(`Failed to read lesson content for ${lessonId}:`, error);
-    console.error('File path attempted:', filePath);
-    console.error('Working directory:', process.cwd());
-    console.error('Lesson object:', lesson);
-    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-    console.error('Error name:', error instanceof Error ? error.name : 'Unknown');
-    console.error('Error code:', (error as any)?.code);
-    console.error('=== LESSON API ERROR END ===');
+    console.error('=== NETLIFY LESSON API ERROR ===');
+    console.error(`Failed to process lesson content for ${lessonId}:`, error);
+    console.error('File path used:', filePath);
+    console.error('=== NETLIFY LESSON API ERROR END ===');
     return NextResponse.json({ 
-      error: 'Failed to load lesson content',
+      error: 'Failed to process lesson content',
       details: error instanceof Error ? error.message : 'Unknown error',
       lessonId,
-      filePath,
-      debugInfo: {
-        cwd: process.cwd(),
-        errorName: error instanceof Error ? error.name : 'Unknown',
-        errorCode: (error as any)?.code,
-        stack: error instanceof Error ? error.stack : 'No stack trace'
-      }
+      filePath
     }, { status: 500 });
   }
 }
