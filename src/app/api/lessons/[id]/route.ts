@@ -21,11 +21,21 @@ export async function GET(
     }
   }
 
-  if (!lesson || !lesson.contentPath) {
+  if (!lesson) {
     return NextResponse.json({ error: 'Lesson not found' }, { status: 404 });
   }
 
-  const filePath = path.resolve(process.cwd(), 'src', lesson.contentPath.replace('@/', ''));
+  const filePath = path.resolve(process.cwd(), 'public', 'lessons', `${lessonId}.md`);
+  
+  try {
+    await fs.access(filePath);
+  } catch {
+    return NextResponse.json({ 
+      error: 'Lesson content file not found',
+      lessonId,
+      filePath
+    }, { status: 404 });
+  }
   
   try {
     const content = await fs.readFile(filePath, 'utf-8');

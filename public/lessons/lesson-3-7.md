@@ -1,0 +1,1 @@
+Using ADHeart spy service for competitive intelligence and campaign research.
