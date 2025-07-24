@@ -54,3 +54,6 @@ coverage
 *.rar
 *.tar.gz
 *.7z
+
+# Original lesson files with invalid characters
+/public/lessons/original/

@@ -27,7 +27,7 @@
 ### Виправлення імені файлу
 
 - **Проблема:** Розгортання завершувалося з помилкою `Invalid filename 'lessons/original/#1.4 Security on the Internet.md'. Deployed filenames cannot contain # or ? characters`.
-- **Рішення:** Перейменовано файл `public/lessons/original/#1.4 Security on the Internet.md` на `public/lessons/original/1.4 Security on the Internet.md`, видаливши неприпустимий символ `#`.
+- **Рішення:** Додано директорію `public/lessons/original/` до `.gitignore`, щоб виключити файли з неприпустимими символами з процесу збірки та розгортання.
 
 ### 4. Конфігурація Netlify
 - **Файл**: `netlify.toml`
