@@ -24,6 +24,11 @@
   - Headers для API кешування
   - Підтримка Netlify Functions
 
+### Виправлення імені файлу
+
+- **Проблема:** Розгортання завершувалося з помилкою `Invalid filename 'lessons/original/#1.4 Security on the Internet.md'. Deployed filenames cannot contain # or ? characters`.
+- **Рішення:** Перейменовано файл `public/lessons/original/#1.4 Security on the Internet.md` на `public/lessons/original/1.4 Security on the Internet.md`, видаливши неприпустимий символ `#`.
+
 ### 4. Конфігурація Netlify
 - **Файл**: `netlify.toml`
 - **Створено**: Повна конфігурація для Netlify Functions та статичних файлів
