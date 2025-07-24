@@ -55,5 +55,6 @@ coverage
 *.tar.gz
 *.7z
 
-# Original lesson files with invalid characters
+# Original lessons directories with invalid filename characters
 /public/lessons/original/
+/src/data/lessons/original/
