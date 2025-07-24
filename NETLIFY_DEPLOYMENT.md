@@ -33,6 +33,12 @@
   3. Закомічено зміни для остаточного видалення файлів з git репозиторію
 - **Причина:** `.gitignore` не працює для файлів, які вже відстежуються git репозиторієм
 
+### Виправлення API маршрутів (404 помилки)
+
+- **Проблема:** API ендпоінти повертають 404 помилки після розгортання
+- **Рішення:** Видалено ручні redirects з `netlify.toml`, які конфліктували з плагіном `@netlify/plugin-nextjs`
+- **Причина:** Плагін автоматично обробляє маршрутизацію API, ручні redirects спричиняли конфлікти
+
 ### 4. Конфігурація Netlify
 - **Файл**: `netlify.toml`
 - **Створено**: Повна конфігурація для Netlify Functions та статичних файлів
@@ -51,19 +57,35 @@
 [build]
   command = "npm run build"
   publish = ".next"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+  base = "."
 
 [build.environment]
   NODE_VERSION = "18"
 
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["sharp"]
+
 [[headers]]
   for = "/api/*"
   [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/lessons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    Content-Type = "text/plain; charset=utf-8"
 ```
 
 ### 2. `next.config.js`
