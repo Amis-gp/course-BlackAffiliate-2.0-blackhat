@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight, Play, FileText, HelpCircle } from 'lucide-react';
 import { courseData, Section, Lesson } from '@/data/courseData';
@@ -12,14 +12,21 @@ interface CourseNavigationProps {
 }
 
 export default function CourseNavigation({ currentLessonId, onLessonSelect }: CourseNavigationProps) {
-  const [expandedSections, setExpandedSections] = useState<string[]>(['section-1']);
+  const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const { isLessonCompleted, completedLessons } = useProgress();
+
+  useEffect(() => {
+    const section = courseData.find(s => s.lessons.some(l => l.id === currentLessonId));
+    if (section) {
+      setExpandedSections([section.id]);
+    } else if (courseData.length > 0) {
+      setExpandedSections([courseData[0].id]);
+    }
+  }, [currentLessonId]);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => 
-      prev.includes(sectionId) 
-        ? prev.filter(id => id !== sectionId)
-        : [...prev, sectionId]
+      prev.includes(sectionId) ? [] : [sectionId]
     );
   };
 

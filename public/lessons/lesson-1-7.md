@@ -1,9 +1,5 @@
 # Facebook Accounts: Everything You Need to Know
 
-
-<div class="mb-8" style="aspect-ratio: 16/9;">
-  <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/DTl1xowz45M?si=9XqJsPwk4Rjxez6v" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
 Facebook accounts are the foundation of your work in affiliate marketing. Without properly set up and structured accounts, you can’t launch ads, manage campaigns, or scale effectively. But not all Facebook accounts are the same, and understanding their types, roles, and connections is crucial for running a successful operation.
 Let’s break it all down.
 

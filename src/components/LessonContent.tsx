@@ -131,7 +131,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
 
         {headings.length > 0 && (
             <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm rounded-xl p-6 mb-8 border border-gray-700/50 shadow-lg">
-                <h4 className="text-lg font-semibold text-white pb-2">Lesson navigation</h4>
+                <h4 className="text-base font-semibold text-white pb-2">Lesson navigation</h4>
                 <div className="space-y-1">
                     {headings.map((heading, index) => (
                         <div key={heading.slug} className="group">
@@ -154,8 +154,8 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
             </div>
         )}
         <div className="prose prose-lg max-w-none dark:prose-invert">
-          <div className="bg-[#0f1012] border border-gray-800 rounded-lg p-6 mb-8">
-            <h3 className="text-xl font-semibold text-primary mb-4">Lesson Overview</h3>
+          <div className="bg-[#0f1012] border border-gray-800 rounded-lg p-6">
+            <h3 className="text-base font-semibold text-primary mt-0">Lesson Overview</h3>
             
             <div className="text-gray-300 leading-relaxed prose prose-invert max-w-none">
               {isLoading ? (
@@ -178,15 +178,15 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                       </div>
                     ),
                     h2: ({node, ...props}) => (
-                      <div className="mb-6 mt-8">
-                        <h2 
-                          id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
-                          className="text-2xl font-semibold text-white mb-3  relative"
-                          {...props} 
-                        />
-                        <div className="w-12 h-0.5 bg-primary mt-2"></div>
-                      </div>
-                    ),
+                        <div className="mb-6 mt-12 pt-8 border-t border-gray-800">
+                          <h2 
+                            id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                            className="text-2xl font-semibold text-white mb-3  relative"
+                            {...props} 
+                          />
+                          <div className="w-16 h-1 bg-primary rounded-full"></div>
+                        </div>
+                      ),
                     h3: ({node, ...props}) => (
                       <h3 
                         id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 

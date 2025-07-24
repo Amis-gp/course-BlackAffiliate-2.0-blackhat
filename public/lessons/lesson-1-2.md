@@ -1,3 +1,5 @@
+# The Art of Traffic Arbitrage: A Deep Dive
+
 Alright, now that you're excited to jump into the world of affiliate marketing, let's take a moment to really understand the core of traffic arbitrage. This is where the magic happens — where the game is played, and the strategies come into play.
 
 ## What is Traffic Arbitrage?

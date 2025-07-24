@@ -110,24 +110,30 @@ export const courseData: Section[] = [
       },
       {
         id: 'lesson-2-6',
+        title: 'Passing the Advertising Activity Ban (ZRD)',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-2-5.md'
+      },
+      {
+        id: 'lesson-2-7',
         title: 'Pixel FB settings',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-6.md'
       },
       {
-        id: 'lesson-2-7',
+        id: 'lesson-2-8',
         title: 'Setting up a Keitaro tracker',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-7.md'
       },
       {
-        id: 'lesson-2-8',
+        id: 'lesson-2-9',
         title: 'Cloaking FB',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-8.md'
       },
       {
-        id: 'lesson-2-9',
+        id: 'lesson-2-10',
         title: 'Spreadsheet tracker of FB accounts and script for statistics',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-9.md'
