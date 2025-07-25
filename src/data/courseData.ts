@@ -174,47 +174,65 @@ export const courseData: Section[] = [
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-2.md'
       },
-      {
+{
         id: 'lesson-3-3',
-        title: 'Choosing the Right Offer',
+        title: 'Understanding Postbacks for Traffic Arbitrage',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-3.md'
       },
       {
         id: 'lesson-3-4',
-        title: 'Creative Production',
+        title: 'Choosing the Right Offer',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-4.md'
       },
       {
         id: 'lesson-3-5',
-        title: 'SPY services for Facebook',
+        title: 'Creative Production',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-5.md'
       },
       {
         id: 'lesson-3-6',
-        title: 'Working with Facebook Fan Page',
+        title: 'One hook and CTR to the moon',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-6.md'
       },
       {
         id: 'lesson-3-7',
-        title: 'Pre-landing',
+        title: 'SPY services for Facebook',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-7.md'
       },
       {
         id: 'lesson-3-8',
-        title: 'Where to get payment methods',
+        title: 'Working with Facebook Fan Page',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-8.md'
       },
       {
         id: 'lesson-3-9',
-        title: 'Facebook Traffic Launch Checklist',
+        title: 'Pre-landing',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-9.md'
+      },
+      {
+        id: 'lesson-3-10',
+        title: 'Downloading any landings/sites',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-3-10.md'
+      },
+      {
+        id: 'lesson-3-11',
+        title: 'Where to get payment methods',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-3-11.md'
+      },
+      {
+        id: 'lesson-3-12',
+        title: 'Facebook Traffic Launch Checklist',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-3-12.md'
       },
       {
         id: 'homework-3-1',
