@@ -21,7 +21,7 @@ At its core, a social account is just your personal profile — the one where yo
 
 However, within this profile, you gain access to Facebook’s advertising tools, which include:
 
-### 1.1 Personal Ad Account
+## 1.1 Personal Ad Account
 
 This is the default ad account that comes with every Facebook profile. It’s tied directly to your personal account and is often the first place where new affiliates start running ads. However, personal ad accounts have strict limits and are not suitable for long-term scaling.
 
@@ -38,7 +38,7 @@ Upon first login, you may need to accept Facebook’s Terms of Service. Just cli
 
 **Link**: [Facebook Ads Help - About Ad Accounts](https://www.facebook.com/help/516147308587266?helpref=hc_fnav)
 
-### 1.2 Business Manager (BM)
+## 1.2 Business Manager (BM)
 
 A Business Manager (BM) is essentially a company-level account where you can create multiple ad accounts, manage pages, pixels, and add team members. BMs are much more powerful than personal ad accounts because they allow for greater flexibility and the ability to manage multiple assets from one place.
 
@@ -51,7 +51,7 @@ Each BM allows you to create multiple ad accounts (depending on the BM’s trust
 
 **Link**: [Facebook Business Help - About Business Manager](https://www.facebook.com/business/help/910137316041095)
 
-### 1.3 Business Suite
+## 1.3 Business Suite
 
 ![Image 5](/img/1.7/image5.webp)
 
@@ -61,7 +61,7 @@ Each BM allows you to create multiple ad accounts (depending on the BM’s trust
 
 **Link**: [Facebook Business Help - Getting Started with Meta Business Suite](https://www.facebook.com/business/help/898752960195806)
 
-### 1.4 Fan Page (FP) / Business Page
+## 1.4 Fan Page (FP) / Business Page
 
 A Fan Page (FP) is the public-facing page that represents your business on Facebook. Every ad that runs on Facebook must be attached to a Fan Page, as ads cannot be run directly from a personal profile.
 
@@ -72,7 +72,7 @@ A Fan Page (FP) is the public-facing page that represents your business on Faceb
 
 **Link**: [Facebook Help Center - Creating and Managing Pages](https://www.facebook.com/help/396528481579093/?helpref=hc_fnav)
 
-### 1.5 Additional Business Assets
+## 1.5 Additional Business Assets
 
 *   You mentioned “lots of additional stuff,” which could include:
     *   **Pixels**: Tools to track user actions (like clicks or sign-ups).
@@ -93,7 +93,7 @@ Since we work in traffic arbitrage, running gray-hat offers means Facebook is co
 
 Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your account options helps you dodge bans and maximize profits. We’ll explore all types, but **agency accounts** are our star players—stable, scalable, and simpler for beginners. Let’s break it down! 📋
 
-### 2.1 Agency Accounts 💼 – Your Best Bet!
+## 2.1 Agency Accounts 💼 – Your Best Bet!
 
 **What They Are**: Premium accounts managed by agencies, often with fan pages, proxies, and profile access included. You pay a commission based on ad spend.
 **Why You Need Them**: Perfect for launching big campaigns right away!
@@ -102,7 +102,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Commission fees (tied to ad spend), needs decent budget to start.
     **For Beginners**: Top pick! Stable and low-hassle, ideal for scaling up fast.
 
-### 2.2 Personal Accounts 👤
+## 2.2 Personal Accounts 👤
 
 **What They Are**: Real user accounts, often old and unused, logged into trusted devices.
 **Why You Need Them**: Great for warming up to build trust.
@@ -111,7 +111,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: You need to ask for access to the FB accounts of your friends, in which case the advertising account may be blocked.
     **For Beginners**: Okay to try, but requires effort to warm up/farming.
 
-### 2.3 Rental Accounts (Aged) 📅
+## 2.3 Rental Accounts (Aged) 📅
 
 **What They Are**: Real user accounts rented out for ads.
 **Why You Need Them**: More trusted than autoregs, last longer in campaigns.
@@ -120,7 +120,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Owner might reclaim or double-rent, adding risk.
     **For Beginners**: Proceed with caution - reliability varies.
 
-### 2.4 Logs (Stolen) 🔒
+## 2.4 Logs (Stolen) 🔒
 
 **What They Are**: Hacked or phished accounts with high trust.
 **Why You Need Them**: Quick trust boost for ads.
@@ -129,7 +129,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Unethical, risky (owners can reclaim), potential legal issues.
     **For Beginners**: Avoid - too risky and unreliable.
 
-### 2.5 Farmed Accounts 🌾
+## 2.5 Farmed Accounts 🌾
 
 **What They Are**: Auto-created accounts “farmed” with activity (friends, likes, group joins).
 **Why You Need Them**: Mimic real user behavior for better trust.
@@ -138,7 +138,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Costlier ($3–$5 each), quality depends on farming, are not immune to bans.
     **For Beginners**: needs testing.
 
-### 2.6 PZRD Accounts 🎯
+## 2.6 PZRD Accounts 🎯
 
 **What They Are**: Artificially recovered accounts that were initially blocked and then unblocked through a document.
 **Why You Need Them**: Suitable for running ads
@@ -147,7 +147,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Not fully ban-proof,can be blocked again.
     **For Beginners**: can be used, sometimes accounts are combined - Farm + PZRD to make it more trustworthy
 
-### 2.7 Autoreg Accounts 🤖
+## 2.7 Autoreg Accounts 🤖
 
 **What They Are**: Mass-created accounts via automation tools.
 **Why You Need Them**: Cheap and abundant for bulk use.
@@ -156,7 +156,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Low trust, high ban risk from Facebook.
     **For Beginners**: Requires volume and warming - challenging start.
 
-### 2.8 King Accounts 👑
+## 2.8 King Accounts 👑
 
 **What They Are**: Trust-boosted farmed accounts (6-12 days old) with fan pages and business managers.
 **Why You Need Them**: Strong base for linking ad accounts.
@@ -169,7 +169,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 
 If you do not work with agency accounts, for the convenience and efficiency of managing your advertising accounts, you need to structure your accounts in a hierarchical system using the King Account, which will combine different tools, and it also helps to reduce the risk of bans.
 
-### 3.1 King Account Hierarchy
+## 3.1 King Account Hierarchy
 
 💡 Example Setup:
 
@@ -185,7 +185,7 @@ After the transfer, your ad accounts will appear in Ads Manager
 
 ![Image 9](/img/1.7/image9.webp)
 
-### 3.2 Linking Accounts Correctly
+## 3.2 Linking Accounts Correctly
 
 To prevent mass bans, it’s important to connect accounts in a strategic way.
 
@@ -203,14 +203,14 @@ To prevent mass bans, it’s important to connect accounts in a strategic way.
 
 A Business Manager (BM) is where you control multiple ad accounts, pages, and team members. Setting it up correctly is crucial for running a smooth operation.
 
-### 4.1 How to Create a BM
+## 4.1 How to Create a BM
 
 1.  Go to [business.facebook.com](https://business.facebook.com/)
 2.  Click "Create Business"
 3.  Add your business details
 4.  Connect a verified email & phone number
 
-### 4.2 Business Manager Trust Levels
+## 4.2 Business Manager Trust Levels
 
 Not all BMs are created equal! There are low-trust and high-trust BMs.
 
@@ -228,7 +228,7 @@ This is a simple and commonly used method for transferring account rights in tra
 
 ![Image 8](/img/1.7/image8.webp)
 
-### 5.1 How to Transfer Ad Account Access
+## 5.1 How to Transfer Ad Account Access
 
 1.  Copy the ad account ID from the Ads Manager of the account you want to transfer.
 

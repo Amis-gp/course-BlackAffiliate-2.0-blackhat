@@ -18,24 +18,21 @@ interface LessonContentProps {
 }
 
 export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, hasPrevious, hasNext }: LessonContentProps) {
-  const { completeLesson } = useProgress();
+  const { completeLesson, uncompleteLesson, isLessonCompleted } = useProgress();
   const [content, setContent] = useState('');
   const [headings, setHeadings] = useState<{ level: number; text: string; slug: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const startTime = Date.now();
+  const isCompleted = isLessonCompleted(lesson.id);
 
-    return () => {
-      const endTime = Date.now();
-      const timeSpent = endTime - startTime;
-
-      if (timeSpent >= 10000) {
-        completeLesson(lesson.id);
-      }
-    };
-  }, [lesson.id, completeLesson]);
+  const handleToggleComplete = () => {
+    if (isCompleted) {
+      uncompleteLesson(lesson.id);
+    } else {
+      completeLesson(lesson.id);
+    }
+  };
 
   useEffect(() => {
     if (lesson.contentPath) {
@@ -97,7 +94,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
 
   return (
     <div className='flex-1 overflow-y-auto flex flex-col min-h-full'>
-      <div className="max-w-4xl mx-auto pb-8 pt-4 px-4 sm:p-8 w-full flex-1">
+      <div className="max-w-4xl mx-auto pt-6 px-4 sm:t-8 w-full flex-1">
           <div className="w-full">
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-4">
@@ -259,21 +256,58 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
           </div>
         )}
 
-        <div className="flex justify-between items-center mt-8 pt-8 border-t border-gray-800">
-          <button 
-            className={`btn-secondary ${!hasPrevious ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={onPreviousLesson}
-            disabled={!hasPrevious}
-          >
-            ← Previous Lesson
-          </button>
-          <button 
-            className={`btn-primary ${!hasNext ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={onNextLesson}
-            disabled={!hasNext}
-          >
-            Next Lesson →
-          </button>
+        <div className="py-16 border-t border-gray-800/30">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row md:items-center md:justify-between">
+              <button 
+                className={`group flex items-center justify-center space-x-3 px-8 py-3 rounded-xl font-medium transition-all duration-300 w-full md:w-auto ${
+                  !hasPrevious 
+                    ? 'opacity-30 cursor-not-allowed text-gray-600' 
+                    : 'text-gray-400 hover:text-white bg-gray-900/30 hover:bg-gray-800/50 border border-gray-700/50 hover:border-gray-600/70 backdrop-blur-sm'
+                }`}
+                onClick={onPreviousLesson}
+                disabled={!hasPrevious}
+              >
+                <span className="transform group-hover:-translate-x-1 transition-transform duration-300 text-lg">←</span>
+                <span className="text-sm">Previous Lesson</span>
+              </button>
+              
+              <button 
+                onClick={handleToggleComplete}
+                className={`group relative px-8 py-4 rounded-2xl font-medium text-base transition-all duration-500 ease-out w-full md:w-auto ${
+                  isCompleted 
+                    ? 'bg-emerald-50/5 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-50/10 hover:border-emerald-400/40 shadow-lg shadow-emerald-500/10' 
+                    : 'bg-blue-50/5 text-blue-400 border border-blue-400/20 hover:bg-blue-50/10 hover:border-blue-400/40 shadow-lg shadow-blue-500/10'
+                } backdrop-blur-sm`}>
+                <span className="flex items-center justify-center space-x-3">
+                  <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                    isCompleted 
+                      ? 'border-emerald-400 bg-emerald-400/20' 
+                      : 'border-blue-400 bg-transparent group-hover:bg-blue-400/10'
+                  }`}>
+                    {isCompleted && <span className="text-emerald-400 text-xs">✓</span>}
+                  </span>
+                  <span>{isCompleted ? 'Mark as Incomplete' : 'Mark as Completed'}</span>
+                </span>
+                <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
+                  isCompleted ? 'bg-emerald-400/5' : 'bg-blue-400/5'
+                }`}></div>
+              </button>
+              
+              <button 
+                className={`group flex items-center justify-center space-x-3 px-8 py-3 rounded-xl font-medium transition-all duration-300 w-full md:w-auto ${
+                  !hasNext 
+                    ? 'opacity-30 cursor-not-allowed text-gray-600' 
+                    : 'text-gray-400 hover:text-white bg-gray-900/30 hover:bg-gray-800/50 border border-gray-700/50 hover:border-gray-600/70 backdrop-blur-sm'
+                }`}
+                onClick={onNextLesson}
+                disabled={!hasNext}
+              >
+                <span className="text-sm">Next Lesson</span>
+                <span className="transform group-hover:translate-x-1 transition-transform duration-300 text-lg">→</span>
+              </button>
+            </div>
+          </div>
         </div>
         </div>
       </div>

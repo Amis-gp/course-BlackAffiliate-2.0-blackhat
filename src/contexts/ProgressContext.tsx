@@ -7,6 +7,7 @@ const PROGRESS_KEY = 'course_progress';
 type ProgressContextType = {
   completedLessons: Set<string>;
   completeLesson: (lessonId: string) => void;
+  uncompleteLesson: (lessonId: string) => void;
   isLessonCompleted: (lessonId: string) => boolean;
 };
 
@@ -55,12 +56,22 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const uncompleteLesson = useCallback((lessonId: string) => {
+    console.log('Uncompleting lesson:', lessonId);
+    setCompletedLessons(prev => {
+      const newCompleted = new Set(prev);
+      newCompleted.delete(lessonId);
+      saveProgress(newCompleted);
+      return newCompleted;
+    });
+  }, []);
+
   const isLessonCompleted = useCallback((lessonId: string) => {
     return completedLessons.has(lessonId);
   }, [completedLessons]);
 
   return (
-    <ProgressContext.Provider value={{ completedLessons, completeLesson, isLessonCompleted }}>
+    <ProgressContext.Provider value={{ completedLessons, completeLesson, uncompleteLesson, isLessonCompleted }}>
       {children}
     </ProgressContext.Provider>
   );

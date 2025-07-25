@@ -27,7 +27,7 @@ If you don't pass the checkpoint, you get your social account deactivated. You w
 
 **Passing checkpoints.**
 .
-### Selfies:
+## Selfies:
 
 1. Go to [this-person-does-not-exist.com](https://this-person-does-not-exist.com/en), enter gender, age and click "Refresh Image":
 ![image](/img/2.5/image2.jpg)

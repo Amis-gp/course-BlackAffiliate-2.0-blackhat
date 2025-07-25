@@ -25,21 +25,21 @@ Here's how a tracker empowers you to dominate your campaigns:
 
 Not all trackers are created equal. To pick the best one for your arbitrage campaigns, consider these factors:
 
-### Hosting Type
+## Hosting Type
 
 * **Self-Hosted Trackers** (e.g., Keitaro): Installed on your own server, giving you full control and cost savings. Ideal for high-traffic campaigns but requires technical know-how to manage.  
 * **Cloud-Based Trackers** (e.g., Voluum): Hosted by the provider, offering ease of use but higher costs and less data control. Perfect for beginners or smaller campaigns.
 
-### Traffic Volume
+## Traffic Volume
 
 * For small to medium campaigns, cloud-based trackers are sufficient.  
 * For high-volume traffic, self-hosted trackers offer better scalability and cost-efficiency.
 
-### Affiliate Network Integration
+## Affiliate Network Integration
 
 Look for trackers with pre-built templates for popular affiliate networks. These streamline setup and minimize errors.
 
-### WebView Compatibility
+## WebView Compatibility
 
 If you're running mobile app traffic, ensure your tracker supports WebView event tracking and postback setup to sync data with ad platforms and networks.
 
@@ -47,7 +47,7 @@ If you're running mobile app traffic, ensure your tracker supports WebView event
 
 Here are two leading trackers widely used in the industry:
 
-### Keitaro
+## Keitaro
 
 * **Website**: [keitaro.io](http://keitaro.io)   
 * **Type**: Self-hosted
@@ -61,7 +61,7 @@ Here are two leading trackers widely used in the industry:
   * Requires VPS/server management skills.  
   * Licensing starts at €40/month.
 
-### Voluum
+## Voluum
 
 * **Website**: [voluum.com](http://voluum.com)   
 * **Type**: Cloud-based (SaaS)  

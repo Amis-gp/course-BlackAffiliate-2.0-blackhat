@@ -1,0 +1,155 @@
+facebook
+facebot
+facebookexternalhit/1.0
+facebookexternalhit/1.1
+http://www.facebook.com/externalhit_uatext.php
+python-urllib
+facebookexternalhit
+python-requests
+zgrab/0.x
+wget(linux)
+facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)
+facebookexternalhit/1.1 ( http://www.facebook.com/externalhit_uatext.php)
+facebook
+vkShare
+facebot
+facebookexternalhit/1.0
+proximic
+facebookexternalhit/1.1
+Python-urllib
+python-requests
+zgrab/0.x
+Wget(linux)
+accoona
+ask
+bond
+bot
+crawler
+curl
+eltaindexer
+ia_archiver
+jeeves
+nigma
+rambler
+spider
+turtle
+w3c_validator
+webalta
+wget
+aol
+baidu
+bing
+duckduckgo
+excite
+gigablast
+google
+hotbot
+lycos
+mail
+metacrawler
+pipl
+yahoo
+yandex
+AhrefsBot
+Aport
+BLEXBot
+BTWebClient
+Baiduspider
+CommentReader
+Copier
+Crowsnest
+DISCo
+Ezooms
+Go-http-client/1.1
+HTTrac
+JS-Kit
+Jakarta Commons
+Java
+MJ12bot
+MOT-MPx220
+NING
+Nutch
+Offline
+PaperLiBot
+Slurp
+SputnikBot
+Tagoobot
+Teleport
+Twiceler
+Y!OASIS/TEST
+Yeti
+binlar
+casper
+checkprivacy
+cmsworldmap
+comodo
+cr4nk
+curious
+diavol
+discobot
+doco
+dotbot
+feedfinder
+flicky
+igdeSpyder
+kmccrew
+libwww
+libwww-perl
+netvampire
+peerindex
+planetwork
+purebot
+pycurl
+rogerbot
+skygrid
+sucker
+turnit
+vikspid
+zmeu
+zune
+facebookexternalhit/1.1 (http://www.facebook.com/externalhit_uatext.php)
+a.pr-cy.ru
+AdsBot-Google (+http://www.google.com/adsbot.html)
+AdsBot-Google-Mobile (+http://www.google.com/mobile/adsbot.html) Mozilla (iPhone; U; CPU iPhone OS 3 0 like Mac OS X) AppleWebKit (KHTML
+like Gecko) Mobile Safari
+Apache-HttpClient/4.5 (Java/1.8.0_60)
+eSyndiCat Bot
+facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)
+Google favicon
+Googlebot-Image/1.0
+GuzzleHttp/6.1.0 curl/7.26.0 PHP/5.5.29-1~dotdeb+7.1
+GuzzleHttp/6.1.0 curl/7.35.0 PHP/5.6.14-1+deb.sury.org~trusty+1
+Java/1.4.1_04
+Java/1.8.0_60
+LinksMasterRoBot/0.01 (http://www.linksmaster.ru)
+LinkStats Bot
+ltx71 - (http://ltx71.com/)
+Mozilla/5.0 (compatible; AhrefsBot/5.0; +http://ahrefs.com/robot/)
+Mozilla/5.0 (compatible; archive.org_bot; Wayback Machine Live Record; +http://archive.org/details/archive.org_bot)
+Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)
+Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)
+Mozilla/5.0 (compatible; CNCat/4.2; +http://www.cn-software.com/en/cncat/robot/)
+Mozilla/5.0 (compatible; CNCat/4.2; +http://www.vipwords.com/en/cncat/robot/)
+Mozilla/5.0 (compatible; DeuSu/5.0.2; +https://deusu.de/robot.html)
+Mozilla/5.0 (compatible; DotBot/1.1; http://www.opensiteexplorer.org/dotbot
+help@moz.com)
+Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)/1.8 (InfoSeek crawler; http://www.infoseek.com; crawler@infoseek.com)
+Mozilla/5.0 (compatible; Google-Site-Verification/1.0)
+Mozilla/5.0 (compatible; GrapeshotCrawler/2.0; +http://www.grapeshot.co.uk/crawler.php)
+Mozilla/5.0 (compatible; linkdexbot/2.2; +http://www.linkdex.com/bots/)
+Mozilla/5.0 (compatible; LinkpadBot/1.06; +http://www.linkpad.ru)
+Mozilla/5.0 (compatible; Linux x86_64; Mail.RU_Bot/2.0; +http://go.mail.ru/help/robots)
+Mozilla/5.0 (compatible; Linux x86_64; Mail.RU_Bot/Fast/2.0; +http://go.mail.ru/help/robots)
+Mozilla/5.0 (compatible; meanpathbot/1.0; +http://www.meanpath.com/meanpathbot.html)
+Mozilla/5.0 (compatible; MegaIndex.ru/2.0; +http://megaindex.com/crawler)
+Mozilla/5.0 (compatible; MJ12bot/v1.4.5; http://www.majestic12.co.uk/bot.php?+)
+Mozilla/5.0 (compatible; NetSeer crawler/2.0; +http://www.netseer.com/crawler.html; crawler@netseer.com)
+Mozilla/5.0 (compatible; openstat.ru/Bot)
+Mozilla/5.0 (compatible; SemrushBot/0.99~bl; +http://www.semrush.com/bot.html)
+Mozilla/5.0 (compatible; SputnikFaviconBot/1.2; +http://corp.sputnik.ru/webmaster)
+Mozilla/5.0 (compatible; statdom.ru/Bot; +http://statdom.ru/bot.html)
+Mozilla/5.0 (compatible; StatOnlineRuBot/1.0)
+Mozilla/5.0 (compatible; vkShare; +http://vk.com/dev/Share)
+Mozilla/5.0 (compatible; WebArtexBot; +http://webartex.ru/)
+Mozilla/5.0 (compatible; Web-Monitoring/1.0; +http://monoid.nic.ru/)

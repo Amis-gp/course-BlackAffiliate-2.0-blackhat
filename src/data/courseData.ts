@@ -112,31 +112,37 @@ export const courseData: Section[] = [
         id: 'lesson-2-6',
         title: 'Passing the Advertising Activity Ban (ZRD)',
         type: 'lesson',
-        contentPath: '@/data/lessons/lesson-2-5.md'
+        contentPath: '@/data/lessons/lesson-2-6.md'
       },
       {
         id: 'lesson-2-7',
         title: 'Pixel FB settings',
         type: 'lesson',
-        contentPath: '@/data/lessons/lesson-2-6.md'
-      },
-      {
-        id: 'lesson-2-8',
-        title: 'Setting up a Keitaro tracker',
-        type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-7.md'
       },
       {
-        id: 'lesson-2-9',
-        title: 'Cloaking FB',
+        id: 'lesson-2-8',
+        title: 'Pixel Conversion API',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-8.md'
       },
       {
-        id: 'lesson-2-10',
-        title: 'Spreadsheet tracker of FB accounts and script for statistics',
+        id: 'lesson-2-9',
+        title: 'Setting up a Keitaro tracker',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-2-9.md'
+      },
+      {
+        id: 'lesson-2-10',
+        title: 'Cloaking FB',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-2-10.md'
+      },
+      {
+        id: 'lesson-2-11',
+        title: 'Spreadsheet tracker of FB accounts and script for statistics',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-2-11.md'
       },
       {
         id: 'homework-2-1',
@@ -158,63 +164,57 @@ export const courseData: Section[] = [
     lessons: [
       {
         id: 'lesson-3-1',
-        title: 'Where to get payment methods',
+        title: 'Ideal customer profile - Prompt',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-1.md'
       },
       {
         id: 'lesson-3-2',
-        title: 'Facebook Traffic Launch Checklist',
+        title: 'Basics of working with the affiliate network',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-2.md'
       },
       {
         id: 'lesson-3-3',
-        title: 'Passing the Advertising Activity Ban (ZRD)',
+        title: 'Choosing the Right Offer',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-3.md'
       },
       {
         id: 'lesson-3-4',
-        title: 'Basics of working with the affiliate network',
+        title: 'Creative Production',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-4.md'
       },
       {
         id: 'lesson-3-5',
-        title: 'Setting up postback with Affiliate networks',
+        title: 'SPY services for Facebook',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-5.md'
       },
       {
         id: 'lesson-3-6',
-        title: 'Pixel FB',
+        title: 'Working with Facebook Fan Page',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-6.md'
       },
       {
         id: 'lesson-3-7',
-        title: 'SPY servis ADHeart',
+        title: 'Pre-landing',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-7.md'
       },
       {
         id: 'lesson-3-8',
-        title: 'Types of creatives',
+        title: 'Where to get payment methods',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-8.md'
       },
       {
         id: 'lesson-3-9',
-        title: 'Ideal customer profile - Prompt',
+        title: 'Facebook Traffic Launch Checklist',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-9.md'
-      },
-      {
-        id: 'lesson-3-10',
-        title: 'SOP: Connecting an ad account to the BM',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-3-10.md'
       },
       {
         id: 'homework-3-1',
