@@ -174,7 +174,7 @@ export const courseData: Section[] = [
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-3-2.md'
       },
-{
+      {
         id: 'lesson-3-3',
         title: 'Understanding Postbacks for Traffic Arbitrage',
         type: 'lesson',
@@ -239,6 +239,156 @@ export const courseData: Section[] = [
         title: 'Homework',
         type: 'homework',
         contentPath: '@/data/lessons/homework-3-1.md'
+      }
+    ]
+  },
+  {
+    id: 'section-4',
+    title: 'Advertising management and optimization',
+    lessons: [
+      {
+        id: 'lesson-4-1',
+        title: 'Setting up and working with metrics',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-1.md'
+      },
+      {
+        id: 'lesson-4-2',
+        title: 'What Budget to Use for Launching Ad Campaigns',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-2.md'
+      },
+      {
+        id: 'lesson-4-3',
+        title: 'Working with bids',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-3.md'
+      },
+      {
+        id: 'lesson-4-4',
+        title: 'FB auction mechanisms',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-4.md'
+      },
+      {
+        id: 'lesson-4-5',
+        title: 'Optimization Facebook Ads',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-5.md'
+      },
+      {
+        id: 'lesson-4-6',
+        title: 'Technical Audit of Your Funnel',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-6.md'
+      },
+      {
+        id: 'lesson-4-7',
+        title: 'Scaling  Campaigns',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-7.md'
+      },
+      {
+        id: 'lesson-4-8',
+        title: 'Creating auto-rules',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-8.md'
+      },
+      {
+        id: 'homework-4-1',
+        title: 'Homework - Questions on the general part',
+        type: 'homework',
+        contentPath: '@/data/lessons/homework-4-1.md'
+      },
+    ]
+  },
+  {
+    id: 'section-5',
+    title: 'Gambling / Casino part 1',
+    lessons: [
+      {
+        id: 'lesson-5-1',
+        title: 'How to Promote Gambling in 2025',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-1.md'
+      },
+      {
+        id: 'lesson-5-2',
+        title: 'What Budget to Use for Launching Ad Campaigns',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-2.md'
+      },
+      {
+        id: 'lesson-5-3',
+        title: 'Working with bids',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-3.md'
+      },
+      {
+        id: 'lesson-5-4',
+        title: 'FB auction mechanisms',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-4.md'
+      },
+      {
+        id: 'lesson-5-5',
+        title: 'Optimization Facebook Ads',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-5.md'
+      },
+      {
+        id: 'lesson-5-6',
+        title: 'Technical Audit of Your Funnel',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-6.md'
+      },
+      {
+        id: 'lesson-5-7',
+        title: 'Scaling  Campaigns',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-7.md'
+      },
+      {
+        id: 'lesson-5-8',
+        title: 'Creating auto-rules',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-8.md'
+      }
+    ]
+  },
+  {
+    id: 'section-8',
+    title: 'PWA Installation',
+    lessons: [
+      {
+        id: 'lesson-8-1',
+        title: 'PWA Builder',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-8-1.md'
+      },
+      {
+        id: 'lesson-8-2',
+        title: 'Test PWA Installation',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-8-2.md'
+      },
+      {
+        id: 'lesson-8-3',
+        title: 'Integration with Trackers',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-8-3.md'
+      },
+      {
+        id: 'lesson-8-4',
+        title: 'Voluum Integration',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-8-4.md'
+      },
+      {
+        id: 'lesson-8-5',
+        title: 'Traffic Split Between Campaigns in Trackers',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-8-5.md'
       }
     ]
   }

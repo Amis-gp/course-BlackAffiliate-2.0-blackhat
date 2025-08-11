@@ -73,7 +73,7 @@ export default function LessonPage() {
   return (
     <ProtectedRoute>
       <ProgressProvider>
-      <div className="min-h-screen bg-background flex">
+      <div className="min-h-screen bg-background flex relative">
         {isMobileNavOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setIsMobileNavOpen(false)} />
         )}
@@ -110,7 +110,7 @@ export default function LessonPage() {
         </div>
 
         <div className="flex-1 flex flex-col">
-          <div className="lg:hidden bg-[#0f1012] border-b border-gray-700 p-4 flex justify-between items-center">
+          <div className="lg:hidden bg-[#0f1012] border-b border-gray-700 p-4 flex justify-between items-center relative z-10">
             <button onClick={() => setIsMobileNavOpen(true)} className="text-white hover:text-gray-300">
               <Menu className="w-6 h-6" />
             </button>

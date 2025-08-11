@@ -2,6 +2,8 @@
 
 This guide will walk you through setting up Facebook Pixel API for conversion tracking and event management.
 
+This method is suitable for running Gambling offers through PWA.
+
 ## Step 1: Create Pixel API Conversion
 
 Create a Pixel API conversion and name it based on your domain + GEO for convenience.

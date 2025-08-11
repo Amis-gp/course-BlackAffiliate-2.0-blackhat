@@ -95,7 +95,10 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
   return (
     <div className='flex-1 overflow-y-auto flex flex-col min-h-full'>
       <div className="max-w-4xl mx-auto pt-6 px-4 sm:t-8 w-full flex-1">
-          <div className="w-full">
+        <div className="absolute top-0 left-0 bottom-0 w-20 md:w-32 bg-gradient-to-r from-red-500/15 via-red-400/5 to-transparent lg:left-[320px]"></div>
+        <div className="absolute top-0 right-0 bottom-0 w-20 md:w-32 bg-gradient-to-l from-red-500/15 via-red-400/5 to-transparent "></div>
+      
+        <div className="w-full z-50 relative">
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-4">
             <div className={`p-2 rounded-lg ${typeInfo.bgColor}`}>
@@ -109,7 +112,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-6">
             {lesson.title}
           </h1>
-          </div>
+        </div>
 
         {lesson.videoUrl && (
           <div className="mb-8">
@@ -127,7 +130,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
         )}
 
         {headings.length > 0 && (
-            <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm rounded-xl p-6 mb-8 border border-gray-700/50 shadow-lg">
+            <div className="bg-[#0f1012] rounded-xl p-6 mb-8 border border-[#252d39] shadow-lg">
                 <h4 className="text-base font-semibold text-white pb-2">Lesson navigation</h4>
                 <div className="space-y-1">
                     {headings.map((heading, index) => (
@@ -187,7 +190,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                     h3: ({node, ...props}) => (
                       <h3 
                         id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
-                        className="text-xl font-semibold text-gray-100 mb-3 mt-6 pb-1 border-b border-gray-700/50"
+                        className="text-xl font-semibold text-gray-100 mb-3 mt-6 pt-2 border-t border-gray-700/50"
                         {...props} 
                       />
                     ),
@@ -262,8 +265,8 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
               <button 
                 className={`group flex items-center justify-center space-x-3 px-8 py-3 rounded-xl font-medium transition-all duration-300 w-full md:w-auto ${
                   !hasPrevious 
-                    ? 'opacity-30 cursor-not-allowed text-gray-600' 
-                    : 'text-gray-400 hover:text-white bg-gray-900/30 hover:bg-gray-800/50 border border-gray-700/50 hover:border-gray-600/70 backdrop-blur-sm'
+                    ? 'cursor-not-allowed text-gray-600 border border-gray-900 bg-background' 
+                    : 'text-gray-400 hover:text-white bg-[#05070b] hover:bg-[#0f151c] border border-[#1e242e] hover:border-[#3a424e]'
                 }`}
                 onClick={onPreviousLesson}
                 disabled={!hasPrevious}
@@ -272,6 +275,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                 <span className="text-sm">Previous Lesson</span>
               </button>
               
+              <div className='bg-background rounded-2xl'>
               <button 
                 onClick={handleToggleComplete}
                 className={`group relative px-8 py-4 rounded-2xl font-medium text-base transition-all duration-500 ease-out w-full md:w-auto ${
@@ -293,12 +297,13 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                   isCompleted ? 'bg-emerald-400/5' : 'bg-blue-400/5'
                 }`}></div>
               </button>
+              </div>
               
               <button 
                 className={`group flex items-center justify-center space-x-3 px-8 py-3 rounded-xl font-medium transition-all duration-300 w-full md:w-auto ${
                   !hasNext 
-                    ? 'opacity-30 cursor-not-allowed text-gray-600' 
-                    : 'text-gray-400 hover:text-white bg-gray-900/30 hover:bg-gray-800/50 border border-gray-700/50 hover:border-gray-600/70 backdrop-blur-sm'
+                    ? 'cursor-not-allowed text-gray-600 border border-gray-900 bg-background' 
+                    : 'text-gray-400 hover:text-white bg-[#05070b] hover:bg-[#0f151c] border border-[#1e242e] hover:border-[#3a424e]'
                 }`}
                 onClick={onNextLesson}
                 disabled={!hasNext}
