@@ -314,81 +314,57 @@ export const courseData: Section[] = [
       },
       {
         id: 'lesson-5-2',
-        title: 'What Budget to Use for Launching Ad Campaigns',
+        title: 'A Deeper Dive into PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-2.md'
       },
       {
         id: 'lesson-5-3',
-        title: 'Working with bids',
+        title: 'PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-3.md'
       },
       {
         id: 'lesson-5-4',
-        title: 'FB auction mechanisms',
+        title: 'PWA Builder',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-4.md'
       },
       {
         id: 'lesson-5-5',
-        title: 'Optimization Facebook Ads',
+        title: 'Test PWA Installation',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-5.md'
       },
       {
         id: 'lesson-5-6',
-        title: 'Technical Audit of Your Funnel',
+        title: 'Integration with Trackers',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-6.md'
       },
       {
         id: 'lesson-5-7',
-        title: 'Scaling  Campaigns',
+        title: 'Voluum Integration',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-7.md'
       },
       {
         id: 'lesson-5-8',
-        title: 'Creating auto-rules',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-5-8.md'
-      }
-    ]
-  },
-  {
-    id: 'section-8',
-    title: 'PWA Installation',
-    lessons: [
-      {
-        id: 'lesson-8-1',
-        title: 'PWA Builder',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-8-1.md'
-      },
-      {
-        id: 'lesson-8-2',
-        title: 'Test PWA Installation',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-8-2.md'
-      },
-      {
-        id: 'lesson-8-3',
-        title: 'Integration with Trackers',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-8-3.md'
-      },
-      {
-        id: 'lesson-8-4',
-        title: 'Voluum Integration',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-8-4.md'
-      },
-      {
-        id: 'lesson-8-5',
         title: 'Traffic Split Between Campaigns in Trackers',
         type: 'lesson',
-        contentPath: '@/data/lessons/lesson-8-5.md'
+        contentPath: '@/data/lessons/lesson-5-8.md'
+      },
+      {
+        id: 'lesson-5-9',
+        title: 'Setup - From buying to launching',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-9.md'
+      },
+      {
+        id: 'lesson-5-10',
+        title: 'Setting up flow via PWA',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-10.md'
       }
     ]
   }
