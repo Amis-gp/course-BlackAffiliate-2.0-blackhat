@@ -14,7 +14,11 @@ Postbacks are a powerful mechanism that lets you capture critical event data (li
 2. **Event Tracking**: Once the user completes an action (e.g., signing up or depositing), the affiliate network logs this event.  
 3. **Data Return via Postback**: The network sends a request to a predefined postback URL, including the ClickID and event details (e.g., registration status or deposit amount). This data is then recorded in your system for further use.
 
-**Example**: If your ad link includes sub1={clickid}, the affiliate network replaces it with a unique ClickID (e.g., sub1=123456). Upon a successful registration, the network pings your postback URL like this: [https://your\_domain.com/postback?clickid=123456\&event=registration](https://your_domain.com/postback?clickid=123456&event=registration) .
+**Example**: If your ad link includes sub1={clickid}, the affiliate network replaces it with a unique ClickID (e.g., sub1=123456). Upon a successful registration, the network pings your postback URL like this:
+
+```
+https://your_domain.com/postback?clickid=123456&event=registration
+```
 
 ## Extending Data Flow
 

@@ -16,7 +16,7 @@ export interface Section {
 export const courseData: Section[] = [
   {
     id: 'section-1',
-    title: 'Introduction, Theory and Basics',
+    title: '1. Introduction, Theory and Basics',
     lessons: [
       {
         id: 'lesson-1-1',
@@ -76,7 +76,7 @@ export const courseData: Section[] = [
   },
   {
     id: 'section-2',
-    title: 'Preparing the infrastructure',
+    title: '2. Preparing the infrastructure',
     lessons: [
       {
         id: 'lesson-2-1',
@@ -160,7 +160,7 @@ export const courseData: Section[] = [
   },
   {
     id: 'section-3',
-    title: 'System Setup',
+    title: '3. System Setup',
     lessons: [
       {
         id: 'lesson-3-1',
@@ -244,7 +244,7 @@ export const courseData: Section[] = [
   },
   {
     id: 'section-4',
-    title: 'Advertising management and optimization',
+    title: '4. Advertising management and optimization',
     lessons: [
       {
         id: 'lesson-4-1',
@@ -304,7 +304,7 @@ export const courseData: Section[] = [
   },
   {
     id: 'section-5',
-    title: 'Gambling / Casino part 1',
+    title: '5. Gambling part 1',
     lessons: [
       {
         id: 'lesson-5-1',
@@ -338,13 +338,13 @@ export const courseData: Section[] = [
       },
       {
         id: 'lesson-5-6',
-        title: 'Integration with Trackers',
+        title: 'Integration with Trackers and ZM apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-6.md'
       },
       {
         id: 'lesson-5-7',
-        title: 'Voluum Integration',
+        title: 'Voluum Integration and ZM apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-7.md'
       },
@@ -365,6 +365,54 @@ export const courseData: Section[] = [
         title: 'Setting up flow via PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-10.md'
+      }
+    ]
+  },
+  {
+    id: 'section-6',
+    title: '6. Gambling part 2',
+    lessons: [
+      {
+        id: 'lesson-6-1',
+        title: 'Choosing the Right Offer for Gambling',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-1.md'
+      },
+      {
+        id: 'lesson-6-2',
+        title: 'Reasons for Low Conversion in Gambling and Betting',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-2.md'
+      },
+      {
+        id: 'lesson-6-3',
+        title: 'Case study - ROI 94.21%',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-3.md'
+      },
+      {
+        id: 'lesson-6-4',
+        title: 'What Creatives and Promo Materials to Use',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-4.md'
+      },
+      {
+        id: 'lesson-6-5',
+        title: 'List of Prohibited/Trigger Words and Phrases',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-5.md'
+      },
+      {
+        id: 'lesson-6-6',
+        title: 'Push notification',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-6.md'
+      },
+      {
+        id: 'lesson-6-7',
+        title: 'Lead Calculator - Gambling',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-7.md'
       }
     ]
   }

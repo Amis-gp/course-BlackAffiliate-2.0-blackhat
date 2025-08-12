@@ -38,8 +38,6 @@ Set up automated rules in Ads Manager to automatically pause ad sets with poor p
 * **Add new GEOs**: Pick 2-3 additional Tier-2/3 countries (e.g., Mexico, India, Brazil, or something else).  
 * **Test multiple offers**: Your issue with instability and scaling difficulties is normal for the gambling vertical, especially when focusing on a single GEO.
 
----
-
 ### A principle that works across all verticals
 
 1. As soon as the creative catches on and starts delivering results, increase the budget by 2–5x the original amount, then return it back at the end of the day.
