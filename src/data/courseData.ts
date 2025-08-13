@@ -304,7 +304,7 @@ export const courseData: Section[] = [
   },
   {
     id: 'section-5',
-    title: '5. Gambling part 1',
+    title: 'Gambling part 1',
     lessons: [
       {
         id: 'lesson-5-1',
@@ -370,7 +370,7 @@ export const courseData: Section[] = [
   },
   {
     id: 'section-6',
-    title: '6. Gambling part 2',
+    title: 'Gambling part 2',
     lessons: [
       {
         id: 'lesson-6-1',
