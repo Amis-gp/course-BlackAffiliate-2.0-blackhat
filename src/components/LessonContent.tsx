@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Play, FileText, HelpCircle, Download, List, ChevronRight } from 'lucide-react';
 import { Lesson } from '@/data/courseData';
 import Footer from '@/components/Footer';
+import ImageModal from '@/components/ImageModal';
 import { useProgress } from '@/contexts/ProgressContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -23,6 +24,9 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
   const [headings, setHeadings] = useState<{ level: number; text: string; slug: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalImages, setModalImages] = useState<{src: string; alt: string}[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isCompleted = isLessonCompleted(lesson.id);
 
@@ -31,6 +35,24 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
       uncompleteLesson(lesson.id);
     } else {
       completeLesson(lesson.id);
+    }
+  };
+
+  const handleImageClick = (imageSrc: string) => {
+    const imageIndex = modalImages.findIndex(img => img.src === imageSrc);
+    if (imageIndex !== -1) {
+      setCurrentImageIndex(imageIndex);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleNavigateImage = (index: number) => {
+    if (index >= 0 && index < modalImages.length) {
+      setCurrentImageIndex(index);
     }
   };
 
@@ -48,6 +70,15 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
         .then(data => {
           setContent(data.content);
           setHeadings(data.headings || []);
+          
+          const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
+          const images: {src: string; alt: string}[] = [];
+          let match;
+          while ((match = imageRegex.exec(data.content)) !== null) {
+            images.push({ src: match[2], alt: match[1] || 'Зображення уроку' });
+          }
+          setModalImages(images);
+          
           setIsLoading(false);
         })
         .catch(err => {
@@ -137,14 +168,14 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                         <div key={heading.slug} className="group">
                             <a 
                                 href={`#${heading.slug}`} 
-                                className="flex items-center justify-between p-3 rounded-lg text-gray-300 hover:bg-gray-700/40 hover:text-white transition-all duration-200 group-hover:translate-x-1"
+                                className="flex items-center justify-between p-1 rounded-lg text-gray-300 hover:bg-gray-700/40 hover:text-white transition-all duration-200 group-hover:translate-x-1"
                                 style={{ textDecoration: 'none' }}
                             >
                                 <div className="flex items-center space-x-3">
-                                    <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs font-medium text-gray-300 group-hover:bg-primary group-hover:text-white transition-colors">
-                                        {index + 1}
-                                    </div>
-                                    <span className="font-medium">{heading.text}</span>
+                                    {(heading.level === 3 || heading.level === 4) && (
+                                        <span className="text-current mr-3 flex-shrink-0 mt-1">•</span>
+                                    )}
+                                    <span className={`font-medium ${heading.level === 3 || heading.level === 4 ? 'ml-6' : ''}`}>{heading.text}</span>
                                 </div>
                                 <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
                             </a>
@@ -167,7 +198,14 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeRaw]}
                   components={{
-                    img: ({node, ...props}) => <img {...props} className="rounded-lg mx-auto" />,
+                    img: ({node, ...props}) => (
+                      <img 
+                        {...props} 
+                        className="rounded-lg mx-auto cursor-pointer hover:opacity-80 transition-opacity" 
+                        onClick={() => props.src && handleImageClick(props.src)}
+                        title="Клікніть для збільшення"
+                      />
+                    ),
                     h1: ({node, ...props}) => (
                       <div className="mb-8">
                         <h1 
@@ -316,6 +354,16 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
         </div>
         </div>
       </div>
+      
+      {/* Image Modal */}
+      <ImageModal
+        isOpen={isModalOpen}
+        images={modalImages}
+        currentIndex={currentImageIndex}
+        onClose={handleCloseModal}
+        onNavigate={handleNavigateImage}
+      />
+      
       <Footer />
     </div>
   );

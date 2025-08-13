@@ -109,7 +109,13 @@ export async function GET(
 
     console.log('Successfully processed lesson content');
     console.log('=== LESSON API DEBUG END ===');
-    return NextResponse.json({ content: fileContent, headings });
+    
+    const response = NextResponse.json({ content: fileContent, headings });
+    
+    response.headers.set('Cache-Control', 'public, max-age=86400, s-maxage=86400');
+    response.headers.set('ETag', `"${lessonId}-${Date.now()}"`);
+    
+    return response;
   } catch (error) {
     console.error('=== LESSON API ERROR ===');
     console.error(`Failed to read lesson content for ${lessonId}:`, error);
