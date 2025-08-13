@@ -42,5 +42,14 @@
     "name": "test3",
     "role": "user",
     "createdAt": "2025-07-18T14:48:35.274Z"
+  },
+  {
+    "id": "i2jed3kve",
+    "email": "test4@test.com",
+    "password": "test4@test.com",
+    "name": "test4",
+    "role": "user",
+    "isApproved": true,
+    "createdAt": "2025-08-13T17:21:10.946Z"
   }
 ]

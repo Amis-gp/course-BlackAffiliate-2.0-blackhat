@@ -9,7 +9,7 @@ export async function GET() {
     console.log('📋 API: Fetching registration requests');
     const requests = await db.registrationRequest.findMany();
     console.log('✅ API: Found requests:', requests.length);
-    return NextResponse.json(requests);
+    return NextResponse.json({ success: true, requests });
   } catch (error) {
     console.error('💥 Error fetching requests:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

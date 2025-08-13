@@ -345,6 +345,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isAdmin,
     register,
     getRegistrationRequests,
+    loadRegistrationRequests,
     approveRegistration,
     rejectRegistration,
     remindAdmin

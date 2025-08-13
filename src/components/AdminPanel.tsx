@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { User as UserType, RegistrationRequest } from '@/types/auth';
 
 export default function AdminPanel() {
-  const { user, logout, getRegistrationRequests, approveRegistration, rejectRegistration } = useAuth();
+  const { user, logout, getRegistrationRequests, loadRegistrationRequests, approveRegistration, rejectRegistration } = useAuth();
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -32,9 +32,13 @@ export default function AdminPanel() {
   };
 
   useEffect(() => {
-    setRegistrationRequests(getRegistrationRequests());
-    loadUsers();
-  }, [getRegistrationRequests]);
+    const loadData = async () => {
+      await loadRegistrationRequests();
+      setRegistrationRequests(getRegistrationRequests());
+      loadUsers();
+    };
+    loadData();
+  }, [loadRegistrationRequests, getRegistrationRequests]);
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,6 +95,7 @@ export default function AdminPanel() {
   const handleApproveRequest = async (requestId: string) => {
     const success = await approveRegistration(requestId);
     if (success) {
+      await loadRegistrationRequests();
       setRegistrationRequests(getRegistrationRequests());
       await loadUsers();
     }
@@ -99,6 +104,7 @@ export default function AdminPanel() {
   const handleRejectRequest = async (requestId: string) => {
     const success = await rejectRegistration(requestId);
     if (success) {
+      await loadRegistrationRequests();
       setRegistrationRequests(getRegistrationRequests());
     }
   };
