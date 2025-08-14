@@ -37,9 +37,10 @@ Contact your agency account provider, ask for a pixel, you can create it on your
 
 * Add user access for a pixel
 
-# ZM Apps \- PWA 
+## ZM Apps \- PWA 
+Go to https://zm.app/, create a PWA design, and customize it.
 
-**Launching an advertising account** 
+## Launching an advertising account
 
 1. Campaign Launch Strategy (1:3:1):  
    * For fresh accounts, use the 1:3:1 system:  
