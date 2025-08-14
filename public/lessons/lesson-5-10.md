@@ -37,7 +37,7 @@ Contact your agency account provider, ask for a pixel, you can create it on your
 
 * Add user access for a pixel
 
-## ZM Apps \- PWA 
+# ZM Apps \- PWA 
 
 **Launching an advertising account** 
 

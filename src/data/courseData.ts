@@ -413,6 +413,12 @@ export const courseData: Section[] = [
         title: 'Lead Calculator - Gambling',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-7.md'
+      },
+      {
+        id: 'lesson-6-8',
+        title: 'FB Campaign Settings',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-8.md'
       }
     ]
   }

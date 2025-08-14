@@ -129,7 +129,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
         <div className="absolute top-0 left-0 bottom-0 w-20 md:w-32 bg-gradient-to-r from-red-500/15 via-red-400/5 to-transparent lg:left-[320px]"></div>
         <div className="absolute top-0 right-0 bottom-0 w-20 md:w-32 bg-gradient-to-l from-red-500/15 via-red-400/5 to-transparent "></div>
       
-        <div className="w-full z-50 relative">
+        <div className="w-full z-30 relative">
           <div className="mb-8">
             <div className="flex items-center space-x-3 mb-4">
             <div className={`p-2 rounded-lg ${typeInfo.bgColor}`}>

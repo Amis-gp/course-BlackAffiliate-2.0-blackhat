@@ -44,7 +44,7 @@ export default function CourseNavigation({ currentLessonId, onLessonSelect }: Co
   };
 
   return (
-    <div className="w-80 bg-[#0f1012] border-r border-gray-800 h-screen overflow-y-auto">
+    <div className="w-80 bg-[#0f1012] border-r border-gray-800 lg:flex-1 lg:min-h-0 overflow-y-auto max-h-[calc(100vh-61px)] lg:max-h-none">
       <div className="p-4">
         
         <div className="space-y-2">

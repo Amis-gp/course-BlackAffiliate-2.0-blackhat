@@ -7,7 +7,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { courseData } from '@/data/courseData';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProgressProvider } from '@/contexts/ProgressContext';
-import { Menu, X, Settings, LogOut } from 'lucide-react';
+import { Menu, X, Settings, LogOut, Home } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -95,6 +95,10 @@ export default function LessonPage() {
             <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
             <div className="text-white font-medium mb-3">{user?.email}</div>
             <div className="flex flex-col gap-2">
+              <Link href="/" className="flex items-center gap-2 text-sm bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors">
+                <Home className="w-4 h-4" />
+                Back to Roadmap
+              </Link>
               {isAdmin() && (
                 <Link href="/admin" className="flex items-center gap-2 text-sm bg-primary hover:bg-red-700 px-3 py-2 rounded-lg transition-colors">
                   <Settings className="w-4 h-4" />
@@ -115,6 +119,9 @@ export default function LessonPage() {
               <Menu className="w-6 h-6" />
             </button>
             <div className="flex items-center gap-2">
+              <Link href="/" className="text-blue-400 hover:text-blue-300">
+                <Home className="w-5 h-5" />
+              </Link>
               {isAdmin() && (
                 <Link href="/admin" className="text-primary hover:text-red-400">
                   <Settings className="w-5 h-5" />
