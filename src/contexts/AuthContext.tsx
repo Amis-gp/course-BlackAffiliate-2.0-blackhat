@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               password: '',
               name: profile.name,
               role: profile.role,
-              createdAt: profile.created_at,
+              created_at: profile.created_at,
               lastLogin: new Date(),
               isApproved: true,
             };
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             password: '',
             name: profile.name,
             role: profile.role,
-            createdAt: profile.created_at,
+            created_at: profile.created_at,
             lastLogin: new Date(),
             isApproved: true,
           };
@@ -145,7 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             password: '',
             name: profile.name,
             role: profile.role,
-            createdAt: profile.created_at,
+            created_at: profile.created_at,
             lastLogin: new Date(),
             isApproved: true,
           };
@@ -338,6 +338,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const remindAdmin = async (requestId: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const { data: request, error: requestError } = await supabase
+        .from('registration_requests')
+        .select('email, name')
+        .eq('id', requestId)
+        .single();
+
+      if (requestError || !request) {
+        console.error('Error fetching request for reminder:', requestError);
+        return { success: false, message: 'Could not find the registration request.' };
+      }
+
+      const message = `🔔 Reminder: Pending Registration\n\n👤 Name: ${request.name}\n📧 Email: ${request.email}\n\nPlease approve or reject the request.`;
+      await sendTelegramNotification(message);
+
+      return { success: true, message: 'A reminder has been sent to the administrator.' };
+    } catch (error) {
+      console.error('Error sending reminder:', error);
+      return { success: false, message: 'Failed to send reminder.' };
+    }
+  };
+
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
@@ -350,6 +373,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     getRegistrationRequests,
     loadRegistrationRequests,
     rejectRegistration,
+    remindAdmin,
   };
 
   return (

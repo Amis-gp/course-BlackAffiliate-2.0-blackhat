@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
     
     if (profileError) {
       console.error('Error creating profile:', profileError);
+      await supabaseAdmin.auth.admin.deleteUser(authUser.user.id);
       return NextResponse.json({ success: false, message: 'Failed to create user profile' }, { status: 500 });
     }
     

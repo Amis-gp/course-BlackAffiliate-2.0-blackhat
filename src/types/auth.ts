@@ -45,4 +45,5 @@ export interface AuthContextType extends AuthState {
   getRegistrationRequests: () => RegistrationRequest[];
   loadRegistrationRequests: () => Promise<void>;
   rejectRegistration: (requestId: string) => Promise<boolean>;
+  remindAdmin: (requestId: string) => Promise<{ success: boolean; message: string }>;
 }
