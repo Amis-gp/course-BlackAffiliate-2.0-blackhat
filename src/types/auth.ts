@@ -6,7 +6,6 @@ export interface User {
   role: 'admin' | 'user';
   created_at: string;
   lastLogin?: Date;
-  isApproved: boolean;
 }
 
 export interface LoginCredentials {
@@ -21,15 +20,6 @@ export interface RegisterCredentials {
   name?: string;
 }
 
-export interface RegistrationRequest {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
-  createdAt: Date;
-  status: 'pending' | 'approved' | 'rejected';
-}
-
 export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
@@ -41,9 +31,5 @@ export interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string; isPending?: boolean; requestId?: string }>;
   logout: () => void;
   isAdmin: () => boolean;
-  register: (credentials: RegisterCredentials) => Promise<boolean>;
-  getRegistrationRequests: () => RegistrationRequest[];
-  loadRegistrationRequests: () => Promise<void>;
-  rejectRegistration: (requestId: string) => Promise<boolean>;
-  remindAdmin: (requestId: string) => Promise<{ success: boolean; message: string }>;
+  register: (credentials: RegisterCredentials) => Promise<{ success: boolean; message?: string }>;
 }

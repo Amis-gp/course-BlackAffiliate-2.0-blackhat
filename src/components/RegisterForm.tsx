@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, UserPlus, CheckCircle, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import Link from 'next/link';
 
 export default function RegisterForm() {
   const { register } = useAuth();
@@ -42,12 +43,12 @@ export default function RegisterForm() {
     }
 
     try {
-      const success = await register(formData);
+      const result = await register(formData);
       
-      if (success) {
+      if (result.success) {
         setIsRegistered(true);
       } else {
-        setError('Registration failed. Please try again.');
+        setError(result.message || 'Registration failed. Please try again.');
       }
     } catch (error) {
       setError('Registration error. Please try again.');
@@ -65,18 +66,21 @@ export default function RegisterForm() {
               <CheckCircle className="w-8 h-8 text-green-500" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
-              Request Sent!
+              Registration Successful!
             </h2>
             <p className="text-gray-300 mb-6">
-              Your registration request has been sent to the administrator. You will get access to the course after approval.
+              Your account has been created and is awaiting admin approval.
             </p>
             <div className="bg-gray-800 rounded-lg p-4 mb-6">
               <p className="text-sm text-gray-400 mb-2">Your email:</p>
               <p className="text-white font-medium">{formData.email}</p>
             </div>
-            <p className="text-sm text-gray-400">
-              The administrator has been notified via Telegram and will review your request shortly.
-            </p>
+            <Link
+              href="/"
+              className="inline-block w-full bg-primary hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+            >
+              Go to Login
+            </Link>
           </div>
         </div>
       </div>
@@ -198,15 +202,6 @@ export default function RegisterForm() {
               )}
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-gray-400 text-sm">
-              Already have an account?{' '}
-              <a href="/" className="text-primary hover:text-red-400 transition-colors">
-                Login
-              </a>
-            </p>
-          </div>
         </div>
       </div>
     </div>

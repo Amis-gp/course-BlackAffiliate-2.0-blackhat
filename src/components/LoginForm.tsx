@@ -17,71 +17,29 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [isPending, setIsPending] = useState(false);
-  const [requestId, setRequestId] = useState<string | null>(null);
-  const [remindMessage, setRemindMessage] = useState('');
-  const { login, isLoading, remindAdmin } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log('🚀 LoginForm: Form submitted');
     e.preventDefault();
-    
-    console.log('🧹 LoginForm: Clearing previous state');
     setError('');
-    setIsPending(false);
-    setRequestId(null);
-    setRemindMessage('');
 
     if (!credentials.email || !credentials.password) {
-      console.log('⚠️ LoginForm: Empty fields validation failed');
       setError('Please fill in all fields');
       return;
     }
 
-    console.log('📝 LoginForm: Credentials validated, calling login function');
     try {
       const result = await login(credentials);
-      console.log('📨 LoginForm: Login function returned result:', result);
       
       if (result.success) {
-        console.log('✅ LoginForm: Login successful, calling onSuccess');
         setError('');
         onSuccess?.();
-        return;
-      }
-
-      if (result.isPending && result.requestId) {
-        console.log('⏳ LoginForm: Account pending approval');
-        setIsPending(true);
-        setRequestId(result.requestId);
-        setError('');
-      } else if (!result.success) {
-        console.log('❌ LoginForm: Login failed, setting error message');
+      } else {
         const errorMessage = result.message || 'Invalid email or password.';
-        console.log('📝 LoginForm: Error message:', errorMessage);
         setError(errorMessage);
-        setIsPending(false);
-        setRequestId(null);
       }
     } catch (err) {
-      console.error('💥 LoginForm: Catch block - Login error in component:', err);
       setError('An error occurred while trying to log in. Please try again.');
-      setIsPending(false);
-      setRequestId(null);
-    }
-    
-    console.log('🏁 LoginForm: handleSubmit completed');
-  };
-
-  const handleRemindAdmin = async () => {
-    if (!requestId) return;
-    
-    try {
-      const result = await remindAdmin(requestId);
-      setRemindMessage(result.message);
-    } catch (err) {
-      console.error('Remind error:', err);
-      setRemindMessage('Error sending reminder');
     }
   };
 
@@ -143,22 +101,6 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
           {error && (
             <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg">
               {error}
-            </div>
-          )}
-
-          {isPending && (
-            <div className="bg-yellow-900/50 border border-yellow-700 text-yellow-300 px-4 py-3 rounded-lg">
-              <p className="mb-3">Your account has not yet been approved by the administrator. Please wait for confirmation.</p>
-              <button
-                type="button"
-                onClick={handleRemindAdmin}
-                className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                Remind Admin
-              </button>
-              {remindMessage && (
-                <p className="mt-2 text-sm text-yellow-200">{remindMessage}</p>
-              )}
             </div>
           )}
 
