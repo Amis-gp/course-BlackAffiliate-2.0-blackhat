@@ -106,13 +106,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (error) {
-        console.log('❌ AuthContext: Supabase auth error:', error.message);
-        
+        console.log('❌ AuthContext: Supabase auth error:', error);
+        console.error('Full Supabase error object:', JSON.stringify(error, null, 2));
+
         if (error.message === 'Invalid login credentials') {
-          const { data: pendingRequests } = await supabase
+          const { data: pendingRequests, error: requestError } = await supabase
             .from('registration_requests')
             .select('id')
             .eq('email', credentials.email);
+
+          if (requestError) {
+            console.error('Error fetching registration requests:', JSON.stringify(requestError, null, 2));
+          }
 
           if (pendingRequests && pendingRequests.length > 0) {
             return {
@@ -132,12 +137,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (data.user) {
         console.log('👤 AuthContext: Supabase login successful');
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', data.user.id)
           .single();
-          
+
+        if (profileError) {
+          console.error('Error fetching profile:', JSON.stringify(profileError, null, 2));
+        }
+
         if (profile && profile.is_approved) {
           const userObj: User = {
             id: profile.id,
