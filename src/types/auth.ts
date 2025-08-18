@@ -4,7 +4,7 @@ export interface User {
   password: string;
   name: string;
   role: 'admin' | 'user';
-  createdAt: Date;
+  created_at: string;
   lastLogin?: Date;
   isApproved: boolean;
 }
@@ -44,7 +44,5 @@ export interface AuthContextType extends AuthState {
   register: (credentials: RegisterCredentials) => Promise<boolean>;
   getRegistrationRequests: () => RegistrationRequest[];
   loadRegistrationRequests: () => Promise<void>;
-  approveRegistration: (requestId: string) => Promise<boolean>;
   rejectRegistration: (requestId: string) => Promise<boolean>;
-  remindAdmin: (requestId: string) => Promise<{ success: boolean; message: string }>;
 }

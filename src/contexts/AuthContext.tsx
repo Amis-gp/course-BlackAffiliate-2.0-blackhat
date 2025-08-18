@@ -1,8 +1,9 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { User, LoginCredentials, AuthContextType, RegisterCredentials, RegistrationRequest } from '@/types/auth';
-import { initializeDatabase, db } from '@/lib/db';
+import { supabase } from '@/lib/supabase';
+import type { AuthUser } from '@supabase/supabase-js';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -17,41 +18,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      console.log('🔄 AuthContext: Starting initialization after page reload');
+      console.log('🔄 AuthContext: Starting initialization with Supabase');
       try {
-        console.log('🗄️ AuthContext: Initializing database');
-        await initializeDatabase();
+        const { data: { session } } = await supabase.auth.getSession();
         
-        const savedUserId = localStorage.getItem('currentUserId');
-        console.log('💾 AuthContext: Checking localStorage for savedUserId:', savedUserId);
-        
-        if (savedUserId) {
-          console.log('🔍 AuthContext: Fetching user from API with ID:', savedUserId);
-        try {
-          const response = await fetch(`/api/users/${savedUserId}`);
-          if (response.ok) {
-            const user = await response.json();
-            console.log('👤 AuthContext: API user found:', !!user);
-            if (user && user.isApproved) {
-              console.log('✅ AuthContext: User is approved, setting user state');
-              setUser(user);
-            } else {
-              console.log('❌ AuthContext: User not found or not approved, removing from localStorage');
-              localStorage.removeItem('userId');
-              setUser(null);
-            }
+        if (session?.user) {
+          console.log('👤 AuthContext: Supabase session found');
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+            
+          if (profile && profile.is_approved) {
+            console.log('✅ AuthContext: User is approved, setting user state');
+            const userObj: User = {
+              id: profile.id,
+              email: session.user.email!,
+              password: '',
+              name: profile.name,
+              role: profile.role,
+              createdAt: profile.created_at,
+              lastLogin: new Date(),
+              isApproved: true,
+            };
+            setUser(userObj);
           } else {
-            console.log('❌ AuthContext: User not found via API, removing from localStorage');
-            localStorage.removeItem('userId');
+            console.log('❌ AuthContext: User not approved');
             setUser(null);
           }
-        } catch (error) {
-          console.error('❌ AuthContext: Error fetching user:', error);
-          localStorage.removeItem('userId');
-          setUser(null);
-        }
         } else {
-          console.log('📭 AuthContext: No savedUserId found in localStorage');
+          console.log('📭 AuthContext: No Supabase session found');
+          setUser(null);
         }
         
         console.log('📋 AuthContext: Loading registration requests');
@@ -60,86 +58,113 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error('💥 AuthContext: Initialization error:', error);
       } finally {
-        console.log('🏁 AuthContext: Setting isLoading to false');
+        console.log('🏁 AuthContext: Setting isInitializing to false');
         setIsInitializing(false);
       }
     };
     
     initAuth();
+    
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('🔄 AuthContext: Auth state changed:', event);
+      if (event === 'SIGNED_IN' && session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+          
+        if (profile && profile.is_approved) {
+          const userObj: User = {
+            id: profile.id,
+            email: session.user.email!,
+            password: '',
+            name: profile.name,
+            role: profile.role,
+            createdAt: profile.created_at,
+            lastLogin: new Date(),
+            isApproved: true,
+          };
+          setUser(userObj);
+        }
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+      }
+    });
+    
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (credentials: LoginCredentials): Promise<{ success: boolean; message?: string; isPending?: boolean; requestId?: string }> => {
-    console.log('🔐 AuthContext: Starting login process', { email: credentials.email });
+    console.log('🔐 AuthContext: Starting login process with Supabase', { email: credentials.email });
     setIsLoading(true);
     
     try {
-      console.log('🌐 AuthContext: Sending fetch request to /api/auth/login');
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: credentials.email,
+        password: credentials.password,
       });
 
-      console.log('📡 AuthContext: Response received', { 
-        status: response.status, 
-        statusText: response.statusText,
-        ok: response.ok 
-      });
+      if (error) {
+        console.log('❌ AuthContext: Supabase auth error:', error.message);
+        
+        if (error.message === 'Invalid login credentials') {
+          const { data: pendingRequests } = await supabase
+            .from('registration_requests')
+            .select('id')
+            .eq('email', credentials.email);
 
-      if (!response.ok) {
-        console.log('❌ AuthContext: Response not OK, parsing error response');
-        let data;
-        try {
-          data = await response.json();
-          console.log('📄 AuthContext: Error response data:', data);
-        } catch (parseError) {
-          console.error('💥 AuthContext: Error parsing error response:', parseError);
-          return {
-            success: false,
-            message: 'Server error. Please try again.',
-          };
+          if (pendingRequests && pendingRequests.length > 0) {
+            return {
+              success: false,
+              message: 'Your registration is pending approval.',
+              isPending: true,
+              requestId: pendingRequests[0].id,
+            };
+          }
         }
         
-        const result = {
-          success: false,
-          message: data.message || 'Login error. Please try again.',
-          isPending: data.isPending,
-          requestId: data.requestId,
-        };
-        console.log('🔄 AuthContext: Returning error result:', result);
-        return result;
-      }
-
-      console.log('✅ AuthContext: Response OK, parsing success response');
-      let data;
-      try {
-        data = await response.json();
-        console.log('📄 AuthContext: Success response data:', data);
-      } catch (parseError) {
-        console.error('💥 AuthContext: Error parsing success response:', parseError);
         return {
           success: false,
-          message: 'Error processing server response.',
+          message: error.message || 'Login error. Please try again.',
         };
       }
 
-      console.log('👤 AuthContext: Creating user object');
-      const userObj: User = {
-        id: data.user.id,
-        email: data.user.email,
-        password: data.user.password,
-        name: data.user.name,
-        role: data.user.role,
-        createdAt: data.user.createdAt,
-        lastLogin: new Date(),
-        isApproved: true,
+      if (data.user) {
+        console.log('👤 AuthContext: Supabase login successful');
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.user.id)
+          .single();
+          
+        if (profile && profile.is_approved) {
+          const userObj: User = {
+            id: profile.id,
+            email: data.user.email!,
+            password: '',
+            name: profile.name,
+            role: profile.role,
+            createdAt: profile.created_at,
+            lastLogin: new Date(),
+            isApproved: true,
+          };
+          setUser(userObj);
+          console.log('🎉 AuthContext: Login successful');
+          return { success: true };
+        } else {
+          await supabase.auth.signOut();
+          return {
+            success: false,
+            message: 'Your account is not approved yet.',
+          };
+        }
+      }
+      
+      return {
+        success: false,
+        message: 'Login failed. Please try again.',
       };
-
-      console.log('💾 AuthContext: Setting user and localStorage');
-      setUser(userObj);
-      localStorage.setItem('currentUserId', data.user.id);
-      console.log('🎉 AuthContext: Login successful');
-      return { success: true };
     } catch (error) {
       console.error('💥 AuthContext: Catch block - Login error:', error);
       return { success: false, message: 'Could not connect to the server. Check your internet connection.' };
@@ -149,9 +174,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem('currentUserId');
   };
 
   const isAdmin = (): boolean => {
@@ -195,22 +220,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
+      const { data: existingRequests, error: existingRequestError } = await supabase
+        .from('registration_requests')
+        .select('id')
+        .eq('email', credentials.email);
+
+      if (existingRequestError) {
+        console.error('Error checking for existing registration request:', existingRequestError);
+        setIsLoading(false);
+        return false;
+      }
+        
+      if (existingRequests && existingRequests.length > 0) {
+        setIsLoading(false);
+        return false;
+      }
       
-      const data = await response.json();
+      const { data, error } = await supabase
+        .from('registration_requests')
+        .insert([
+          {
+            email: credentials.email,
+            password: credentials.password,
+            name: credentials.name,
+            created_at: new Date().toISOString(),
+          }
+        ])
+        .select()
+        .single();
       
-      if (data.success) {
-        // Send a message to Telegram if a new request is created
-        if (data.request) {
-          const message = `🔔 New registration request\n\n📧 Email: ${data.request.email}\n🔑 Password: ${data.request.password}\n📅 Date: ${new Date(data.request.createdAt).toLocaleDateString('en-US')}, ${new Date(data.request.createdAt).toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
-          await sendTelegramNotification(message);
-        }
+      if (error) {
+        console.error('Registration error:', error);
+        setIsLoading(false);
+        return false;
+      }
+      
+      if (data) {
+        const message = `🔔 New registration request\n\n📧 Email: ${data.email}\n🔑 Password: ${data.password}\n📅 Date: ${new Date(data.created_at).toLocaleDateString('en-US')}, ${new Date(data.created_at).toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
+        await sendTelegramNotification(message);
         
         setIsLoading(false);
         return true;
@@ -231,16 +278,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loadRegistrationRequests = async () => {
     try {
-      const response = await fetch('/api/admin/requests');
-      const data = await response.json();
+      const { data, error } = await supabase
+        .from('registration_requests')
+        .select('*')
+        .order('created_at', { ascending: false });
       
-      if (data.success) {
-        const formattedRequests = data.requests.map((req: any) => ({
+      if (error) {
+        console.error('Error loading requests:', error);
+        return;
+      }
+      
+      if (data) {
+        const formattedRequests = data.map((req: any) => ({
           id: req.id,
           email: req.email,
           password: req.password,
           name: req.name,
-          createdAt: req.createdAt,
+          createdAt: req.created_at,
           status: 'pending' as const
         }));
         setRegistrationRequests(formattedRequests);
@@ -250,88 +304,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const approveRegistration = async (requestId: string): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/admin/approve', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ requestId }),
-      });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        setRegistrationRequests(prev => prev.filter(r => r.id !== requestId));
-        
-        if (data.request) {
-          const message = `✅ <b>Registration approved</b>\n\n📧 Email: ${data.request.email}\n👤 The user now has access to the course`;
-          await sendTelegramNotification(message);
-        }
-        
-        return true;
-      }
-      
-      return false;
-    } catch (error) {
-      console.error('Error approving registration:', error);
-      return false;
-    }
-  };
-
   const rejectRegistration = async (requestId: string): Promise<boolean> => {
     try {
-      const response = await fetch('/api/admin/reject', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ requestId }),
-      });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        setRegistrationRequests(prev => prev.filter(r => r.id !== requestId));
+      const { data: request } = await supabase
+        .from('registration_requests')
+        .select('*')
+        .eq('id', requestId)
+        .single();
         
-        if (data.request) {
-          const message = `❌ <b>Registration rejected</b>\n\n📧 Email: ${data.request.email}`;
-          await sendTelegramNotification(message);
-        }
-        
-        return true;
+      if (!request) {
+        return false;
       }
       
-      return false;
+      const { error } = await supabase
+        .from('registration_requests')
+        .delete()
+        .eq('id', requestId);
+        
+      if (error) {
+        console.error('Error deleting request:', error);
+        return false;
+      }
+      
+      setRegistrationRequests(prev => prev.filter(r => r.id !== requestId));
+      
+      const message = `❌ <b>Registration rejected</b>\n\n📧 Email: ${request.email}`;
+      await sendTelegramNotification(message);
+      
+      return true;
     } catch (error) {
       console.error('Error rejecting registration:', error);
       return false;
-    }
-  };
-
-  const remindAdmin = async (requestId: string): Promise<{ success: boolean; message: string }> => {
-    try {
-      const response = await fetch('/api/auth/remind', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ requestId }),
-      });
-      
-      const data = await response.json();
-      
-      return {
-        success: data.success,
-        message: data.message || (data.success ? 'Reminder sent' : 'Error sending')
-      };
-    } catch (error) {
-      console.error('Reminder error:', error);
-      return {
-        success: false,
-        message: 'Error sending reminder'
-      };
     }
   };
 
@@ -346,9 +349,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     register,
     getRegistrationRequests,
     loadRegistrationRequests,
-    approveRegistration,
     rejectRegistration,
-    remindAdmin
   };
 
   return (

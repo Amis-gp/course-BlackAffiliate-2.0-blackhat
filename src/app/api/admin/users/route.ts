@@ -1,23 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export async function GET(request: NextRequest) {
   try {
-    const users = await db.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        lastLogin: true
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    });
+    const { data: users, error } = await supabaseAdmin
+      .from('profiles')
+      .select('id, email, name, role, created_at')
+      .order('created_at', { ascending: false });
     
-    return NextResponse.json({ success: true, users });
+    if (error) {
+      console.error('Error fetching users:', error);
+      return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+    }
+    
+    return NextResponse.json({ success: true, users: users || [] });
   } catch (error) {
     console.error('Error fetching users:', error);
     return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
@@ -28,32 +24,52 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password, name, role } = await request.json();
     
-    const existingUser = await db.user.findUnique({
-      where: { email }
-    });
+    const { data: existingProfile } = await supabaseAdmin
+      .from('profiles')
+      .select('id')
+      .eq('email', email)
+      .single();
     
-    if (existingUser) {
+    if (existingProfile) {
       return NextResponse.json({ success: false, message: 'User with this email already exists' }, { status: 400 });
     }
     
-    const newUser = await db.user.create({
-      data: {
+    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true
+    });
+    
+    if (authError || !authUser.user) {
+      console.error('Error creating auth user:', authError);
+      return NextResponse.json({ success: false, message: 'Failed to create user' }, { status: 500 });
+    }
+    
+    const { data: newProfile, error: profileError } = await supabaseAdmin
+      .from('profiles')
+      .insert({
+        id: authUser.user.id,
         email,
-        password,
         name: name || email,
         role: role || 'user',
-        isApproved: true
-      }
-    });
+        is_approved: true
+      })
+      .select()
+      .single();
+    
+    if (profileError) {
+      console.error('Error creating profile:', profileError);
+      return NextResponse.json({ success: false, message: 'Failed to create user profile' }, { status: 500 });
+    }
     
     return NextResponse.json({ 
       success: true, 
       message: 'User created',
       user: {
-        id: newUser.id,
-        email: newUser.email,
-        role: newUser.role,
-        createdAt: newUser.createdAt
+        id: newProfile.id,
+        email: newProfile.email,
+        role: newProfile.role,
+        createdAt: newProfile.created_at
       }
     });
   } catch (error) {
@@ -71,9 +87,21 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'User ID not specified' }, { status: 400 });
     }
     
-    await db.user.delete({
-      where: { id: userId }
-    });
+    const { error: profileError } = await supabaseAdmin
+      .from('profiles')
+      .delete()
+      .eq('id', userId);
+    
+    if (profileError) {
+      console.error('Error deleting profile:', profileError);
+      return NextResponse.json({ success: false, message: 'Failed to delete user profile' }, { status: 500 });
+    }
+    
+    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
+    
+    if (authError) {
+      console.error('Error deleting auth user:', authError);
+    }
     
     return NextResponse.json({ success: true, message: 'User deleted' });
   } catch (error) {

@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { User as UserType, RegistrationRequest } from '@/types/auth';
 
 export default function AdminPanel() {
-  const { user, logout, getRegistrationRequests, loadRegistrationRequests, approveRegistration, rejectRegistration } = useAuth();
+  const { user, logout, getRegistrationRequests, loadRegistrationRequests, rejectRegistration } = useAuth();
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -15,6 +15,7 @@ export default function AdminPanel() {
   const [newUser, setNewUser] = useState({
     email: '',
     password: '',
+    name: '',
     role: 'user' as 'admin' | 'user'
   });
 
@@ -57,7 +58,7 @@ export default function AdminPanel() {
       
       if (data.success) {
         await loadUsers();
-        setNewUser({ email: '', password: '', role: 'user' });
+        setNewUser({ email: '', password: '', name: '', role: 'user' });
         setShowAddForm(false);
       } else {
         alert(data.message || 'Error creating user');
@@ -93,11 +94,27 @@ export default function AdminPanel() {
   };
 
   const handleApproveRequest = async (requestId: string) => {
-    const success = await approveRegistration(requestId);
-    if (success) {
-      await loadRegistrationRequests();
-      setRegistrationRequests(getRegistrationRequests());
-      await loadUsers();
+    try {
+      const response = await fetch('/api/admin/approve-registration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ requestId }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await loadRegistrationRequests();
+        setRegistrationRequests(getRegistrationRequests());
+        await loadUsers();
+      } else {
+        alert(data.message || 'Error approving request');
+      }
+    } catch (error) {
+      console.error('Error approving request:', error);
+      alert('Error approving request');
     }
   };
 
@@ -190,17 +207,29 @@ export default function AdminPanel() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Password
+                      Name
                     </label>
                     <input
-                      type="password"
-                      value={newUser.password}
-                      onChange={(e) => setNewUser(prev => ({ ...prev, password: e.target.value }))}
+                      type="text"
+                      value={newUser.name}
+                      onChange={(e) => setNewUser(prev => ({ ...prev, name: e.target.value }))}
                       className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Password"
-                      required
+                      placeholder="Full Name"
                     />
                   </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={newUser.password}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, password: e.target.value }))}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Password"
+                    required
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -253,17 +282,16 @@ export default function AdminPanel() {
                           </div>
                         )}
                       </div>
+                      {userItem.name && (
+                        <div className="text-sm text-gray-300 mt-1">
+                          <span className="font-medium">Name: {userItem.name}</span>
+                        </div>
+                      )}
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-gray-400 mt-2">
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
-                          <span>Created: {new Date(userItem.createdAt).toLocaleDateString('en-US')}</span>
+                          <span>Created: {new Date(userItem.created_at).toLocaleDateString('en-US')}</span>
                         </div>
-                        {userItem.lastLogin && (
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4" />
-                            <span>Last login: {new Date(userItem.lastLogin).toLocaleDateString('en-US')}</span>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>

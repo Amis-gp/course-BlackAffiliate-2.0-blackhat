@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { supabase } from '@/lib/supabase';
 
 const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID;
@@ -10,9 +10,16 @@ export async function POST(request: NextRequest) {
     const { requestId } = await request.json();
     console.log('Received requestId:', requestId);
     
-    const registrationRequest = await db.registrationRequest.findUnique({
-      where: { id: requestId }
-    });
+    const { data: registrationRequest, error: requestError } = await supabase
+      .from('registration_requests')
+      .select('*')
+      .eq('id', requestId)
+      .single();
+    
+    if (requestError) {
+      console.error('Error fetching registration request:', requestError);
+      return NextResponse.json({ success: false, message: 'Request not found' }, { status: 404 });
+    }
     
     if (!registrationRequest) {
       return NextResponse.json({ success: false, message: 'Request not found' }, { status: 404 });

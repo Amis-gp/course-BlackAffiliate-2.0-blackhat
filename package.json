@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.55.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/typography": "^0.5.16",
+    "@types/uuid": "^10.0.0",
+    "googleapis": "^156.0.0",
     "lucide-react": "^0.294.0",
     "next": "^15.4.1",
     "react": "^19.1.0",
@@ -22,7 +25,8 @@
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.11.6",

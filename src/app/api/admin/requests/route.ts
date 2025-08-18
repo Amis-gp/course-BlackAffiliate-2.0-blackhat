@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, initializeDatabase } from '@/lib/db';
+import { supabase } from '@/lib/supabase';
 
 export async function GET() {
   try {
-    // Initialize database for Netlify
-    await initializeDatabase();
-    
     console.log('📋 API: Fetching registration requests');
-    const requests = await db.registrationRequest.findMany();
-    console.log('✅ API: Found requests:', requests.length);
-    return NextResponse.json({ success: true, requests });
+    const { data: requests, error } = await supabase
+      .from('registration_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('💥 Error fetching requests:', error);
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+    
+    console.log('✅ API: Found requests:', requests?.length || 0);
+    return NextResponse.json({ success: true, requests: requests || [] });
   } catch (error) {
     console.error('💥 Error fetching requests:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -18,29 +24,41 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    // Initialize database for Netlify
-    await initializeDatabase();
-    
     const { email, password, name } = await request.json();
     console.log('📝 API: Creating registration request for:', email);
     
-    // Check if user already exists
-    const existingUser = await db.user.findUnique({ where: { email } });
-    if (existingUser) {
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('email', email)
+      .single();
+    
+    if (existingProfile) {
       console.log('❌ API: User already exists:', email);
       return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }
     
-    // Check if request already exists
-    const existingRequest = await db.registrationRequest.findFirst({ where: { email } });
+    const { data: existingRequest } = await supabase
+      .from('registration_requests')
+      .select('id')
+      .eq('email', email)
+      .single();
+    
     if (existingRequest) {
       console.log('❌ API: Registration request already exists:', email);
       return NextResponse.json({ error: 'Registration request already exists' }, { status: 400 });
     }
     
-    const newRequest = await db.registrationRequest.create({
-      data: { email, password, name }
-    });
+    const { data: newRequest, error: insertError } = await supabase
+      .from('registration_requests')
+      .insert({ email, password, name })
+      .select()
+      .single();
+    
+    if (insertError) {
+      console.error('💥 Error creating request:', insertError);
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
     
     console.log('✅ API: Registration request created:', newRequest.id);
     return NextResponse.json(newRequest, { status: 201 });
