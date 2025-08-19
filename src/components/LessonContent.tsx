@@ -12,18 +12,16 @@ import rehypeRaw from 'rehype-raw';
 
 interface LessonContentProps {
   lesson: Lesson;
+  content: string;
+  headings: { level: number; text: string; slug: string }[];
   onPreviousLesson?: () => void;
   onNextLesson?: () => void;
   hasPrevious?: boolean;
   hasNext?: boolean;
 }
 
-export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, hasPrevious, hasNext }: LessonContentProps) {
+export default function LessonContent({ lesson, content, headings, onPreviousLesson, onNextLesson, hasPrevious, hasNext }: LessonContentProps) {
   const { completeLesson, uncompleteLesson, isLessonCompleted } = useProgress();
-  const [content, setContent] = useState('');
-  const [headings, setHeadings] = useState<{ level: number; text: string; slug: string }[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [modalImages, setModalImages] = useState<{src: string; alt: string}[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,40 +55,14 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
   };
 
   useEffect(() => {
-    if (lesson.contentPath) {
-      setIsLoading(true);
-      setError(null);
-      fetch(`/api/lessons/${lesson.id}`)
-        .then(res => {
-          if (!res.ok) {
-            throw new Error('Failed to fetch lesson content');
-          }
-          return res.json();
-        })
-        .then(data => {
-          setContent(data.content);
-          setHeadings(data.headings || []);
-          
-          const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
-          const images: {src: string; alt: string}[] = [];
-          let match;
-          while ((match = imageRegex.exec(data.content)) !== null) {
-            images.push({ src: match[2], alt: match[1] || 'Зображення уроку' });
-          }
-          setModalImages(images);
-          
-          setIsLoading(false);
-        })
-        .catch(err => {
-          console.error(err);
-          setError('Could not load lesson content. Please try again later.');
-          setIsLoading(false);
-        });
-    } else {
-      setContent('Content for this lesson will be available soon.');
-      setIsLoading(false);
+    const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
+    const images: {src: string; alt: string}[] = [];
+    let match;
+    while ((match = imageRegex.exec(content)) !== null) {
+      images.push({ src: match[2], alt: match[1] || 'image' });
     }
-  }, [lesson.id, lesson.contentPath]);
+    setModalImages(images);
+  }, [content]);
 
   const getLessonTypeInfo = (type: Lesson['type']) => {
     switch (type) {
@@ -189,21 +161,16 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
             <h3 className="text-base font-semibold text-primary mt-0">Lesson Overview</h3>
             
             <div className="text-gray-300 leading-relaxed prose prose-invert max-w-none">
-              {isLoading ? (
-                <p>Loading...</p>
-              ) : error ? (
-                <p className="text-red-500">{error}</p>
-              ) : (
-                <ReactMarkdown 
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    img: ({node, ...props}) => (
+              <ReactMarkdown 
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  img: ({node, ...props}) => (
                       <img 
                         {...props} 
                         className="rounded-lg mx-auto cursor-pointer hover:opacity-80 transition-opacity" 
                         onClick={() => props.src && handleImageClick(props.src)}
-                        title="Клікніть для збільшення"
+                        title="Click to enlarge"
                       />
                     ),
                     h1: ({node, ...props}) => (
@@ -273,10 +240,9 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                 >
                   {content}
                 </ReactMarkdown>
-              )}
+              </div>
             </div>
           </div>
-        </div>
 
         {lesson.files && lesson.files.length > 0 && (
           <div className="mb-8">
@@ -355,7 +321,6 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
         </div>
       </div>
       
-      {/* Image Modal */}
       <ImageModal
         isOpen={isModalOpen}
         images={modalImages}

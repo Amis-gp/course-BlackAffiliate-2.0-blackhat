@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { ProgressProvider } from '@/contexts/ProgressContext'
 
 const geologica = {
   className: 'font-geologica'
@@ -26,7 +27,9 @@ export default function RootLayout({
       </head>
       <body className={`${geologica.className} bg-background text-foreground`}>
         <AuthProvider>
-          {children}
+          <ProgressProvider>
+            {children}
+          </ProgressProvider>
         </AuthProvider>
       </body>
     </html>
