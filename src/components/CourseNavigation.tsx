@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight, Play, FileText, HelpCircle } from 'lucide-react';
 import { useProgress } from '@/contexts/ProgressContext';
+import { useUI } from '@/contexts/UIContext';
 
 interface NavLesson {
   id: string;
@@ -24,23 +25,17 @@ interface CourseNavigationProps {
 }
 
 export default function CourseNavigation({ courseData, currentLessonId, onLessonSelect }: CourseNavigationProps) {
-  const [expandedSections, setExpandedSections] = useState<string[]>([]);
+  const { expandedSections, toggleSection, setExpandedSections } = useUI();
   const { isLessonCompleted } = useProgress();
 
   useEffect(() => {
     const section = courseData.find(s => s.lessons.some(l => l.id === currentLessonId));
-    if (section) {
+    if (section && !expandedSections.includes(section.id)) {
       setExpandedSections([section.id]);
-    } else if (courseData.length > 0) {
+    } else if (!section && courseData.length > 0 && expandedSections.length === 0) {
       setExpandedSections([courseData[0].id]);
     }
-  }, [currentLessonId, courseData]);
-
-  const toggleSection = (sectionId: string) => {
-    setExpandedSections(prev => 
-      prev.includes(sectionId) ? [] : [sectionId]
-    );
-  };
+  }, [currentLessonId, courseData, setExpandedSections]);
 
   const getLessonIcon = (type: NavLesson['type']) => {
     switch (type) {

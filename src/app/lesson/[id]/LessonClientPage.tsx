@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -10,6 +9,7 @@ import { ProgressProvider } from '@/contexts/ProgressContext';
 import { Menu, X, Settings, LogOut, Home } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useUI } from '@/contexts/UIContext';
 
 const CourseNavigation = dynamic(() => import('@/components/CourseNavigation'));
 const LessonContent = dynamic(() => import('@/components/LessonContent'));
@@ -36,7 +36,7 @@ interface LessonClientPageProps {
 }
 
 export default function LessonClientPage({ lessonData, courseData }: LessonClientPageProps) {
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const { isMobileNavOpen, setMobileNavOpen, toggleMobileNav } = useUI();
   const { user, logout, isAdmin } = useAuth();
   const router = useRouter();
   const { lesson, content, headings } = lessonData;
@@ -44,7 +44,7 @@ export default function LessonClientPage({ lessonData, courseData }: LessonClien
 
   const handleLessonSelect = (lessonId: string) => {
     router.push(`/lesson/${lessonId}`);
-    setIsMobileNavOpen(false);
+    setMobileNavOpen(false);
   };
 
   const getAllLessons = () => {
@@ -74,14 +74,14 @@ export default function LessonClientPage({ lessonData, courseData }: LessonClien
       <ProgressProvider>
       <div className="min-h-screen bg-background flex relative">
         {isMobileNavOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setIsMobileNavOpen(false)} />
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setMobileNavOpen(false)} />
         )}
         
         <div className={`fixed lg:static inset-y-0 left-0 z-50 w-80 bg-[#0f1012] transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isMobileNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="flex items-center justify-between p-4 border-b border-gray-700">
             <h2 className="text-lg font-semibold text-white lg:block hidden">Course Navigation</h2>
             <h2 className="text-lg font-semibold text-white lg:hidden">Course Navigation</h2>
-            <button onClick={() => setIsMobileNavOpen(false)} className="text-gray-400 hover:text-white lg:hidden">
+            <button onClick={() => setMobileNavOpen(false)} className="text-gray-400 hover:text-white lg:hidden">
               <X className="w-6 h-6" />
             </button>
           </div>
@@ -115,7 +115,7 @@ export default function LessonClientPage({ lessonData, courseData }: LessonClien
 
         <div className="flex-1 flex flex-col">
           <div className="lg:hidden bg-[#0f1012] border-b border-gray-700 p-4 flex justify-between items-center relative z-10">
-            <button onClick={() => setIsMobileNavOpen(true)} className="text-white hover:text-gray-300">
+            <button onClick={toggleMobileNav} className="text-white hover:text-gray-300">
               <Menu className="w-6 h-6" />
             </button>
             <div className="flex items-center gap-2">
