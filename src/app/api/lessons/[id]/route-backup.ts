@@ -5,6 +5,8 @@ import fs from 'fs/promises';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import { visit } from 'unist-util-visit';
+import { toString } from 'mdast-util-to-string';
+import type { Heading } from 'mdast';
 
 export async function GET(
   request: Request,
@@ -61,7 +63,7 @@ export async function GET(
       console.log('Successfully read file from:', testPath);
       break;
     } catch (error) {
-      console.log('Path failed:', testPath, 'Error:', (error as any)?.code || error);
+      console.log('Path failed:', testPath, 'Error:', (error as NodeJS.ErrnoException)?.code || error);
     }
   }
 
@@ -87,8 +89,8 @@ export async function GET(
     const processor = unified().use(remarkParse);
     const tree = processor.parse(fileContent);
 
-    visit(tree, 'heading', (node: any) => {
-      const text = node.children.map((child: any) => child.value).join('');
+    visit(tree, 'heading', (node: Heading) => {
+      const text = toString(node);
       const slug = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
       headings.push({
         level: node.depth,

@@ -1,11 +1,14 @@
 import type { Metadata } from 'next'
+import { Geologica } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ProgressProvider } from '@/contexts/ProgressContext'
 
-const geologica = {
-  className: 'font-geologica'
-}
+const geologica = Geologica({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'BlackAffiliate 2.0 Course',
@@ -21,9 +24,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/img/favicon.webp" type="image/webp" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet" />
       </head>
       <body className={`${geologica.className} bg-background text-foreground`}>
         <AuthProvider>

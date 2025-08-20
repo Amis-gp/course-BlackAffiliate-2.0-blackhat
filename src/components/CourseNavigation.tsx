@@ -3,17 +3,29 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight, Play, FileText, HelpCircle } from 'lucide-react';
-import { courseData, Section, Lesson } from '@/data/courseData';
 import { useProgress } from '@/contexts/ProgressContext';
 
-interface CourseNavigationProps {
-  currentLessonId?: string;
-  onLessonSelect?: (lessonId: string) => void; // Made optional
+interface NavLesson {
+  id: string;
+  title: string;
+  type: 'lesson' | 'homework' | 'questions';
 }
 
-export default function CourseNavigation({ currentLessonId, onLessonSelect }: CourseNavigationProps) {
+interface NavSection {
+  id: string;
+  title: string;
+  lessons: NavLesson[];
+}
+
+interface CourseNavigationProps {
+  courseData: NavSection[];
+  currentLessonId?: string;
+  onLessonSelect?: (lessonId: string) => void;
+}
+
+export default function CourseNavigation({ courseData, currentLessonId, onLessonSelect }: CourseNavigationProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
-  const { isLessonCompleted, completedLessons } = useProgress();
+  const { isLessonCompleted } = useProgress();
 
   useEffect(() => {
     const section = courseData.find(s => s.lessons.some(l => l.id === currentLessonId));
@@ -22,7 +34,7 @@ export default function CourseNavigation({ currentLessonId, onLessonSelect }: Co
     } else if (courseData.length > 0) {
       setExpandedSections([courseData[0].id]);
     }
-  }, [currentLessonId]);
+  }, [currentLessonId, courseData]);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => 
@@ -30,7 +42,7 @@ export default function CourseNavigation({ currentLessonId, onLessonSelect }: Co
     );
   };
 
-  const getLessonIcon = (type: Lesson['type']) => {
+  const getLessonIcon = (type: NavLesson['type']) => {
     switch (type) {
       case 'lesson':
         return <Play className="w-4 h-4" />;
@@ -46,7 +58,6 @@ export default function CourseNavigation({ currentLessonId, onLessonSelect }: Co
   return (
     <div className="w-80 bg-[#0f1012] border-r border-gray-800 lg:flex-1 lg:min-h-0 overflow-y-auto max-h-[calc(100vh-61px)] lg:max-h-none">
       <div className="p-4">
-        
         <div className="space-y-2">
           {courseData.map((section) => {
             const isExpanded = expandedSections.includes(section.id);

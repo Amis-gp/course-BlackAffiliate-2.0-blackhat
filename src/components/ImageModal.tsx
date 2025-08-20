@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { X, RotateCw, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface ImageData {
   src: string;
@@ -20,8 +21,6 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
   const [rotation, setRotation] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  
   const currentImage = images[currentIndex] || { src: '', alt: '' };
 
   useEffect(() => {
@@ -37,16 +36,27 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
+  const resetTransform = useCallback(() => {
+    setRotation(0);
   }, []);
+
+  const handleRotate = useCallback(() => {
+    setRotation(prev => (prev + 90) % 360);
+  }, []);
+
+  const handlePrevious = useCallback(() => {
+    if (images.length > 1 && currentIndex > 0 && onNavigate) {
+      onNavigate(currentIndex - 1);
+      resetTransform();
+    }
+  }, [images.length, currentIndex, onNavigate, resetTransform]);
+
+  const handleNext = useCallback(() => {
+    if (images.length > 1 && currentIndex < images.length - 1 && onNavigate) {
+      onNavigate(currentIndex + 1);
+      resetTransform();
+    }
+  }, [images.length, currentIndex, onNavigate, resetTransform]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -72,31 +82,7 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, currentIndex, images.length]);
-
-
-
-  const handleRotate = () => {
-    setRotation(prev => (prev + 90) % 360);
-  };
-
-  const handlePrevious = () => {
-    if (images.length > 1 && currentIndex > 0 && onNavigate) {
-      onNavigate(currentIndex - 1);
-      resetTransform();
-    }
-  };
-
-  const handleNext = () => {
-    if (images.length > 1 && currentIndex < images.length - 1 && onNavigate) {
-      onNavigate(currentIndex + 1);
-      resetTransform();
-    }
-  };
-
-  const resetTransform = () => {
-    setRotation(0);
-  };
+  }, [isOpen, currentIndex, images.length, onClose, handleNext, handlePrevious, handleRotate]);
 
   const minSwipeDistance = 50;
 
@@ -190,7 +176,7 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        <img
+        <Image
           src={currentImage.src}
           alt={currentImage.alt}
           className="max-w-full max-h-full transition-transform duration-200 select-none"
@@ -198,7 +184,11 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
             transform: `rotate(${rotation}deg)`
           }}
           draggable={false}
-        />
+          fill
+          sizes="(max-width: 768px) 100vw, 80vw"
+          priority
+          quality={90}
+          />
       </div>
     </div>
   );

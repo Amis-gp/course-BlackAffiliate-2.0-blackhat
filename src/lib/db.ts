@@ -1,12 +1,16 @@
-// Server-side only database operations
-let fs: any;
-let path: any;
+import type * as FSType from 'fs';
+import type * as PathType from 'path';
+
+let fs: typeof FSType;
+let path: typeof PathType;
 
 // Check if we're in Netlify Functions environment
 const isNetlify = process.env.NETLIFY === 'true';
 
 if (typeof window === 'undefined' && !isNetlify) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   fs = require('fs');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   path = require('path');
 }
 
@@ -183,6 +187,10 @@ export async function initializeDatabase() {
   }
 }
 
+type UserSelect = Partial<Record<keyof User, boolean>>;
+
+type UserOrderBy = Partial<Record<keyof User, 'asc' | 'desc'>>;
+
 export const db = {
   user: {
     findUnique: async (options: { where: { email: string } }) => {
@@ -213,7 +221,7 @@ export const db = {
       return foundUser || null;
     },
     
-    findMany: async (options?: { select?: any; orderBy?: any }) => {
+    findMany: async (options?: { select?: UserSelect; orderBy?: UserOrderBy }) => {
       let users = readUsers();
       
       if (options?.orderBy?.createdAt === 'desc') {
@@ -222,13 +230,10 @@ export const db = {
       
       if (options?.select) {
         return users.map(user => {
-          const selected: any = {};
-          Object.keys(options.select).forEach(key => {
-            if (options.select[key] && user.hasOwnProperty(key)) {
-              selected[key] = user[key as keyof User];
-            }
-          });
-          return selected;
+          const entries = (Object.keys(options.select!) as Array<keyof User>)
+            .filter(key => options.select![key] && Object.prototype.hasOwnProperty.call(user, key))
+            .map(key => [key, user[key]]);
+          return Object.fromEntries(entries) as Partial<User>;
         });
       }
       

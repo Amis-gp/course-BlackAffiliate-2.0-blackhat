@@ -38,7 +38,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
         const errorMessage = result.message || 'Invalid email or password.';
         setError(errorMessage);
       }
-    } catch (err) {
+    } catch {
       setError('An error occurred while trying to log in. Please try again.');
     }
   };
@@ -115,7 +115,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
 
         <div className="text-center">
           <p className="text-gray-400 text-sm mb-4">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <button
               onClick={onRegisterClick}
               className="text-primary hover:text-red-400 transition-colors font-medium"

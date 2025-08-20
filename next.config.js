@@ -3,11 +3,8 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   trailingSlash: true,
-  images: {
-    unoptimized: true
-  },
   experimental: {
-    // optimizeCss: true
+    optimizePackageImports: ['lucide-react'],
   },
   webpack: (config, { isServer }) => {
     if (isServer) {

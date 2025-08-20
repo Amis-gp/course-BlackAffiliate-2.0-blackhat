@@ -12,16 +12,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const initAuth = async () => {
+    setIsInitializing(true);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_, session) => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
           const { data: profile } = await supabase
             .from('profiles')
             .select('id, name, role, created_at')
             .eq('id', session.user.id)
             .single();
-            
+
           if (profile) {
             const userObj: User = {
               id: profile.id,
@@ -40,40 +40,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(null);
         }
       } catch (error) {
-        console.error('Auth initialization error:', error);
+        console.error('Auth state change error:', error);
+        setUser(null);
       } finally {
         setIsInitializing(false);
       }
-    };
-    
-    initAuth();
-    
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('id, name, role, created_at')
-          .eq('id', session.user.id)
-          .single();
-          
-        if (profile) {
-          const userObj: User = {
-            id: profile.id,
-            email: session.user.email!,
-            password: '',
-            name: profile.name,
-            role: profile.role,
-            created_at: profile.created_at,
-            lastLogin: new Date(),
-          };
-          setUser(userObj);
-        }
-      } else if (event === 'SIGNED_OUT') {
-        setUser(null);
-      }
     });
-    
-    return () => subscription.unsubscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (credentials: LoginCredentials): Promise<{ success: boolean; message?: string }> => {
@@ -113,7 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
       return { success: false, message: 'Login failed. Please try again.' };
-    } catch (error) {
+    } catch {
       return { success: false, message: 'Could not connect to the server.' };
     } finally {
       setIsLoading(false);
@@ -154,7 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       return { success: true };
 
-    } catch (error) {
+    } catch {
       return { success: false, message: 'An unexpected error occurred.' };
     } finally {
       setIsLoading(false);

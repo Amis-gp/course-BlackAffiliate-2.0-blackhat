@@ -5,6 +5,7 @@ export interface Lesson {
   contentPath?: string;
   videoUrl?: string;
   files?: string[];
+  version?: number;
 }
 
 export interface Section {

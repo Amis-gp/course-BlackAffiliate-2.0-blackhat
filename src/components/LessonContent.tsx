@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Play, FileText, HelpCircle, Download, List, ChevronRight } from 'lucide-react';
+import { Play, FileText, HelpCircle, Download, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import { Lesson } from '@/data/courseData';
 import Footer from '@/components/Footer';
 import ImageModal from '@/components/ImageModal';
@@ -59,7 +60,7 @@ export default function LessonContent({ lesson, content, headings, onPreviousLes
     const images: {src: string; alt: string}[] = [];
     let match;
     while ((match = imageRegex.exec(content)) !== null) {
-      images.push({ src: match[2], alt: match[1] || 'image' });
+      images.push({ src: match[2], alt: match[1] || 'Зображення уроку' });
     }
     setModalImages(images);
   }, [content]);
@@ -136,7 +137,7 @@ export default function LessonContent({ lesson, content, headings, onPreviousLes
             <div className="bg-[#0f1012] rounded-xl p-6 mb-8 border border-[#252d39] shadow-lg">
                 <h4 className="text-base font-semibold text-white pb-2">Lesson navigation</h4>
                 <div className="space-y-1">
-                    {headings.map((heading, index) => (
+                    {headings.map((heading) => (
                         <div key={heading.slug} className="group">
                             <a 
                                 href={`#${heading.slug}`} 
@@ -165,82 +166,87 @@ export default function LessonContent({ lesson, content, headings, onPreviousLes
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeRaw]}
                 components={{
-                  img: ({node, ...props}) => (
-                      <img 
-                        {...props} 
-                        className="rounded-lg mx-auto cursor-pointer hover:opacity-80 transition-opacity" 
-                        onClick={() => props.src && handleImageClick(props.src)}
-                        title="Click to enlarge"
+                  img: ({...props}) => {
+                    if (!props.src) return null;
+                    return (
+                      <Image
+                        src={props.src}
+                        alt={props.alt || 'Зображення уроку'}
+                        width={800}
+                        height={600}
+                        className="rounded-lg mx-auto cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => handleImageClick(props.src!)}
+                        title="Клікніть для збільшення"
                       />
-                    ),
-                    h1: ({node, ...props}) => (
-                      <div className="mb-8">
-                        <h1 
+                    );
+                  },
+                  h1: ({...props}) => (
+                    <div className="mb-8">
+                      <h1 
+                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                        className="text-3xl font-bold text-white mb-4 pb-3 border-b-2 border-primary/30"
+                        {...props} 
+                      />
+                    </div>
+                  ),
+                  h2: ({...props}) => (
+                      <div className="mb-6 mt-12 pt-8 border-t border-gray-800">
+                        <h2 
                           id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
-                          className="text-3xl font-bold text-white mb-4 pb-3 border-b-2 border-primary/30"
+                          className="text-2xl font-semibold text-white mb-3  relative"
                           {...props} 
                         />
+                        <div className="w-16 h-1 bg-primary rounded-full"></div>
                       </div>
                     ),
-                    h2: ({node, ...props}) => (
-                        <div className="mb-6 mt-12 pt-8 border-t border-gray-800">
-                          <h2 
-                            id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
-                            className="text-2xl font-semibold text-white mb-3  relative"
-                            {...props} 
-                          />
-                          <div className="w-16 h-1 bg-primary rounded-full"></div>
-                        </div>
-                      ),
-                    h3: ({node, ...props}) => (
-                      <h3 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
-                        className="text-xl font-semibold text-gray-100 mb-3 mt-6 pt-2 border-t border-gray-700/50"
-                        {...props} 
-                      />
-                    ),
-                    h4: ({node, ...props}) => (
-                      <h4 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
-                        className="text-lg font-medium text-gray-200 mb-2 mt-5"
-                        {...props} 
-                      />
-                    ),
-                    h5: ({node, ...props}) => (
-                      <h5 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
-                        className="text-base font-medium text-gray-300 mb-2 mt-4"
-                        {...props} 
-                      />
-                    ),
-                    h6: ({node, ...props}) => (
-                      <h6 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
-                        className="text-sm font-medium text-gray-400 mb-2 mt-3"
-                        {...props} 
-                      />
-                    ),
-                    hr: ({node, ...props}) => (
-                      <div className="my-8 flex items-center">
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
-                        <div className="mx-4 w-2 h-2 bg-primary rounded-full"></div>
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
-                      </div>
-                    ),
-                    p: ({node, ...props}) => (
-                      <p className="text-gray-300 leading-relaxed mb-4" {...props} />
-                    ),
-                    strong: ({node, ...props}) => (
-                      <strong className="text-white font-semibold" {...props} />
-                    ),
-                    em: ({node, ...props}) => (
-                      <em className="text-gray-200 italic" {...props} />
-                    ),
-                  }}
-                >
-                  {content}
-                </ReactMarkdown>
-              </div>
+                  h3: ({...props}) => (
+                    <h3 
+                      id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                      className="text-xl font-semibold text-gray-100 mb-3 mt-6 pt-2 border-t border-gray-700/50"
+                      {...props} 
+                    />
+                  ),
+                  h4: ({...props}) => (
+                    <h4 
+                      id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                      className="text-lg font-medium text-gray-200 mb-2 mt-5"
+                      {...props} 
+                    />
+                  ),
+                  h5: ({...props}) => (
+                    <h5 
+                      id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                      className="text-base font-medium text-gray-300 mb-2 mt-4"
+                      {...props} 
+                    />
+                  ),
+                  h6: ({...props}) => (
+                    <h6 
+                      id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                      className="text-sm font-medium text-gray-400 mb-2 mt-3"
+                      {...props} 
+                    />
+                  ),
+                  hr: () => (
+                    <div className="my-8 flex items-center">
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+                      <div className="mx-4 w-2 h-2 bg-primary rounded-full"></div>
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+                    </div>
+                  ),
+                  p: ({...props}) => (
+                    <p className="text-gray-300 leading-relaxed mb-4" {...props} />
+                  ),
+                  strong: ({...props}) => (
+                    <strong className="text-white font-semibold" {...props} />
+                  ),
+                  em: ({...props}) => (
+                    <em className="text-gray-200 italic" {...props} />
+                  ),
+                }}
+              >
+                {content}
+              </ReactMarkdown>
             </div>
           </div>
 

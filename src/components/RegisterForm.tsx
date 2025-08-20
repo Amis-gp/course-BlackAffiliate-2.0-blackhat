@@ -50,7 +50,7 @@ export default function RegisterForm() {
       } else {
         setError(result.message || 'Registration failed. Please try again.');
       }
-    } catch (error) {
+    } catch {
       setError('Registration error. Please try again.');
     }
 
