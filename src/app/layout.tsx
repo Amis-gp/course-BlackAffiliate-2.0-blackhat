@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import { Geologica } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
-import { ProgressProvider } from '@/contexts/ProgressContext'
-import { UIProvider } from '@/contexts/UIContext'
 
 const geologica = Geologica({
   subsets: ['latin'],
@@ -28,11 +26,7 @@ export default function RootLayout({
       </head>
       <body className={`${geologica.className} bg-background text-foreground`}>
         <AuthProvider>
-          <ProgressProvider>
-            <UIProvider>
-              {children}
-            </UIProvider>
-          </ProgressProvider>
+          {children}
         </AuthProvider>
       </body>
     </html>

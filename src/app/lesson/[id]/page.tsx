@@ -1,15 +1,11 @@
 import { getLesson } from '@/lib/lesson';
-import { getCourseNavigationData } from '@/lib/course';
-import LessonClientPage from './LessonClientPage';
+import LessonPage from './LessonPage';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const [lessonData, courseData] = await Promise.all([
-      getLesson(id),
-      getCourseNavigationData(),
-    ]);
-    return <LessonClientPage lessonData={lessonData} courseData={courseData} />;
+    const lessonData = await getLesson(id);
+    return <LessonPage lessonData={lessonData} />;
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return (
