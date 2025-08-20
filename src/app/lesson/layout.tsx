@@ -1,5 +1,5 @@
 import { getCourseNavigationData } from '@/lib/course';
-import LessonLayoutClient from './LessonLayoutClient';
+import LessonLayoutClient from '@/app/lesson/LessonLayoutClient';
 import { ProgressProvider } from '@/contexts/ProgressContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
