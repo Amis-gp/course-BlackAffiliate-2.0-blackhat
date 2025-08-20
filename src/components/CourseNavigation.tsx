@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight, Play, FileText, HelpCircle } from 'lucide-react';
 import { useProgress } from '@/contexts/ProgressContext';
+import { useLessonContext } from '@/contexts/LessonContext';
 
 interface NavLesson {
   id: string;
@@ -19,22 +20,22 @@ interface NavSection {
 
 interface CourseNavigationProps {
   courseData: NavSection[];
-  currentLessonId?: string;
   onLessonSelect?: (lessonId: string) => void;
 }
 
-export default function CourseNavigation({ courseData, currentLessonId, onLessonSelect }: CourseNavigationProps) {
+export default function CourseNavigation({ courseData, onLessonSelect }: CourseNavigationProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const { isLessonCompleted } = useProgress();
+  const { currentLesson } = useLessonContext();
 
   useEffect(() => {
-    const section = courseData.find(s => s.lessons.some(l => l.id === currentLessonId));
+    const section = courseData.find(s => s.lessons.some(l => l.id === currentLesson?.id));
     if (section) {
       setExpandedSections([section.id]);
     } else if (courseData.length > 0) {
       setExpandedSections([courseData[0].id]);
     }
-  }, [currentLessonId, courseData]);
+  }, [currentLesson, courseData]);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => 
@@ -83,7 +84,7 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                         href={`/lesson/${lesson.id}`}
                         key={lesson.id}
                         onClick={() => onLessonSelect && onLessonSelect(lesson.id)}
-                        className={`w-full p-3 text-left flex items-center space-x-3 hover:bg-gray-800 transition-colors duration-200 ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'} ${currentLessonId === lesson.id ? 'bg-primary/20 border-r-2 border-primary' : ''}`}>
+                        className={`w-full p-3 text-left flex items-center space-x-3 hover:bg-gray-800 transition-colors duration-200 ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'} ${currentLesson?.id === lesson.id ? 'bg-primary/20 border-r-2 border-primary' : ''}`}>
                         <span className={`${isLessonCompleted(lesson.id) ? 'text-gray-600' : 'text-primary'}`}>
                           {getLessonIcon(lesson.type)}
                         </span>

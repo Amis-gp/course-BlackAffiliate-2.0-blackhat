@@ -1,8 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
 import { Lesson } from '@/data/courseData';
+import { useLessonContext } from '@/contexts/LessonContext';
 
 const LessonContent = dynamic(() => import('@/components/LessonContent'));
 
@@ -15,12 +15,8 @@ interface LessonPageProps {
 }
 
 export default function LessonPage({ lessonData }: LessonPageProps) {
-  const router = useRouter();
   const { lesson, content, headings } = lessonData;
-
-  // Dummy handlers, real implementation is in the layout
-  const handlePreviousLesson = () => {};
-  const handleNextLesson = () => {};
+  const { handlePreviousLesson, handleNextLesson, hasPrevious, hasNext } = useLessonContext();
 
   return (
     <LessonContent 
@@ -29,8 +25,8 @@ export default function LessonPage({ lessonData }: LessonPageProps) {
       headings={headings}
       onPreviousLesson={handlePreviousLesson}
       onNextLesson={handleNextLesson}
-      hasPrevious={false} // This will be handled by the context/layout in a real app
-      hasNext={false} // This will be handled by the context/layout in a real app
+      hasPrevious={hasPrevious}
+      hasNext={hasNext}
     />
   );
 }
