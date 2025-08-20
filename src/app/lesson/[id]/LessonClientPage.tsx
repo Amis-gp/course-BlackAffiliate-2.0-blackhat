@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import CourseNavigation from '@/components/CourseNavigation';
-import LessonContent from '@/components/LessonContent';
+import dynamic from 'next/dynamic';
+
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Lesson } from '@/data/courseData';
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,6 +10,9 @@ import { ProgressProvider } from '@/contexts/ProgressContext';
 import { Menu, X, Settings, LogOut, Home } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+
+const CourseNavigation = dynamic(() => import('@/components/CourseNavigation'));
+const LessonContent = dynamic(() => import('@/components/LessonContent'));
 
 interface NavLesson {
   id: string;

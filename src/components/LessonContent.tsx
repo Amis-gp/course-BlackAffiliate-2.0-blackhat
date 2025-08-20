@@ -5,11 +5,13 @@ import { Play, FileText, HelpCircle, Download, ChevronRight } from 'lucide-react
 import Image from 'next/image';
 import { Lesson } from '@/data/courseData';
 import Footer from '@/components/Footer';
-import ImageModal from '@/components/ImageModal';
 import { useProgress } from '@/contexts/ProgressContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import dynamic from 'next/dynamic';
+
+const ImageModal = dynamic(() => import('@/components/ImageModal'));
 
 interface LessonContentProps {
   lesson: Lesson;
