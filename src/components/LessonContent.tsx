@@ -249,6 +249,7 @@ export default function LessonContent({ lesson, content, headings, onPreviousLes
               </ReactMarkdown>
             </div>
           </div>
+        </div>
 
         {lesson.files && lesson.files.length > 0 && (
           <div className="mb-8">
