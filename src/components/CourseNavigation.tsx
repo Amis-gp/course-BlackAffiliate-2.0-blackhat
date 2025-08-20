@@ -6,36 +6,25 @@ import { ChevronDown, ChevronRight, Play, FileText, HelpCircle } from 'lucide-re
 import { useProgress } from '@/contexts/ProgressContext';
 import { useLessonContext } from '@/contexts/LessonContext';
 
-interface NavLesson {
-  id: string;
-  title: string;
-  type: 'lesson' | 'homework' | 'questions';
-}
-
-interface NavSection {
-  id: string;
-  title: string;
-  lessons: NavLesson[];
-}
-
 interface CourseNavigationProps {
-  courseData: NavSection[];
   onLessonSelect?: (lessonId: string) => void;
 }
 
-export default function CourseNavigation({ courseData, onLessonSelect }: CourseNavigationProps) {
+export default function CourseNavigation({ onLessonSelect }: CourseNavigationProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const { isLessonCompleted } = useProgress();
-  const { currentLesson } = useLessonContext();
+  const { currentLesson, navSections } = useLessonContext();
 
   useEffect(() => {
-    const section = courseData.find(s => s.lessons.some(l => l.id === currentLesson?.id));
-    if (section) {
-      setExpandedSections([section.id]);
-    } else if (courseData.length > 0) {
-      setExpandedSections([courseData[0].id]);
+    if (navSections) {
+      const section = navSections.find(s => s.lessons.some(l => l.id === currentLesson?.id));
+      if (section) {
+        setExpandedSections([section.id]);
+      } else if (navSections.length > 0) {
+        setExpandedSections([navSections[0].id]);
+      }
     }
-  }, [currentLesson, courseData]);
+  }, [currentLesson, navSections]);
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev => 
@@ -43,7 +32,7 @@ export default function CourseNavigation({ courseData, onLessonSelect }: CourseN
     );
   };
 
-  const getLessonIcon = (type: NavLesson['type']) => {
+  const getLessonIcon = (type: 'lesson' | 'homework' | 'questions') => {
     switch (type) {
       case 'lesson':
         return <Play className="w-4 h-4" />;
@@ -60,7 +49,7 @@ export default function CourseNavigation({ courseData, onLessonSelect }: CourseN
     <div className="w-80 bg-[#0f1012] border-r border-gray-800 lg:flex-1 lg:min-h-0 overflow-y-auto max-h-[calc(100vh-61px)] lg:max-h-none">
       <div className="p-4">
         <div className="space-y-2">
-          {courseData.map((section) => {
+          {navSections.map((section) => {
             const isExpanded = expandedSections.includes(section.id);
             
             return (

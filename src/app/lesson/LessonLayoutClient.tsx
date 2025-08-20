@@ -1,44 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import CourseNavigation from '@/components/CourseNavigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X, Settings, LogOut, Home } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LessonContext } from '@/contexts/LessonContext';
-
-interface NavLesson {
-  id: string;
-  title: string;
-  type: 'lesson' | 'homework' | 'questions';
-}
-
-interface NavSection {
-  id: string;
-  title: string;
-  lessons: NavLesson[];
-}
+import { LessonContext, NavSection } from '@/contexts/LessonContext';
+import { courseData as fullCourseData, Lesson } from '@/data/courseData';
 
 interface LessonLayoutClientProps {
-  courseData: NavSection[];
   children: React.ReactNode;
 }
 
-export default function LessonLayoutClient({ courseData, children }: LessonLayoutClientProps) {
+export default function LessonLayoutClient({ children }: LessonLayoutClientProps) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const { user, logout, isAdmin } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const currentLessonId = pathname.split('/').pop() || '';
+  const pathParts = pathname.split('/').filter(Boolean);
+  const currentLessonId = pathParts.length > 0 ? pathParts[pathParts.length - 1] : '';
 
-  const handleLessonSelect = (lessonId: string) => {
-    router.push(`/lesson/${lessonId}`);
-    setIsMobileNavOpen(false);
-  };
+  const navSections: NavSection[] = fullCourseData.map(section => ({
+    id: section.id,
+    title: section.title,
+    lessons: section.lessons.map(lesson => ({
+      id: lesson.id,
+      title: lesson.title,
+      isLocked: false,
+      type: lesson.type,
+    })),
+  }));
 
-  const allLessons = courseData.flatMap(section => section.lessons.map(lesson => ({ id: lesson.id })));
+  const allLessons = fullCourseData.flatMap(section => section.lessons);
   const currentLessonIndex = allLessons.findIndex(l => l.id === currentLessonId);
+  const currentLesson: Lesson | null = currentLessonIndex !== -1 ? allLessons[currentLessonIndex] : null;
 
   const handlePreviousLesson = () => {
     if (currentLessonIndex > 0) {
@@ -47,16 +43,22 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
   };
 
   const handleNextLesson = () => {
-    if (currentLessonIndex < allLessons.length - 1) {
-      router.push(`/lesson/${allLessons[currentLessonIndex + 1].id}`);
+    const nextIndex = currentLessonIndex + 1;
+    if (currentLessonIndex !== -1 && nextIndex < allLessons.length) {
+      router.push(`/lesson/${allLessons[nextIndex].id}`);
     }
   };
 
   const hasPrevious = currentLessonIndex > 0;
-  const hasNext = currentLessonIndex < allLessons.length - 1;
+  const hasNext = currentLessonIndex !== -1 && currentLessonIndex < allLessons.length - 1;
+
+  const handleLessonSelect = (lessonId: string) => {
+    router.push(`/lesson/${lessonId}`);
+    setIsMobileNavOpen(false);
+  };
 
   return (
-    <LessonContext.Provider value={{ courseData, currentLessonId, handlePreviousLesson, handleNextLesson, hasPrevious, hasNext }}>
+    <LessonContext.Provider value={{ course: fullCourseData, currentLesson, navSections, handlePreviousLesson, handleNextLesson, hasPrevious, hasNext }}>
       <div className="min-h-screen bg-background flex relative">
         {isMobileNavOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setIsMobileNavOpen(false)} />
