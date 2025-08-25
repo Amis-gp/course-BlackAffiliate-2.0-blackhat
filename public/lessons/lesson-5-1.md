@@ -80,7 +80,3 @@ It’s important to analyze GEOs using spy tools. Pay attention to:
 * How long ads stayed in the auction.
 
 Based on the collected data, draw conclusions about the level of competition.
-
-## Download Landing Page Mask
-
-- [Download Landing Mask](/img/5.1/landing-mask.zip)

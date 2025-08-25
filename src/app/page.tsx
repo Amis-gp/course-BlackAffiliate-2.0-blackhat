@@ -3,6 +3,7 @@
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import MiroBoard from '@/components/MiroBoard';
 
 console.log('NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_URL);
 console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
@@ -16,18 +17,7 @@ export default function Home() {
             <h1 className="text-4xl font-bold text-white mb-4">Course Roadmap</h1>
             <p className="text-gray-300 text-lg">Your path to success in Black Hat marketing</p>
           </div>
-          <div className="w-full mb-8" style={{height: '600px'}}>
-            <iframe 
-              width="100%" 
-              height="100%" 
-              src="https://miro.com/app/live-embed/uXjVJd8dQOg=/?embedMode=view_only_without_ui&moveToViewport=-51291,7398,35011,19339&embedId=187877913013" 
-              frameBorder="0" 
-              scrolling="no" 
-              allow="fullscreen; clipboard-read; clipboard-write" 
-              allowFullScreen
-              className="rounded-lg"
-            />
-          </div>
+          <MiroBoard />
           
           <div className="text-center">
             <Link 

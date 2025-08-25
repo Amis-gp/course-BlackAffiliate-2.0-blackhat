@@ -1,4 +1,4 @@
-# FB King Account Setup
+# FB Account Setup
 
 ## 1\. Choosing an offer*
 

@@ -60,3 +60,7 @@ While PWAs are a game-changer, there are a few things you need to be aware of:
 **Performance on Low-End Devices**
 
 3. While PWAs are known for their fast loading speeds, users with older devices or slower internet might experience lag or delayed loading times. Make sure the gambling site you're working with optimizes its PWA to run smoothly even on lower-end mobile devices.
+
+## Download Landing Page Mask
+
+- [Download Example PWA](/img/5.1/landing-mask.zip)

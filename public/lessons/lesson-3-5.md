@@ -2,6 +2,10 @@
 
 Ads are your tool: flashy banners, loud offers, scroll-stopping videos. But even the sickest creative won’t perform if there’s no strong marketing strategy behind it. Today, we’ll break down how to build creatives that grab attention, boost CTR, and keep your CPC low.
 
+<div class="mb-8" style="aspect-ratio: 16/9;">
+  <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/siz1iO6zGGo?si=_atOp23Sc7igdfOk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
 ## 🕵️‍♂️ Block 1: Market Research & Finding Inspiration
 
 Step one to a killer creative — understand where and for whom you're working. Market research is your treasure map as a media buyer\!
