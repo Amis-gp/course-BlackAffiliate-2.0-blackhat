@@ -24,56 +24,54 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'Registration request not found' }, { status: 404 });
     }
 
-    // 2. Check if user already exists, if not create new user
+    // 2. Check if user already exists, if not, invite them
     console.log('👤 Checking/creating user with email:', registrationRequest.email);
     
-    let authUser;
-    
-    // First try to get existing user
-    const { data: usersList } = await supabaseAdmin.auth.admin.listUsers();
-    const existingUser = usersList?.users?.find(user => user.email === registrationRequest.email);
-    
+    const { data: { users }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+    if (listError) {
+      console.error('💥 Error listing users:', listError);
+      return NextResponse.json({ success: false, message: listError.message || 'Error checking for existing user' }, { status: 500 });
+    }
+
+    const existingUser = users.find(user => user.email === registrationRequest.email);
+    let userId: string;
+
     if (existingUser) {
-      console.log('✅ Using existing user:', existingUser.id);
-      authUser = { user: existingUser };
+      console.log('✅ User already exists:', existingUser.id);
+      userId = existingUser.id;
     } else {
-      // Create new user if doesn't exist
-      const { data: newUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      console.log('➕ Creating new user:', registrationRequest.email);
+      const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
         email: registrationRequest.email,
         password: registrationRequest.password,
-        email_confirm: true
+        email_confirm: true,
+        user_metadata: { name: registrationRequest.name },
       });
-      
-      if (authError || !newUser.user) {
-        console.error('💥 Error creating user:', authError);
-        return NextResponse.json({ success: false, message: authError?.message || 'Error creating user' }, { status: 500 });
+
+      if (createError || !newUser.user) {
+        console.error('💥 Error creating user:', createError);
+        return NextResponse.json({ success: false, message: createError?.message || 'Error creating user' }, { status: 500 });
       }
       
-      console.log('✅ New user created:', newUser.user.id);
-      authUser = newUser;
+      console.log('✅ User created successfully:', newUser.user.id);
+      userId = newUser.user.id;
     }
 
-    // 3. Create or update profile in public.profiles
-    const userId = authUser.user?.id;
-    if (!userId) {
-      return NextResponse.json({ success: false, message: 'User ID not found' }, { status: 500 });
-    }
-    
+    // 3. Update the existing profile to mark as approved
+    console.log(`✍️ Updating profile for user ID: ${userId}`);
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
-      .upsert([
-        {
-          id: userId,
-          email: registrationRequest.email,
-          name: registrationRequest.name,
-          role: 'user',
-          is_approved: true,
-        }
-      ], { onConflict: 'id' });
+      .update({
+        is_approved: true,
+        name: registrationRequest.name,
+      })
+      .eq('id', userId);
 
     if (profileError) {
+      console.error('💥 Error updating profile:', profileError);
       return NextResponse.json({ success: false, message: profileError.message || 'Error creating profile' }, { status: 500 });
     }
+    console.log('✅ Profile updated successfully.');
 
     // 4. Delete the registration request
     const { error: deleteError } = await supabaseAdmin
