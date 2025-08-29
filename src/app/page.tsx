@@ -17,7 +17,7 @@ export default function Home() {
             <h1 className="text-4xl font-bold text-white mb-4">Course Roadmap</h1>
             <p className="text-gray-300 text-lg">Your path to success in Black Hat marketing</p>
           </div>
-          <MiroBoard />
+          {/* <MiroBoard /> */}
           
           <div className="text-center">
             <Link 

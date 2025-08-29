@@ -2,7 +2,6 @@
 const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
-  trailingSlash: true,
   images: {
     unoptimized: true
   },

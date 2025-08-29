@@ -88,7 +88,8 @@ export default function LessonPage() {
           </div>
           
           <div className="flex-1 overflow-y-auto min-h-0">
-            <CourseNavigation 
+            <CourseNavigation
+              courseData={courseData}
               currentLessonId={currentLessonId}
               onLessonSelect={handleLessonSelect}
             />
