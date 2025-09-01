@@ -11,14 +11,28 @@ const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID || '';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  console.log('🏗️ AuthProvider: Component is rendering');
+  console.log('🌍 AuthProvider: Running on:', typeof window !== 'undefined' ? 'CLIENT' : 'SERVER');
+  
+  if (typeof window !== 'undefined') {
+    console.log('✅ AuthProvider: Client-side rendering detected');
+  } else {
+    console.log('🔴 AuthProvider: Server-side rendering detected');
+  }
   const [user, setUser] = useState<User | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
+  
+  useEffect(() => {
+    console.log('🧪 TEST: Simple useEffect is working!');
+  }, []);
 
   useEffect(() => {
+    console.log('🚀 AuthContext: useEffect started');
     const initAuth = async () => {
       console.log('🔄 AuthContext: Starting initialization with Supabase');
+      console.log('🔄 AuthContext: isInitializing is currently:', isInitializing);
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
@@ -64,10 +78,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } finally {
         console.log('🏁 AuthContext: Setting isInitializing to false');
         setIsInitializing(false);
+        console.log('✅ AuthContext: Initialization completed, isInitializing should now be false');
       }
     };
     
     initAuth();
+    console.log('📞 AuthContext: initAuth() called');
     
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('🔄 AuthContext: Auth state changed:', event);
@@ -277,6 +293,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const loadRegistrationRequests = async () => {
+    console.log('📋 AuthContext: Starting loadRegistrationRequests');
     try {
       const { data, error } = await supabase
         .from('registration_requests')
@@ -284,11 +301,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .order('created_at', { ascending: false });
       
       if (error) {
-        console.error('Error loading requests:', error);
+        console.error('❌ AuthContext: Error loading requests:', error);
         return;
       }
       
       if (data) {
+        console.log('✅ AuthContext: Successfully loaded registration requests:', data.length);
         const formattedRequests = data.map((req: any) => ({
           id: req.id,
           email: req.email,
@@ -300,8 +318,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setRegistrationRequests(formattedRequests);
       }
     } catch (error) {
-      console.error('Error loading requests:', error);
+      console.error('💥 AuthContext: Catch block - Error loading requests:', error);
     }
+    console.log('🏁 AuthContext: Finished loadRegistrationRequests');
   };
 
   const remindAdmin = async (requestId: string): Promise<{ success: boolean; message: string }> => {

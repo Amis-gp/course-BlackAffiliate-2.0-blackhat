@@ -13,6 +13,8 @@ interface ProtectedRouteProps {
 export default function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
   const { isAuthenticated, isAdmin, isInitializing } = useAuth();
   const [showRegister, setShowRegister] = useState(false);
+  
+  console.log('🛡️ ProtectedRoute: Current state:', { isAuthenticated, isInitializing });
 
   if (isInitializing) {
     return (
