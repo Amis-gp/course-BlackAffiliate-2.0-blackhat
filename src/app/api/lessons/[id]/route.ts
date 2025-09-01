@@ -1,16 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { courseData } from '@/data/courseData';
 import fs from 'fs';
 import path from 'path';
 
-type RouteContext = {
-  params: {
-    id: string;
-  };
-};
-
-export async function GET(request: Request, context: RouteContext) {
-  const { id } = context.params;
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
 
   let lesson;
   for (const section of courseData) {
