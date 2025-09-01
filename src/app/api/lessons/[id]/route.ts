@@ -3,7 +3,13 @@ import { courseData } from '@/data/courseData';
 import fs from 'fs';
 import path from 'path';
 
-export async function GET(request: Request, context: { params: { id: string } }) {
+type RouteContext = {
+  params: {
+    id: string;
+  };
+};
+
+export async function GET(request: Request, context: RouteContext) {
   const { id } = context.params;
 
   let lesson;
