@@ -53,7 +53,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         
         console.log('📋 AuthContext: Loading registration requests');
-        await loadRegistrationRequests();
+        try {
+          await loadRegistrationRequests();
+        } catch (requestError) {
+          console.error('⚠️ AuthContext: Failed to load registration requests:', requestError);
+        }
         
       } catch (error) {
         console.error('💥 AuthContext: Initialization error:', error);
