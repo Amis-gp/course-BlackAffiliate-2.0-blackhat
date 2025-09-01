@@ -5,9 +5,9 @@ import LessonPageClient from './LessonPageClient';
 import { notFound } from 'next/navigation';
 
 interface LessonPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 const getLessonInfo = (id: string): Lesson | null => {
@@ -32,7 +32,7 @@ async function getLessonContent(id: string): Promise<string> {
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {
-  const { id } = params;
+  const { id } = await params;
   const lessonInfo = getLessonInfo(id);
 
   if (!lessonInfo) {
