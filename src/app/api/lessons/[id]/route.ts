@@ -3,8 +3,8 @@ import { courseData } from '@/data/courseData';
 import fs from 'fs';
 import path from 'path';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const id = params.id;
+export async function GET(request: Request, context: { params: { id: string } }) {
+  const { id } = context.params;
 
   let lesson;
   for (const section of courseData) {

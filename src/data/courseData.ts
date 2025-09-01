@@ -2,6 +2,7 @@ export interface Lesson {
   id: string;
   title: string;
   type: 'lesson' | 'homework' | 'questions';
+  content?: string;
   contentPath?: string;
   videoUrl?: string;
   files?: string[];
