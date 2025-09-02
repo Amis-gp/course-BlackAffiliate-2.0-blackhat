@@ -1,6 +1,4 @@
-# Homework 4-6
-
-## Questions on the general part
+# Questions on the general part
 *Slang: Webmaster = Arbitrageur = Media Buyer*
 
 **Question 1:** List the main traffic payment models and briefly describe them.

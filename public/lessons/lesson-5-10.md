@@ -1,12 +1,12 @@
 # FB Account Setup
 
-## 1\. Choosing an offer*
+## 1. Choosing an offer*
 
 * We analyze competitors, analyze existing offers, conditions, payments, geo
 
 * Choose an offer for PWA 
 
-## 2\. Account Preparation:
+## 2. Account Preparation:
 
 * Purchase an Agency account for work
 
@@ -14,7 +14,7 @@
 
 * Use one Fan Page for 2-3 ad accounts and for one offer.
 
-## 3\. Business Manager Setup(If you work on your own BM):
+## 3. Business Manager Setup(If you work on your own BM):
 Contact your agency account provider, ask for a pixel, you can create it on your King account and then transfer it to the agency
 
 * [Facebook Business Settings](https://business.facebook.com/latest/settings) 
@@ -23,11 +23,11 @@ Contact your agency account provider, ask for a pixel, you can create it on your
 
 * Link it to an existing BM and add 3-4 ad accounts.
 
-## 4\. Pixel API Setup:
+## 4. Pixel API Setup:
 
 * Create a Pixel API conversion and name it based on your domain \+ GEO for convenience.
 
-## 6\. Sharing Pixel Access:
+## 5. Sharing Pixel Access:
 
 * Share pixel access with all active ad accounts.    
 ![image](/img/5.10/image1.webp)
@@ -37,7 +37,7 @@ Contact your agency account provider, ask for a pixel, you can create it on your
 
 * Add user access for a pixel
 
-## ZM Apps \- PWA 
+## ZM Apps \ PWA 
 Go to https://zm.app/, create a PWA design, and customize it.
 
 ## Launching an advertising account
@@ -92,7 +92,7 @@ Example
 
 - In the targeting settings, we add Antarctica to the geo we have chosen, there will be no impressions there, but it will help to confuse the FB moderation
 
-## Our Global Goal: 
+## Our Global Goal
 
 1. Drive Traffic from Multiple Accounts Linked to Our Pixel:  
    * Use several accounts connected to our pixel to maximize data collection.

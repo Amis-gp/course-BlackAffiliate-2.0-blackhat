@@ -34,7 +34,7 @@ Even when working with white-hat offers on FB\*, you may encounter:
 
 On the positive side, recent developments include the emergence of new GEOs. Many countries have legalized online casinos, leading to an increase in the number of offers and advertisers.
 
-## Advantages of FB\* as a Traffic Source for Gambling
+## Advantages of FB as a Traffic Source for Gambling
 
 Despite the challenges and restrictions, Facebook\* remains one of the most profitable sources, capable of generating millions. Here are a few reasons why:
 

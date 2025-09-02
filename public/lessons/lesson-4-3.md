@@ -59,7 +59,7 @@ Again, it is calculated conditionally, you can't get some final number or see yo
 This is the only variable that can be set in numeric format manually.  
 In FB, when creating an ad campaign, you can select several bid strategies:
 
-## 1\. Minimum bid
+## 1. Minimum bid
 
 This strategy used to be called auto-bid, but now it has been renamed, although the essence remains the same.
 
@@ -67,7 +67,7 @@ And its essence is that, as you remember, the bid is made up of several indicato
 
 Conventionally speaking, if you have a low frequency of targeted actions and low value to users, FB will inflate the "Advertiser Bid" so you can win the auction.
 
-## 2\. Marginal Bid
+## 2. Marginal Bid
 
 With this type of bid, our variable "advertiser bid" will be fixed. Hence all our variables become fixed FB cannot help us by artificially inflating one of the variables as it does with the minimum bid.
 
@@ -77,7 +77,7 @@ Because of this, the ads may not spin up because we can't win the right number o
 
 For example, in this situation, out of a $20 budget for the day, we may only spend $5 with a cap bid that is too low.
 
-## 3\. Target price.
+## 3. Target price.
 
 I've never used this bidding strategy, but the gist of it is that it's sort of a mix of "minimum price" and "limit bid".
 
@@ -161,7 +161,7 @@ But this is not quite true, the price per result will be about the same as that 
 
 **A couple more points regarding FB mechanics:**
 
- ## 1.Narrowing the targeting.
+## 1. Narrowing the targeting.
 
 Never select interests and do not reduce the age when creating an RC if you are working with commodity or other arbitrage vertical (unless it is explicitly stated in the rules of the offer).
 
@@ -173,7 +173,7 @@ The second reason: FB tests age, geo, gender, placements and different audience 
 
 So, when setting up targeting, we choose only geo and gender. Well, and you can slightly reduce the age, for example, instead of the standard 18-65+ put 25-52. It is desirable that the age range should not be less than 20 years between the upper and lower boundaries.
 
- ## 2.Seasonal Offers and Holidays.
+ ## 2. Seasonal Offers and Holidays.
 
 A lot of people want to get on FB and sell trending items for the holidays.
 
@@ -183,7 +183,7 @@ I think a lot of people have heard of a product called "rose bears." This produc
 
 This happened because a lot of people entered the auction, which began to fight for the same audience, in response to which FB increased the price of traffic (as the demand for it increased), and with the remaining in place site conversion rate (CR) most arbitrators merged into the minus.
 
- ## 3.What is the best time to launch an advertising campaign.
+ ## 3. What is the best time to launch an advertising campaign.
 
 There is such an opinion that the best time to launch an advertising campaign is 00:00. Since many people do not pour at night, the competition is lower and traffic is cheaper. 
 
@@ -207,7 +207,7 @@ And you'll see the time zone of the ad acct:
 
 ![image](/img/4.3/image5.jpg)
 
- ## 4.  Is it okay to stop advertising?
+## 4. Is it okay to stop advertising?
 
 This question arises because some people have heard that by stopping an ad campaign, FB can "lose" the audience that was bringing results.
 

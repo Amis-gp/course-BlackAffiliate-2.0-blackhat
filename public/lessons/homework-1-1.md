@@ -1,4 +1,4 @@
-### Task 1: Build Your First Business Manager Setup
+# Build Your First Business Manager Setup
 
 1. Log in to an available Facebook account
 2. Create a Fan Page, fill it out

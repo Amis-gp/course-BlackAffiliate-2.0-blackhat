@@ -6,7 +6,7 @@ It covers most of the steps you’ll encounter — from choosing offers to scali
 
 Some parts of the information or steps may be outdated as the market is quite dynamic and methods are updated (but there is a lot of useful information here), so if you have any questions, you can contact us.  
 
-## 1\. Choosing the Vertical and Offer
+## 1. Choosing the Vertical and Offer
 
 1. Select a Vertical: Decide on the niche you want to work in (e.g., gambling, nutra, e-commerce).  
 2. Review Affiliate Networks and Offers:
@@ -32,7 +32,7 @@ Some parts of the information or steps may be outdated as the market is quite dy
 
 6. Finalize 1-2 Offers and Affiliate Networks.
 
-## 2\. Preparing Landing Pages and Pre-Landing Pages
+## 2. Preparing Landing Pages and Pre-Landing Pages
 
 1. Decide on Pre-Landing Pages:  
    * Will you use a pre-landing page (transit page) or go directly to the landing page?
@@ -82,7 +82,7 @@ Some parts of the information or steps may be outdated as the market is quite dy
 17. Translate Content:  
     * Use tools like DeepL, Google Translate, Chat GPT .
 
-## 3\. Setting Up Facebook Accounts and Pages
+## 3. Setting Up Facebook Accounts and Pages
 
 1. Choose Account Types:  
    * Decide whether to use auto-registered accounts, farmed accounts, or Business Managers (BM).
@@ -131,7 +131,7 @@ Some parts of the information or steps may be outdated as the market is quite dy
 13. Launch Campaigns:  
     * Spend a budget equal to 2-5 payouts per lead on each ad set.
 
-## 4\. Campaign Optimization and Scaling
+## 4. Campaign Optimization and Scaling
 
 1. Analyze ROI, Approval Rate, and Lead Cost for each ad set.
 

@@ -76,7 +76,7 @@ Our CMO decided to test these initial hooks in creatives. In the age of doom-scr
 * You take action — register, deposit, spin slots, and cash out the profit.
 
 
-## ⚠️ Why is this important right now? What’s this article about?
+## Why is this important right now? What’s this article about?
 
 The goal here is **initial hooks**. That means you already have a solid, well-structured video creative, and now you're just adding a themed "bait" segment at the start.
 

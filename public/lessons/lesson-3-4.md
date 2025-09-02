@@ -4,12 +4,12 @@ When you're diving into affiliate marketing, choosing the right offer is absolut
 
 So, how do you choose the right offer? There are a few key factors you should consider when picking an offer to run, and I'm going to break them down for you. Trust me, once you get the hang of it, you’ll be able to spot a winner from a mile away.
 
-## 1\. Personal Manager’s Advice of Affiliate networks
+## 1. Personal Manager’s Advice of Affiliate networks
 
 First and foremost, your personal manager is your best friend. They're the ones with the inside scoop on what offers are performing well. They can give you insights on the latest trends, top offers, and conversion rates. Don’t hesitate to text your manager for advice\! After all, their salary depends on your success. So, if they say a particular offer is hot, you better believe it's worth checking out.
 
 
-## 2\. Statistical Indicators
+## 2. Statistical Indicators
 
 You may be new to affiliate marketing, but stats are your best friends. Here's a quick breakdown of the key stats you need to know before jumping into any offer:
 
@@ -22,7 +22,7 @@ You may be new to affiliate marketing, but stats are your best friends. Here's a
 
 ![mapa](/img/3.4/image1.webp)
 
-## 3\. GEO Features**
+## 3. GEO Features
 
 GEO (geographical location) is another important factor. Not all offers perform equally in every country. Some regions have lower traffic costs but also lower payouts due to lower purchasing power. Here’s a quick rule of thumb:
 

@@ -5,7 +5,7 @@ Why is it tricky?
 
 Because platforms like Facebook have extremely strict rules when it comes to gambling ads. It’s a high-risk, high-reward game. Facebook will ban accounts or ads in a heartbeat if you're not careful.
 
-## How to Choose the Right Gambling Offer:
+## How to Choose the Right Gambling Offer
 
 1. Work with Trusted Networks: The most successful affiliates in the gambling vertical know the importance of partnering with reliable affiliate networks. Look for networks like LeadsGenerals, 1Win Partners, Welcome.Partners, Pin-Up Partners, and Leadshub. These have strong reputations and know how to navigate Facebook’s strict ad policies.
 

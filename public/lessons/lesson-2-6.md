@@ -37,7 +37,7 @@ In the case of ZRD, this option is rarely used; it is typically employed to rest
 
 ![image](/img/2.6/image2.webp)
 
-## Verification via Document Photos**
+## Verification via Document Photos
 
 This method is frequently used during the ZRD process, so let’s go over it in more detail:
 

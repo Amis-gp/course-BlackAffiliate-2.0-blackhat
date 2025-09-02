@@ -8,7 +8,7 @@ The app and PWA market is dynamic, and we currently recommend using ZM Apps, a p
 
 PWA Builder is a tool for creating Progressive Web Applications (PWAs). Before you start building a new PWA, note some important features.
 
-### What you need to know before you begin:
+### What you need to know before you begin
 
 **AI Generation** – A feature that automatically creates text or avatars. Fields with this feature have a button to activate it.
 

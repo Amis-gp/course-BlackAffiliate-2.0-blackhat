@@ -1,4 +1,4 @@
-## Important Notes
+# Important Notes
 
 This lesson is important for understanding the basics of how proxies work, where to buy them if needed, and where to set them up.
 

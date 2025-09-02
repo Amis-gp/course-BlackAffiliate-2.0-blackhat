@@ -93,7 +93,7 @@ Since we work in traffic arbitrage, running gray-hat offers means Facebook is co
 
 Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your account options helps you dodge bans and maximize profits. We’ll explore all types, but **agency accounts** are our star players—stable, scalable, and simpler for beginners. Let’s break it down! 📋
 
-### 2.1 Agency Accounts 💼 – Your Best Bet!
+### 2.1 Agency Accounts – Your Best Bet!
 
 **What They Are**: Premium accounts managed by agencies, often with fan pages, proxies, and profile access included. You pay a commission based on ad spend.
 **Why You Need Them**: Perfect for launching big campaigns right away!
@@ -102,7 +102,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Commission fees (tied to ad spend), needs decent budget to start.
     **For Beginners**: Top pick! Stable and low-hassle, ideal for scaling up fast.
 
-### 2.2 Personal Accounts 👤
+### 2.2 Personal Accounts
 
 **What They Are**: Real user accounts, often old and unused, logged into trusted devices.
 **Why You Need Them**: Great for warming up to build trust.
@@ -111,7 +111,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: You need to ask for access to the FB accounts of your friends, in which case the advertising account may be blocked.
     **For Beginners**: Okay to try, but requires effort to warm up/farming.
 
-### 2.3 Rental Accounts (Aged) 📅
+### 2.3 Rental Accounts (Aged)
 
 **What They Are**: Real user accounts rented out for ads.
 **Why You Need Them**: More trusted than autoregs, last longer in campaigns.
@@ -120,7 +120,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Owner might reclaim or double-rent, adding risk.
     **For Beginners**: Proceed with caution - reliability varies.
 
-### 2.4 Logs (Stolen) 🔒
+### 2.4 Logs (Stolen)
 
 **What They Are**: Hacked or phished accounts with high trust.
 **Why You Need Them**: Quick trust boost for ads.
@@ -129,7 +129,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Unethical, risky (owners can reclaim), potential legal issues.
     **For Beginners**: Avoid - too risky and unreliable.
 
-### 2.5 Farmed Accounts 🌾
+### 2.5 Farmed Accounts
 
 **What They Are**: Auto-created accounts “farmed” with activity (friends, likes, group joins).
 **Why You Need Them**: Mimic real user behavior for better trust.
@@ -138,7 +138,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Costlier ($3–$5 each), quality depends on farming, are not immune to bans.
     **For Beginners**: needs testing.
 
-### 2.6 PZRD Accounts 🎯
+### 2.6 PZRD Accounts
 
 **What They Are**: Artificially recovered accounts that were initially blocked and then unblocked through a document.
 **Why You Need Them**: Suitable for running ads
@@ -147,7 +147,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Not fully ban-proof,can be blocked again.
     **For Beginners**: can be used, sometimes accounts are combined - Farm + PZRD to make it more trustworthy
 
-### 2.7 Autoreg Accounts 🤖
+### 2.7 Autoreg Accounts
 
 **What They Are**: Mass-created accounts via automation tools.
 **Why You Need Them**: Cheap and abundant for bulk use.
@@ -156,7 +156,7 @@ Running Facebook Ads is a powerhouse strategy for driving traffic. Knowing your 
 *   ❌ **Cons**: Low trust, high ban risk from Facebook.
     **For Beginners**: Requires volume and warming - challenging start.
 
-### 2.8 King Accounts 👑
+### 2.8 King Accounts
 
 **What They Are**: Trust-boosted farmed accounts (6-12 days old) with fan pages and business managers.
 **Why You Need Them**: Strong base for linking ad accounts.

@@ -1,4 +1,4 @@
-# 🎨 Creative Production for Gambling, Dating, Nutra, and Crypto
+# Creative Production for Gambling, Dating, Nutra, and Crypto
 
 Ads are your tool: flashy banners, loud offers, scroll-stopping videos. But even the sickest creative won’t perform if there’s no strong marketing strategy behind it. Today, we’ll break down how to build creatives that grab attention, boost CTR, and keep your CPC low.
 
@@ -6,7 +6,7 @@ Ads are your tool: flashy banners, loud offers, scroll-stopping videos. But even
   <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/siz1iO6zGGo?si=_atOp23Sc7igdfOk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
-## 🕵️‍♂️ Block 1: Market Research & Finding Inspiration
+## Block 1: Market Research & Finding Inspiration
 
 Step one to a killer creative — understand where and for whom you're working. Market research is your treasure map as a media buyer\!
 
@@ -33,7 +33,7 @@ Step one to a killer creative — understand where and for whom you're working. 
 
 **Tip:** Store everything in Figma. Sort by vertical and drop screenshots in. That’s your creative kitchen. 🍳
 
-## 🌈 Block 2: References & Headline Magic
+## Block 2: References & Headline Magic
 
 **Don’t know where to start?**  
  Go into FB Ads Library, pick a GEO, and hunt for inspo. Don’t stress about text — focus on visuals and layout. Collect everything into one “idea vault.”
@@ -56,7 +56,7 @@ The best gambling and nutra headlines hit at the intersection of audience target
  A common mistake — you swipe something from another GEO and forget the audience context is totally different.  
  What kills it in Mexico might be confusing in Romania. What works in CIS might seem boring or shady in the US.
 
-## 🎬 Block 3: Creative Process — From Idea to Banger
+## Block 3: Creative Process — From Idea to Banger
 
 Making a creative is an art, but there’s a system to it.
 
@@ -74,7 +74,7 @@ Making a creative is an art, but there’s a system to it.
 * CapCut — for video  
 * Removal.ai, WatermarkRemover — clean up assets
 
-## ⚡ Block 4: 5 Key Tips for Success
+## Block 4: 5 Key Tips for Success
 
 **Make it unique**
 
@@ -102,7 +102,7 @@ Making a creative is an art, but there’s a system to it.
 
 * Launching a campaign? Prep a bunch of different creatives and test multiple angles.
 
-## 🔥 Block 5: Structure & Creative Examples
+## Block 5: Structure & Creative Examples
 
 Pros don’t just see a "pic with text" — they see structure, hook, emotional punch, and angle.
 
@@ -157,7 +157,7 @@ Simple? Yes. Effective? Hell yes.
 
 **Pro tip:** UGC style \= your weapon. Simplicity \= native \= higher approval
 
-## 🧪 Block 6: Testing — Your Path to Winning
+## Block 6: Testing — Your Path to Winning
 
 **How to test:**
 
@@ -172,7 +172,7 @@ Simple? Yes. Effective? Hell yes.
 **Video rejects?**  
  Download 3–5 min clips from YouTube on a similar topic and stitch them in. 90% chance of approval.
 
-## 📱 Why simple creatives perform best
+## Why simple creatives perform best
 
 ![image](/img/3.5/image1.webp) 
  
@@ -212,7 +212,7 @@ Simple? Yes. Effective? Hell yes.
  Split test the basics — they deliver.  
  Remember Germany test? We’ll drop results in the next post (within the hour).
 
-## 📱 How to fight video rejects
+## How to fight video rejects
 
 👀 Sometimes your videos get hit with a reject. Pro move — take the same creative you’ve uploaded a hundred times and throw in a 3–5 min YouTube clip on a related topic.
 
@@ -220,7 +220,7 @@ Simple? Yes. Effective? Hell yes.
 
 ![Example](/img/3.5/image2.webp) 
 
-## 💡 Need help from the pros?
+## Need help from the pros?
 
 Don’t want to do it solo? Hit up agencies for creative production:
 
@@ -237,7 +237,8 @@ Don’t want to do it solo? Hit up agencies for creative production:
 Sources: [https://t.me/creotivs](https://t.me/creotivs) — grab ready-to-go creative assets
 
 
-**Conclusion:** You’re not a designer \- you’re a media buyer.
+## Conclusion
+You’re not a designer \- you’re a media buyer.
 
 Your goal is to hook, surprise, and sell. The client doesn’t analyze the layout — they react to emotion. Don’t be afraid of simple ideas. Test boldly.
 

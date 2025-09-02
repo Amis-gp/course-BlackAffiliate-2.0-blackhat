@@ -36,7 +36,7 @@ Now, how do you actually manage multiple Facebook profiles without getting flagg
 
 Each account needs its own browser profile. This is where things get specific: you need to ensure that Facebook can't tie your accounts together through cookies or browser fingerprints. Anti-detect browsers let you add custom profiles for each Facebook account, making each one appear like it's being run on a different machine.
 
-## Using Cookies🍪 and User Agents for Extra Stealth
+## Using Cookies and User Agents for Extra Stealth
 
 Speaking of cookies, they're your friend. When you buy a fresh Facebook account, it often comes with its own set of cookies — these help you log in smoothly without triggering a red flag. Some accounts also come with pre-configured user agents, which mimic the behavior of specific devices (such as a MacBook, which is seen as more "unique" and trustworthy by the Facebook algorithm). The more authentic your login appears, the better your chances of staying off Facebook's radar.
 
