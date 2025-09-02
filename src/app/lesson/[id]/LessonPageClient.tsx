@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { useLessonContext } from '@/app/lesson/LessonLayoutClient';
+import { slugify } from '@/lib/utils';
 
 interface LessonPageClientProps {
   initialLesson: Lesson | null;
@@ -41,7 +42,7 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
       while ((headingMatch = headingRegex.exec(lesson.content)) !== null) {
         const level = headingMatch[0].match(/^#+/)![0].length;
         const text = headingMatch[1];
-        const slug = text.toLowerCase().replace(/\s+/g, '-');
+        const slug = slugify(text);
         foundHeadings.push({ level, text, slug });
       }
       setHeadings(foundHeadings);
@@ -180,7 +181,7 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
                   h1: ({node, ...props}) => (
                     <div className="mb-8">
                       <h1 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                        id={slugify(props.children?.toString() || '')} 
                         className="text-3xl font-bold text-white mb-4 pb-3 border-b-2 border-primary/30"
                         {...props} 
                       />
@@ -189,7 +190,7 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
                   h2: ({node, ...props}) => (
                       <div className="mb-6 mt-12 pt-8 border-t border-gray-800">
                         <h2 
-                          id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                          id={slugify(props.children?.toString() || '')} 
                           className="text-2xl font-semibold text-white mb-3  relative"
                           {...props} 
                         />
@@ -198,28 +199,28 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
                     ),
                   h3: ({node, ...props}) => (
                     <h3 
-                      id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                      id={slugify(props.children?.toString() || '')} 
                       className="text-xl font-semibold text-gray-100 mb-3 mt-6 pt-2 border-t border-gray-700/50"
                       {...props} 
                     />
                   ),
                   h4: ({node, ...props}) => (
                     <h4 
-                      id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                      id={slugify(props.children?.toString() || '')} 
                       className="text-lg font-medium text-gray-200 mb-2 mt-5"
                       {...props} 
                     />
                   ),
                   h5: ({node, ...props}) => (
                     <h5 
-                      id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                      id={slugify(props.children?.toString() || '')} 
                       className="text-base font-medium text-gray-300 mb-2 mt-4"
                       {...props} 
                     />
                   ),
                   h6: ({node, ...props}) => (
                     <h6 
-                      id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                      id={slugify(props.children?.toString() || '')} 
                       className="text-sm font-medium text-gray-400 mb-2 mt-3"
                       {...props} 
                     />

@@ -10,6 +10,16 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 
+const generateSlug = (text: string): string => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[\s:]+/g, '-')
+    .replace(/[^a-z0-9\u0400-\u04FF-]+/g, '')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-+/g, '-');
+};
+
 interface LessonContentProps {
   lesson: Lesson;
   onPreviousLesson?: () => void;
@@ -29,6 +39,17 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isCompleted = isLessonCompleted(lesson.id);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
+    e.preventDefault();
+    const element = document.getElementById(slug);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.history.pushState(null, '', `#${slug}`);
+    } else {
+      window.location.hash = slug;
+    }
+  };
 
   const handleToggleComplete = () => {
     if (isCompleted) {
@@ -69,13 +90,22 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
         })
         .then(data => {
           setContent(data.content);
-          setHeadings(data.headings || []);
+          
+          const headingRegex = /^(#{2,4})\s+(.*)$/gm;
+          const extractedHeadings: { level: number; text: string; slug: string }[] = [];
+          let match;
+          while ((match = headingRegex.exec(data.content)) !== null) {
+            const level = match[1].length;
+            const text = match[2].trim();
+            extractedHeadings.push({ level, text, slug: generateSlug(text) });
+          }
+          setHeadings(extractedHeadings);
           
           const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
           const images: {src: string; alt: string}[] = [];
-          let match;
-          while ((match = imageRegex.exec(data.content)) !== null) {
-            images.push({ src: match[2], alt: match[1] || 'Зображення уроку' });
+          let imageMatch;
+          while ((imageMatch = imageRegex.exec(data.content)) !== null) {
+            images.push({ src: imageMatch[2], alt: imageMatch[1] || 'Зображення уроку' });
           }
           setModalImages(images);
           
@@ -91,6 +121,33 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
       setIsLoading(false);
     }
   }, [lesson.id, lesson.contentPath]);
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    const scrollToHash = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const elementId = decodeURIComponent(hash.substring(1));
+        setTimeout(() => {
+          const element = document.getElementById(elementId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 300);
+      }
+    };
+
+    scrollToHash();
+
+    window.addEventListener('hashchange', scrollToHash);
+    
+    return () => {
+      window.removeEventListener('hashchange', scrollToHash);
+    };
+  }, [isLoading]);
 
   const getLessonTypeInfo = (type: Lesson['type']) => {
     switch (type) {
@@ -168,6 +225,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                         <div key={heading.slug} className="group">
                             <a 
                                 href={`#${heading.slug}`} 
+                                onClick={(e) => handleNavClick(e, heading.slug)}
                                 className="flex items-center justify-between p-1 rounded-lg text-gray-300 hover:bg-gray-700/40 hover:text-white transition-all duration-200 group-hover:translate-x-1"
                                 style={{ textDecoration: 'none' }}
                             >
@@ -209,7 +267,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                     h1: ({node, ...props}) => (
                       <div className="mb-8">
                         <h1 
-                          id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                          id={generateSlug(props.children?.toString() || '')} 
                           className="text-3xl font-bold text-white mb-4 pb-3 border-b-2 border-primary/30"
                           {...props} 
                         />
@@ -218,7 +276,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                     h2: ({node, ...props}) => (
                         <div className="mb-6 mt-12 pt-8 border-t border-gray-800">
                           <h2 
-                            id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                            id={generateSlug(props.children?.toString() || '')} 
                             className="text-2xl font-semibold text-white mb-3  relative"
                             {...props} 
                           />
@@ -227,28 +285,28 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
                       ),
                     h3: ({node, ...props}) => (
                       <h3 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                        id={generateSlug(props.children?.toString() || '')} 
                         className="text-xl font-semibold text-gray-100 mb-3 mt-6 pt-2 border-t border-gray-700/50"
                         {...props} 
                       />
                     ),
                     h4: ({node, ...props}) => (
                       <h4 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                        id={generateSlug(props.children?.toString() || '')} 
                         className="text-lg font-medium text-gray-200 mb-2 mt-5"
                         {...props} 
                       />
                     ),
                     h5: ({node, ...props}) => (
                       <h5 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                        id={generateSlug(props.children?.toString() || '')} 
                         className="text-base font-medium text-gray-300 mb-2 mt-4"
                         {...props} 
                       />
                     ),
                     h6: ({node, ...props}) => (
                       <h6 
-                        id={props.children?.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')} 
+                        id={generateSlug(props.children?.toString() || '')} 
                         className="text-sm font-medium text-gray-400 mb-2 mt-3"
                         {...props} 
                       />
