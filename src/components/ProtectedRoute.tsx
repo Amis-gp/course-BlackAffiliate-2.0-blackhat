@@ -19,7 +19,10 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
   if (isInitializing) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+          <div className="text-white text-xl">Loading...</div>
+        </div>
       </div>
     );
   }

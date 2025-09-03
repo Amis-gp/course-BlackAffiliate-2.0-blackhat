@@ -2,8 +2,8 @@
 
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-import MiroBoard from '@/components/MiroBoard';
+import { ArrowRight, Play, FileText, HelpCircle, Map } from 'lucide-react';
+import { courseData } from '@/data/courseData';
 
 console.log('NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_URL);
 console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
@@ -12,21 +12,78 @@ export default function Home() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-black">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-white mb-4">Course Roadmap</h1>
-            <p className="text-gray-300 text-lg">Your path to success in Black Hat marketing</p>
-          </div>
-          {/* <MiroBoard /> */}
-          
-          <div className="text-center">
-            <Link 
-              href="/lesson/lesson-1-1" 
-              className="inline-flex items-center gap-2 bg-primary hover:bg-red-700 text-white font-medium px-6 py-3 rounded-lg transition-colors"
-            >
-              Start Learning
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+        <div className="relative">
+          <div className="absolute top-0 left-0 right-0 h-64 md:h-[443px] bg-[url('/img/hero.webp')] bg-cover bg-center opacity-80"></div>
+          <div className="absolute top-64 md:top-[443px] left-0 bottom-0 w-8 md:w-20 lg:w-32 bg-gradient-to-r from-red-500/15 via-red-400/5 to-transparent"></div>
+          <div className="absolute top-64 md:top-[443px] right-0 bottom-0 w-8 md:w-20 lg:w-32 bg-gradient-to-l from-red-500/15 via-red-400/5 to-transparent"></div>
+          <div className="relative z-10">
+            <div className="container mx-auto px-4 py-6 md:py-12">
+              <div className="text-center mb-8 md:mb-16">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
+                  Black Affiliate 2.0
+                </h1>
+                <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-12 px-4">
+                  Traffic arbitrage and affiliate marketing course
+                </p>
+                
+                <div className="flex justify-center mb-8 md:mb-12">
+                  <a 
+                    href="https://miro.com/app/board/uXjVJP7S_D4=/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-red-500/25 transform hover:scale-105 transition-all duration-300 ease-out"
+                  >
+                    <Map className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                    <span>Road Map</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="grid gap-4 md:gap-6 max-w-4xl mx-auto px-4">
+                {courseData.map((section, index) => {
+                  const moduleNumber = index + 1;
+                  const moduleImage = `/img/module-${moduleNumber}.webp`;
+                  
+                  return (
+                    <div key={section.id} className="group">
+                      <Link href={`/lesson/${section.lessons[0]?.id}`}>
+                        <div className="bg-[#0f1012] rounded-lg overflow-hidden hover:bg-gradient-to-r hover:from-gray-800/90 hover:to-red-900/20 hover:shadow-lg hover:shadow-red-500/10 hover:scale-[1.02] transition-all duration-300 cursor-pointer group">
+                          <div className="flex flex-col sm:flex-row items-center">
+                            <div className="w-full sm:w-32 md:w-40 h-24 sm:h-24 md:h-32 p-2 md:p-4 flex items-center justify-center flex-shrink-0">
+                              <img 
+                                src={moduleImage} 
+                                alt={`Module ${moduleNumber}`}
+                                className="w-full h-full object-cover rounded-lg"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                  const parent = target.parentElement;
+                                  if (parent) {
+                                    parent.innerHTML = `<span class="text-xl md:text-3xl font-bold text-white">${moduleNumber}</span>`;
+                                  }
+                                }}
+                              />
+                            </div>
+                            <div className="flex-1 px-4 md:px-6 py-3 md:py-4 text-center sm:text-left">
+                              <h3 className="text-lg md:text-xl font-semibold text-white mb-1">
+                                Module {moduleNumber} - {section.title.replace(/^\d+\.\s*/, '')}
+                              </h3>
+                              <p className="text-gray-400 text-sm">
+                                {section.lessons.length} lessons
+                              </p>
+                            </div>
+                            <div className="px-4 md:px-6 pb-3 sm:pb-0">
+                              <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-red-500 group-hover:text-red-400 group-hover:translate-x-1 transition-all duration-300" />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>
