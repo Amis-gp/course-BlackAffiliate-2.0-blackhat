@@ -82,12 +82,16 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
         
         <div className={`fixed lg:static inset-y-0 left-0 z-50 w-80 bg-[#0f1012] transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isMobileNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="flex items-center justify-between p-4 border-b border-gray-700">
-            <h2 className="text-lg font-semibold text-white lg:block hidden">Course Navigation</h2>
-            <h2 className="text-lg font-semibold text-white lg:hidden">Course Navigation</h2>
+            <h2 className="text-lg font-semibold text-white">Course Navigation</h2>
             <button onClick={() => setIsMobileNavOpen(false)} className="text-gray-400 hover:text-white lg:hidden">
               <X className="w-6 h-6" />
             </button>
           </div>
+
+          <Link href="/" className="mx-4 mt-4 flex items-center gap-2 text-sm bg-red-600 hover:bg-red-700 px-3 py-4 rounded-lg transition-colors text-white font-medium">
+            <Home className="w-4 h-4" />
+            Home
+          </Link>
           
           <CourseNavigation 
             courseData={courseData}
@@ -98,10 +102,7 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
             <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
             <div className="text-white font-medium mb-3">{user?.email}</div>
             <div className="flex flex-col gap-2">
-              <Link href="/" className="flex items-center gap-2 text-sm bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors">
-                <Home className="w-4 h-4" />
-                Back to Roadmap
-              </Link>
+              
               {isAdmin() && (
                 <Link href="/admin" className="flex items-center gap-2 text-sm bg-primary hover:bg-red-700 px-3 py-2 rounded-lg transition-colors">
                   <Settings className="w-4 h-4" />
@@ -122,11 +123,11 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
               <Menu className="w-6 h-6" />
             </button>
             <div className="flex items-center gap-2">
-              <Link href="/" className="text-blue-400 hover:text-blue-300">
+              <Link href="/" className="text-primary hover:text-red-400">
                 <Home className="w-5 h-5" />
               </Link>
               {isAdmin() && (
-                <Link href="/admin" className="text-primary hover:text-red-400">
+                <Link href="/admin" className="text-blue-400 hover:text-blue-300">
                   <Settings className="w-5 h-5" />
                 </Link>
               )}

@@ -13,7 +13,8 @@ export default function Home() {
     <ProtectedRoute>
       <div className="min-h-screen bg-black">
         <div className="relative">
-          <div className="absolute top-0 left-0 right-0 h-64 md:h-[443px] bg-[url('/img/hero.webp')] bg-cover bg-center opacity-80"></div>
+          <div className="absolute top-0 left-0 right-0 h-64 md:h-[443px] bg-[url('/img/hero.webp')] bg-cover bg-center opacity-80 border-b-4 border-black"></div>
+          <div className="absolute top-64 md:top-[443px] left-0 right-0 h-8 md:h-20 lg:h-32 bg-gradient-to-b from-red-500/15 via-red-400/5 to-transparent"></div>
           <div className="absolute top-64 md:top-[443px] left-0 bottom-0 w-8 md:w-20 lg:w-32 bg-gradient-to-r from-red-500/15 via-red-400/5 to-transparent"></div>
           <div className="absolute top-64 md:top-[443px] right-0 bottom-0 w-8 md:w-20 lg:w-32 bg-gradient-to-l from-red-500/15 via-red-400/5 to-transparent"></div>
           <div className="relative z-10">
