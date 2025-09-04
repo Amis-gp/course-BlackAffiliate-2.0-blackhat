@@ -1,190 +1,93 @@
-# PWA Builder
+# Creating and Configuring a New Flow
 
-The app and PWA market is dynamic, and we currently recommend using ZM Apps, a proven service.
+Follow these steps to create and configure your new flow:
 
-[Link](https://zm.app/) 
+### Step 1. Create a Flow
 
-## Introduction
+Navigate to the `Flows` section in the left-side menu of ZM apps.
+![image](/img/5.4/image1.png)
 
-PWA Builder is a tool for creating Progressive Web Applications (PWAs). Before you start building a new PWA, note some important features.
+Click `Create` to begin setting up your new flow.
+![image](/img/5.4/image2.png)
 
-### What you need to know before you begin
+### Step 2. Select an App
 
-**AI Generation** – A feature that automatically creates text or avatars. Fields with this feature have a button to activate it.
+Choose the flow type `ZM apps link` and select `PWA` as the app type.
+![image](/img/5.4/image3.png)
 
-![AI Generation](/img/5.4/image1.png)
+**How to create your PWA?**
+Check out our guide for detailed instructions.
 
-**Auto-translation** – A feature that automatically translates the app text to the browser language. All fields that support auto-translation are marked with a special icon and a note under the field.
+Click `Select` to confirm your choice.
+![image](/img/5.4/image4.png)
 
-![Auto-translation](/img/5.4/image2.png)
+### Step 3. Set Up a Pixel
 
-Auto-translation works only if the field is left empty. To disable this feature, toggle the Auto-translate switch.
+You can:
+* Select an existing pixel from the list.
+* Create a new pixel directly while setting up the flow.
+* Continue without a pixel — in this case, events will not be sent to the source.
 
-![Auto-translate switch](/img/5.4/image3.png)
+![image](/img/5.4/image5.png)
 
-## Creating a PWA
+> **info**
+> Learn more about creating and editing pixels in our guide.
 
-Click the Create button to start working on a new PWA application. A window with creation options will appear:
+#### Dynamic Pixel
 
-- **PWA games** – templates with interactive game elements.
-- **PWA templates** – ready-made store layout options for PWA.
-- **Create manually** – an empty template with default values.
-- **Copy by Hash ID / by domain** – create an app based on an existing one in our service.
+When creating a flow, the selected pixel is automatically added to the final link’s parameters.
+If you need to manually add an extra Facebook or Tiktok pixel, follow these steps:
 
-![Creation options](/img/5.4/image4.png)
+* Make sure the needed pixel is saved in the `My Pixels` section.
+* Add this parameter to the final link: `&pixel_fb=ID of the required pixel`
 
-Type the name of your PWA. This name will not show in the app, but it will appear in the list of your projects in ZM apps.
+Example:
+```
+https://example.com/?sub1={sub1}&pixel_fb=12344321234
+```
 
-![PWA name](/img/5.4/image5.png)
+### Step 4. Configure GEO and Whitepage Settings
 
-Choose the language for the AI-generated descriptions, comments, and tags.
+If GEO cloaking is not required, select `Without Cloaking` and proceed to the next step.
+![image](/img/5.4/image6.png)
 
-![Language selection](/img/5.4/image6.png)
+To enable GEO cloaking, select `GEO Cloaking`. In the dropdown list, select the regions where your ad will be available. Users from other GEOs will see a white page.
+![image](/img/5.4/image7.png)
 
-## App Design
+To use your own whitepage instead of the default one from ZM apps, enter the URL in the `Whitepage Source` field.
+![image](/img/5.4/image8.png)
 
-> **Info:** The PWA builder has a live preview that shows any changes you make in your future app.
+If necessary, add a comment to the flow.
+![image](/img/5.4/image9.png)
 
-![Live preview](/img/5.4/image7.png)
+### Step 5. Set Up a Prelanding Page
 
-### App Header
+If a prelanding page is not needed, click `Continue Without Prelanding`.
+![image](/img/5.4/image10.png)
 
-Fill in the following fields:
+To add an existing prelanding page, click `Select Prelanding`.
+![image](/img/5.4/image11.png)
 
-- **App Name** – Enter the name of your app.
-- **Author / Developer** – Add the developer's name or company name.
-- **Advertisement** – Indicate whether the app contains ads.
+### Step 6. Link to Your Offer/Tracker
 
-![App header basic fields](/img/5.4/image8.png)
+Paste the offer or tracker link in the `URL` field.
+![image](/img/5.4/image12.png)
 
-- **Verified checkmark** – Confirmation of authenticity next to the app or developer's name.
+> **info**
+> Ensure the link is correct. For more details, check our Tracker Integration Guide.
 
-![Verified checkmark](/img/5.4/image9.png)
+### Step 7. Complete the Setup
 
-- **Number of Reviews** – Specify the total number of reviews.
-- **Review dimensions** – A letter indicator for the number of reviews, such as K, M, etc.
-- **Download Count** – Specify the number of downloads.
-- **Note** – Additional information about the app.
+Review the details in the `Information Check` section and click `Finish`.
+![image](/img/5.4/image13.png)
 
-![Reviews and downloads](/img/5.4/image10.png)
+After completing the setup, you will receive the final link for traffic redirection. Copy it for further use.
 
-- **Editor's Choice** – Mark the app as recommended.
-- **App Size** – Size in megabytes.
-- **Age Rating** – The minimum age for users.
+> **info**
+> If you are working with TikTok traffic and using TikTok Pixel, make sure to add `?ttclid=__CLICKID__` as the first parameter in the final URL.
+>
+> Without it, events will not be properly tracked by the pixel.
+>
+> Example: `https://example708.info?ttclid=__CLICKID__`
 
-![App details](/img/5.4/image11.png)
-
-- **Rating** – Overall rating based on reviews.
-- **Install or Open** – Buttons to download or launch the app.
-
-![Rating and buttons](/img/5.4/image12.png)
-
-### Screenshots
-
-Upload images and GIFs to make your app interface more appealing.
-
-![Screenshots upload](/img/5.4/image13.png)
-
-### App Description
-
-Fill in the description fields:
-
-- **Title** – A short name for the section.
-- **Description** – The main text with information about the app.
-- **Tags** – Keywords for quick search.
-
-![App description fields](/img/5.4/image14.png)
-
-> **Info:** Use the Generate Description and Generate Tags buttons to automatically generate text for these fields.
-
-## Data Security
-
-Data Security section has default values, but you can edit them depending on your app's specifics:
-
-- **Title** – The section title for data handling.
-- **Description** – Information about data collection, transfer, and protection.
-
-![Data security basic](/img/5.4/image15.png)
-
-- **Sharing** – Data that the app shares with third parties.
-
-![Data sharing](/img/5.4/image16.png)
-
-- **Geolocation** – Information that the app uses the user's location data.
-
-![Geolocation settings](/img/5.4/image17.png)
-
-- **Encryption** – Mark that data is protected by encryption.
-- **Data Deletion** – Information that data can be deleted.
-- **Pseudo-button** – View details.
-
-![Security options](/img/5.4/image18.png)
-
-## Ratings and Reviews
-
-In the Ratings and Reviews section, you can set the rating values for your app:
-
-**Overall Rating** – To change the value, move the rating sliders.
-
-![Rating sliders](/img/5.4/image19.png)
-
-If needed, set a custom rating value.
-
-![Custom rating](/img/5.4/image20.png)
-
-**Name, Description, Did you find this message helpful?** – Default values. Edit them if needed.
-
-![Review details](/img/5.4/image21.png)
-
-## Comments
-
-The Comments section allows you to add both AI-generated and manually created reviews. The date updates automatically. You can choose the date format or disable the comment date update.
-
-![Comments section](/img/5.4/image22.png)
-
-- Click **Generate Comment** to add an AI comment. All fields in the section will be automatically filled.
-- Click **Add Comment** to create a new comment manually. If necessary, edit:
-  - **Author** – Name and avatar.
-  - **Rating** – Star rating.
-  - **Creation Date** – Specify the date or leave it empty.
-  - **Comment** – The review text.
-  - **Helpfulness** – How many users marked the review as helpful.
-
-![Comment editing](/img/5.4/image23.png)
-
-### AI Generation
-
-Use the Generate Avatar and Generate Comment buttons to automatically fill in the fields.
-
-Add a **Developer Response** to reply to comments. Fill in the name, date, and response text manually, or click Generate Response.
-
-![Developer response](/img/5.4/image24.png)
-
-Click **Save changes** to complete the setup.
-
-## Additional Settings
-
-The Additional Settings section is located at the top of the PWA Builder. Here you can adjust the color scheme, app installation format, and additional fields. Go to the section by clicking the Additional Settings button.
-
-![Additional Settings button](/img/5.4/image25.png)
-
-Customize the Install button color. Choose from the options provided or set your custom color.
-
-![Install button color](/img/5.4/image26.png)
-
-Customize the app theme.
-
-![App theme customization](/img/5.4/image27.png)
-
-Choose how the app installation process will look. Click View Demo to see the selected settings on the screen.
-
-![Installation process](/img/5.4/image28.png)
-
-Customize the Additional Fields to change the app download interface. You can modify:
-
-- **Button names:** Delete, Download, Cancel.
-- **Text fields in the installation menu:** Additional subtitle, Hint, Preposition, Installing.
-
-![Additional fields](/img/5.4/image29.png)
-
-> **Info:** If you leave these fields empty, the values will be automatically translated into the user browser language.
+All set! Your flow is now ready and will appear in the `My Flows` section.

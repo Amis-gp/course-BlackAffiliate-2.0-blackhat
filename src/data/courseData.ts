@@ -327,45 +327,63 @@ export const courseData: Section[] = [
       },
       {
         id: 'lesson-5-4',
-        title: 'PWA Builder',
+        title: 'New PWA Flow',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-4.md'
       },
       {
         id: 'lesson-5-5',
-        title: 'Test PWA Installation',
+        title: 'PWA Builder',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-5.md'
       },
       {
         id: 'lesson-5-6',
-        title: 'Integration with Trackers and ZM apps',
+        title: 'Test PWA Installation',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-6.md'
       },
       {
         id: 'lesson-5-7',
-        title: 'Voluum Integration and ZM apps',
+        title: 'Integration with Trackers and ZM apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-7.md'
       },
       {
         id: 'lesson-5-8',
-        title: 'Traffic Split Between Campaigns in Trackers',
+        title: 'Voluum Integration and ZM apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-8.md'
       },
       {
         id: 'lesson-5-9',
-        title: 'Setup - From buying to launching',
+        title: 'Traffic Split Between Campaigns in Trackers',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-9.md'
       },
       {
         id: 'lesson-5-10',
-        title: 'Setting up flow via PWA',
+        title: 'Setup - From buying to launching',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-10.md'
+      },
+      {
+        id: 'lesson-5-11',
+        title: 'Setting up flow via PWA',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-11.md'
+      },
+      {
+        id: 'lesson-5-12',
+        title: 'Statistics',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-12.md'
+      },
+      {
+        id: 'lesson-5-13',
+        title: 'Create a Push Notification',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-13.md'
       }
     ]
   },
@@ -420,6 +438,48 @@ export const courseData: Section[] = [
         title: 'FB Campaign Settings',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-8.md'
+      }
+    ]
+  },
+  {
+    id: 'section-7',
+    title: 'Nutra Vertical',
+    lessons: [
+      {
+        id: 'lesson-7-1',
+        title: 'How to choose an offer',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-7-1.md'
+      },
+      {
+        id: 'lesson-7-2',
+        title: 'Examples: Creatives, Pre-landing pages',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-7-2.md'
+      },
+      {
+        id: 'lesson-7-3',
+        title: 'Setup for Nutra vertical',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-7-3.md'
+      },
+      {
+        id: 'lesson-7-4',
+        title: 'Launching a campaign for Nutra',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-7-4.md'
+      },
+      {
+        id: 'lesson-7-5',
+        title: 'Case Study: $9,450 with Prostanorm Forte',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-7-5.md'
+      },
+      {
+        id: 'lesson-7-6',
+        title: 'Drive traffic from Facebook to Nutra in 2025',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-7-6.md'
       }
     ]
   }
