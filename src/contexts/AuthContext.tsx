@@ -30,62 +30,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     console.log('🚀 AuthContext: useEffect started');
-    const initAuth = async () => {
-      console.log('🔄 AuthContext: Starting initialization with Supabase');
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (session?.user) {
-          console.log('👤 AuthContext: Supabase session found');
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('id, name, role, created_at, is_approved')
-            .eq('id', session.user.id)
-            .single();
-            
-          if (profile && profile.is_approved) {
-            console.log('✅ AuthContext: User is approved, setting user state');
-            const userObj: User = {
-              id: profile.id,
-              email: session.user.email!,
-              password: '',
-              name: profile.name,
-              role: profile.role,
-              created_at: profile.created_at,
-              lastLogin: new Date(),
-              isApproved: true,
-            };
-            setUser(userObj);
-          } else {
-            console.log('❌ AuthContext: User not approved');
-            setUser(null);
-          }
-        } else {
-          console.log('📭 AuthContext: No Supabase session found');
-          setUser(null);
-        }
-        
-      } catch (error) {
-        console.error('💥 AuthContext: Initialization error:', error);
-        setUser(null);
-      } finally {
-        console.log('🏁 AuthContext: Setting isInitializing to false');
-        setIsInitializing(false);
-      }
-    };
-    
-    initAuth();
-    
+    let initialCheckCompleted = false;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('🔄 AuthContext: Auth state changed:', event);
-      if (event === 'SIGNED_IN' && session?.user) {
+
+      if (session?.user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('*')
+          .select('id, name, role, created_at, is_approved')
           .eq('id', session.user.id)
           .single();
-          
+
         if (profile && profile.is_approved) {
+          console.log('✅ AuthContext: User is approved, setting user state');
           const userObj: User = {
             id: profile.id,
             email: session.user.email!,
@@ -97,13 +55,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             isApproved: true,
           };
           setUser(userObj);
+        } else {
+          console.log('❌ AuthContext: User not approved or no profile. Signing out.');
+          setUser(null);
+          if (event !== 'SIGNED_OUT') {
+            await supabase.auth.signOut();
+          }
         }
-      } else if (event === 'SIGNED_OUT') {
+      } else {
+        console.log('📭 AuthContext: No session. User is signed out.');
         setUser(null);
       }
+      
+      if (!initialCheckCompleted) {
+        console.log('🏁 AuthContext: Initial auth check complete, setting isInitializing to false');
+        setIsInitializing(false);
+        initialCheckCompleted = true;
+      }
     });
-    
-    return () => subscription.unsubscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (credentials: LoginCredentials): Promise<{ success: boolean; message?: string; isPending?: boolean; requestId?: string }> => {
