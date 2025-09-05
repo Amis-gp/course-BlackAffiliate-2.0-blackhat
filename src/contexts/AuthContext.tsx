@@ -32,7 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('🚀 AuthContext: useEffect started');
     const initAuth = async () => {
       console.log('🔄 AuthContext: Starting initialization with Supabase');
-      console.log('🔄 AuthContext: isInitializing is currently:', isInitializing);
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
@@ -40,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           console.log('👤 AuthContext: Supabase session found');
           const { data: profile } = await supabase
             .from('profiles')
-            .select('*')
+            .select('id, name, role, created_at, is_approved')
             .eq('id', session.user.id)
             .single();
             
@@ -66,24 +65,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(null);
         }
         
-        console.log('📋 AuthContext: Loading registration requests');
-        try {
-          await loadRegistrationRequests();
-        } catch (requestError) {
-          console.error('⚠️ AuthContext: Failed to load registration requests:', requestError);
-        }
-        
       } catch (error) {
         console.error('💥 AuthContext: Initialization error:', error);
+        setUser(null);
       } finally {
         console.log('🏁 AuthContext: Setting isInitializing to false');
         setIsInitializing(false);
-        console.log('✅ AuthContext: Initialization completed, isInitializing should now be false');
       }
     };
     
     initAuth();
-    console.log('📞 AuthContext: initAuth() called');
     
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('🔄 AuthContext: Auth state changed:', event);
@@ -199,9 +190,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const isAdmin = (): boolean => {
+  const isAdmin = useCallback((): boolean => {
     return user?.role === 'admin';
-  };
+  }, [user?.role]);
 
   const sendTelegramNotification = async (message: string) => {
     console.log('Attempting to send Telegram notification:', message);

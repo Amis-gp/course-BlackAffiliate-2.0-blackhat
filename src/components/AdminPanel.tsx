@@ -21,7 +21,12 @@ export default function AdminPanel() {
 
   const loadUsers = async () => {
     try {
-      const response = await fetch('/api/admin/users');
+      const response = await fetch('/api/admin/users', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
       const data = await response.json();
       
       if (data.success) {
@@ -48,8 +53,10 @@ export default function AdminPanel() {
     try {
       const response = await fetch('/api/admin/users', {
         method: 'POST',
+        cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
         },
         body: JSON.stringify(newUser),
       });
@@ -97,8 +104,10 @@ export default function AdminPanel() {
     try {
       const response = await fetch('/api/admin/approve-registration', {
         method: 'POST',
+        cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
         },
         body: JSON.stringify({ requestId }),
       });

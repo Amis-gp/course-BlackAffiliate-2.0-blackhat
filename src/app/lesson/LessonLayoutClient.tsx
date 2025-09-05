@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext, useEffect } from 'react';
 import CourseNavigation from '@/components/CourseNavigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X, Settings, LogOut, Home } from 'lucide-react';
@@ -57,6 +57,16 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
 
   const allLessons = courseData.flatMap(section => section.lessons.map(lesson => ({ id: lesson.id })));
   const currentLessonIndex = allLessons.findIndex(l => l.id === currentLessonId);
+
+  // Preload next lesson
+  useEffect(() => {
+    const nextLessonIndex = currentLessonIndex + 1;
+    if (nextLessonIndex < allLessons.length) {
+      const nextLessonId = allLessons[nextLessonIndex].id;
+      // Preload next lesson content
+      router.prefetch(`/lesson/${nextLessonId}`);
+    }
+  }, [currentLessonIndex, allLessons, router]);
 
   const handlePreviousLesson = () => {
     if (currentLessonIndex > 0) {
