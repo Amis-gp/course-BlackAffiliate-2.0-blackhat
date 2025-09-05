@@ -1,5 +1,5 @@
-# Приклади креативів та пре-лендингів
+# Creative and Pre-landing Examples
 
-Дуже важливо переглянути приклади, щоб зрозуміти, як створювати ефективні креативи та пре-лендинги для ваших рекламних кампаній.
+It's very important to review examples to understand how to create effective creatives and pre-landings for your advertising campaigns.
 
-[Завантажити приклади](/img/7.2.zip)
+[Download examples](/img/7.2.zip)
