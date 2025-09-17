@@ -1,7 +1,18 @@
 'use client';
 
-import { AuthProvider } from '@/contexts/AuthContext';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ReactNode, useEffect, useState } from 'react';
+import { LoadingScreen } from './LoadingScreen';
+
+function AuthWrapper({ children }: { children: ReactNode }) {
+  const { isInitializing } = useAuth();
+  
+  if (isInitializing) {
+    return <LoadingScreen />;
+  }
+  
+  return <>{children}</>;
+}
 
 export function ClientAuthProvider({ children }: { children: ReactNode }) {
   const [isMounted, setIsMounted] = useState(false);
@@ -24,5 +35,9 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
   }
   
   console.log('✅ ClientAuthProvider: Mounted, rendering AuthProvider');
-  return <AuthProvider>{children}</AuthProvider>;
+  return (
+    <AuthProvider>
+      <AuthWrapper>{children}</AuthWrapper>
+    </AuthProvider>
+  );
 }

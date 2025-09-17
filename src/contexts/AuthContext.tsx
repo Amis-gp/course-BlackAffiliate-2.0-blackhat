@@ -23,24 +23,75 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isInitializing, setIsInitializing] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
+  const [loadingStage, setLoadingStage] = useState('Connecting...');
+  const [retryCount, setRetryCount] = useState(0);
   
   useEffect(() => {
     console.log('🧪 TEST: Simple useEffect is working!');
   }, []);
 
-  useEffect(() => {
-    console.log('🚀 AuthContext: useEffect started');
-    let initialCheckCompleted = false;
+  const checkSupabaseHealth = async (): Promise<boolean> => {
+    try {
+      console.log('🏥 AuthContext: Checking Supabase health...');
+      
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseAnonKey) {
+        console.error('❌ AuthContext: Missing Supabase credentials');
+        return false;
+      }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('🔄 AuthContext: Auth state changed:', event);
+      // Use auth.getSession() instead of table queries to avoid CORS issues
+      // This is the most reliable way to check Supabase connectivity
+      const { error } = await supabase.auth.getSession();
+      
+      const isHealthy = !error;
+      console.log(`${isHealthy ? '✅' : '❌'} AuthContext: Supabase health check ${isHealthy ? 'passed' : 'failed'}`);
+      if (error) {
+        console.log('Health check error details:', error);
+      }
+      return isHealthy;
+    } catch (error) {
+      console.error('💥 AuthContext: Health check failed:', error);
+      return false;
+    }
+  };
+
+  const initializeAuthWithRetry = async (attempt: number = 1): Promise<void> => {
+    try {
+      console.log(`🚀 AuthContext: Initialization attempt ${attempt}/3`);
+      setLoadingStage(`Connecting... (attempt ${attempt}/3)`);
+      setRetryCount(attempt);
+
+      const isHealthy = await checkSupabaseHealth();
+      if (!isHealthy && attempt < 3) {
+        throw new Error('Supabase health check failed');
+      }
+
+      setLoadingStage('Checking authentication...');
+      
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        console.error('❌ AuthContext: Session error:', error);
+        throw error;
+      }
 
       if (session?.user) {
-        const { data: profile } = await supabase
+        setLoadingStage('Loading profile...');
+        console.log('👤 AuthContext: Session found, loading profile...');
+        
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('id, name, role, created_at, is_approved')
           .eq('id', session.user.id)
           .single();
+
+        if (profileError) {
+          console.error('❌ AuthContext: Profile error:', profileError);
+          throw profileError;
+        }
 
         if (profile && profile.is_approved) {
           console.log('✅ AuthContext: User is approved, setting user state');
@@ -58,24 +109,100 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } else {
           console.log('❌ AuthContext: User not approved or no profile. Signing out.');
           setUser(null);
-          if (event !== 'SIGNED_OUT') {
-            await supabase.auth.signOut();
-          }
+          await supabase.auth.signOut();
         }
       } else {
-        console.log('📭 AuthContext: No session. User is signed out.');
+        console.log('📭 AuthContext: No session found');
         setUser(null);
       }
+
+      setLoadingStage('Almost ready...');
+      console.log('🏁 AuthContext: Initialization complete');
+      setIsInitializing(false);
+
+    } catch (error) {
+      console.error(`💥 AuthContext: Initialization attempt ${attempt} failed:`, error);
+      
+      if (attempt < 3) {
+        const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+        console.log(`⏳ AuthContext: Retrying in ${delay}ms...`);
+        setLoadingStage(`Connection failed. Retrying in ${delay/1000}s...`);
+        
+        setTimeout(() => {
+          initializeAuthWithRetry(attempt + 1);
+        }, delay);
+      } else {
+        console.error('💀 AuthContext: All initialization attempts failed');
+        setLoadingStage('Connection failed. Please refresh the page.');
+        setIsInitializing(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    console.log('🚀 AuthContext: useEffect started');
+    let initialCheckCompleted = false;
+    let authSubscription: any = null;
+
+    const initializeAuth = async () => {
+      await initializeAuthWithRetry();
       
       if (!initialCheckCompleted) {
-        console.log('🏁 AuthContext: Initial auth check complete, setting isInitializing to false');
-        setIsInitializing(false);
+        authSubscription = supabase.auth.onAuthStateChange(async (event, session) => {
+          console.log('🔄 AuthContext: Auth state changed:', event);
+
+          if (session?.user) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('id, name, role, created_at, is_approved')
+              .eq('id', session.user.id)
+              .single();
+
+            if (profile && profile.is_approved) {
+              console.log('✅ AuthContext: User is approved, setting user state');
+              const userObj: User = {
+                id: profile.id,
+                email: session.user.email!,
+                password: '',
+                name: profile.name,
+                role: profile.role,
+                created_at: profile.created_at,
+                lastLogin: new Date(),
+                isApproved: true,
+              };
+              setUser(userObj);
+            } else {
+              console.log('❌ AuthContext: User not approved or no profile. Signing out.');
+              setUser(null);
+              if (event !== 'SIGNED_OUT') {
+                await supabase.auth.signOut();
+              }
+            }
+          } else {
+            console.log('📭 AuthContext: No session. User is signed out.');
+            setUser(null);
+          }
+        });
+        
         initialCheckCompleted = true;
       }
-    });
+    };
+
+    initializeAuth();
+
+    const timeoutId = setTimeout(() => {
+      if (isInitializing) {
+        console.log('⏰ AuthContext: Initialization timeout (15s), forcing completion');
+        setLoadingStage('Timeout reached. Please refresh if needed.');
+        setIsInitializing(false);
+      }
+    }, 15000);
 
     return () => {
-      subscription.unsubscribe();
+      clearTimeout(timeoutId);
+      if (authSubscription) {
+        authSubscription.unsubscribe();
+      }
     };
   }, []);
 
@@ -348,6 +475,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isAuthenticated: !!user,
     isLoading,
     isInitializing,
+    loadingStage,
+    retryCount,
     login,
     logout,
     isAdmin,
