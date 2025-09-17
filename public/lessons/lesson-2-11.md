@@ -6,8 +6,6 @@
 
 ## Additional Materials
 
-Download useful files for working with Facebook advertising:
+Download useful file for working with Facebook advertising:
 
 - [📊 Spreadsheet tracker of FB accounts and script for statistics](/img/2.11/#1.%20Spreadsheet%20tracker%20of%20FB%20accounts%20and%20script%20for%20statistics.xlsx) - Table for tracking Facebook accounts and statistics script
-- [📈 Arbi table](/img/2.11/Arbi%20table.xlsx) - Table for arbitrage and campaign profitability analysis
-- [🎰 Lead Calculator - Gambling](/img/2.11/Lead%20Calculator%20-%20Gambling%20.xlsx) - Calculator for lead calculations in gambling sphere
