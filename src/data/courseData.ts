@@ -315,75 +315,81 @@ export const courseData: Section[] = [
       },
       {
         id: 'lesson-5-2',
-        title: 'A Deeper Dive into PWA',
+        title: 'Main Types of Casino Games',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-2.md'
       },
       {
         id: 'lesson-5-3',
-        title: 'PWA',
+        title: 'A Deeper Dive into PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-3.md'
       },
       {
         id: 'lesson-5-4',
-        title: 'New PWA Flow',
+        title: 'PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-4.md'
       },
       {
         id: 'lesson-5-5',
-        title: 'PWA Builder',
+        title: 'New PWA Flow',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-5.md'
       },
       {
         id: 'lesson-5-6',
-        title: 'Test PWA Installation',
+        title: 'PWA Builder',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-6.md'
       },
       {
         id: 'lesson-5-7',
-        title: 'Integration with Trackers and ZM apps',
+        title: 'Test PWA Installation',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-7.md'
       },
       {
         id: 'lesson-5-8',
-        title: 'Voluum Integration and ZM apps',
+        title: 'Integration with Trackers and ZM apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-8.md'
       },
       {
         id: 'lesson-5-9',
-        title: 'Traffic Split Between Campaigns in Trackers',
+        title: 'Voluum Integration and ZM apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-9.md'
       },
       {
         id: 'lesson-5-10',
-        title: 'Setup - From buying to launching',
+        title: 'Traffic Split Between Campaigns in Trackers',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-10.md'
       },
       {
         id: 'lesson-5-11',
-        title: 'Setting up flow via PWA',
+        title: 'Setup - From buying to launching',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-11.md'
       },
       {
         id: 'lesson-5-12',
-        title: 'Statistics',
+        title: 'Setting up flow via PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-12.md'
       },
       {
         id: 'lesson-5-13',
-        title: 'Create a Push Notification',
+        title: 'Statistics',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-13.md'
+      },
+      {
+        id: 'lesson-5-14',
+        title: 'Create a Push Notification',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-5-14.md'
       }
     ]
   },

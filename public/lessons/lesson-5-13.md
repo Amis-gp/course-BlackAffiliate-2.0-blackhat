@@ -1,66 +1,86 @@
-# New Push Notification
+# Statistics
 
-This guide will help you set up a new push notification. Once created, it will appear in the list and be delivered to users based on your selected settings.
-
-### 1. Choose the push notification type.
-
-*   **Scheduled** – sent according to a set schedule.
-*   **One-time** – a single notification sent once.
-*   **Event-based** – delayed notification triggered by an event.
+The Statistics section helps you track user activity at every stage of your Flow. You can check key metrics, filter data, and download reports in CSV format.
 
 ![image](/img/5.13/image1.png)
 
-### 2. Define who will receive the notification.
+### How to Use Statistics
 
-*   **Install** – users who have installed the app.
-*   **Registration** – users who have registered in the app.
-*   **Deposit** – users who have made a deposit.
-*   **For all** – all users at a specified time.
+#### Setting Filters
+
+Choose a date range:
+
+*   Day
+*   Week
+*   Month
+*   Custom dates and time
+
+Click `Select` to update the data.
 
 ![image](/img/5.13/image2.png)
 
-### 3. Select a flow for the push notification.
+You can also customize which data is shown. Pick any three columns:
 
-*   **Choose a domain** – specify the flows linked to the notification.
-*   **Apps** – select the apps for which you want to create the notification.
+*   **Domain** – the Flow’s domain name.
+*   **Application** – the app linked to the Flow.
+*   **IP** – users’ IP addresses.
+*   **Date** – when the action happened.
+*   **UUID** – a unique user ID.
+*   **GEO** – users’ location.
+
+Click `Apply Filters` to update the table.
+
+> **info**
+> The columns appear in the same order you add them.
 
 ![image](/img/5.13/image3.png)
 
-### 4. Set up GEO targeting.
+To refine your analysis, use extra filters:
 
-*   **Audience GEO** – select one or more locations for the notification. The dropdown list will show the number of app users in each region.
+*   **Domain, Flow name, or Comment** – helpful if you manage multiple Flows and need to focus on one.
+*   **Platform** – see traffic by platform. Options:
+    *   All platforms – shows stats for all Flow types.
+    *   PWA.
+    *   iOS | Android link.
+    *   Smartlink+.
+    *   Naming.
+*   **Application** – view stats for a specific app.
 
 ![image](/img/5.13/image4.png)
 
-*   **Time zone** – if the selected geo has multiple time zones, choose the appropriate one from the dropdown list. Notifications will be sent according to this time zone.
+*   **Search by team member** – view statistics for a specific user.
 
 ![image](/img/5.13/image5.png)
 
-### 5. Configure the push notification.
+To reset everything, click `Reset Filters`.
 
-*   **Title and Message** – enter the title and message text that users will see.
+#### Saving Filters
+
+To save your filter settings, click `+` and name the template.
 
 ![image](/img/5.13/image6.png)
 
-*   **Send Date and Time** – set the date and time for sending. The notification will be sent to users according to the time zone of the selected geo.
+Later, you can quickly apply saved filter combinations.
+
+#### Exporting Data
+
+Click `.CSV` to download the statistics.
 
 ![image](/img/5.13/image7.png)
 
-*   **End Date** – for scheduled notifications, set an end date. By default, notifications will be sent indefinitely.
+### Table Overview
 
-![image](/img/5.13/image8.png)
+The statistics table includes key metrics:
 
-For an event-based push notification, specify the delay before sending the push notification after the event.
+*   **Click** – number of clicks.
+*   **Inst** – number of installs.
+*   **Reg** – number of registrations.
+*   **Dep** – number of users who entered payment details.
+*   **click2inst** – installs per click.
+*   **inst2reg** – registrations per install.
+*   **reg2dep** – deposits per registration.
 
 > **info**
-> On days when custom push notifications are set up, system push notifications will not be sent.
+> If your Flow includes multiple apps, you can track clicks, installs, registrations, and deposits for each one. Just enable the `Application` column in the filters.
 
-*   **Design** – choose an image for the notification or leave it blank.
-
-![image](/img/5.13/image9.png)
-
-### 6. Review and confirm.
-
-Check all settings in the `Review Information` section and click `Finish`.
-
-Done! Your push notification is now set up. It will appear in the push notifications list and will be sent to users according to your configured settings.
+![image](/img/5.13/image8.png)

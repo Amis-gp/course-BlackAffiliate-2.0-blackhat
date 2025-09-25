@@ -1,86 +1,109 @@
-# Statistics
+# FB Account Setup
 
-The Statistics section helps you track user activity at every stage of your Flow. You can check key metrics, filter data, and download reports in CSV format.
+## 1. Choosing an offer*
 
-![image](/img/5.12/image1.png)
+* We analyze competitors, analyze existing offers, conditions, payments, geo
 
-### How to Use Statistics
+* Choose an offer for PWA 
 
-#### Setting Filters
+## 2. Account Preparation:
 
-Choose a date range:
+* Purchase an Agency account for work
 
-*   Day
-*   Week
-*   Month
-*   Custom dates and time
+* Set up your Fan Page to match the design of your PWA. Add a few posts related to your niche so that if a user clicks on the Fan Page, they don’t lose trust and continue down the funnel via the Fan Page link.
 
-Click `Select` to update the data.
+* Use one Fan Page for 2-3 ad accounts and for one offer.
 
-![image](/img/5.12/image2.png)
+## 3. Business Manager Setup(If you work on your own BM):
+Contact your agency account provider, ask for a pixel, you can create it on your King account and then transfer it to the agency
 
-You can also customize which data is shown. Pick any three columns:
+* [Facebook Business Settings](https://business.facebook.com/latest/settings) 
 
-*   **Domain** – the Flow’s domain name.
-*   **Application** – the app linked to the Flow.
-*   **IP** – users’ IP addresses.
-*   **Date** – when the action happened.
-*   **UUID** – a unique user ID.
-*   **GEO** – users’ location.
+* Log into the King’s Business Manager (BM).
 
-Click `Apply Filters` to update the table.
+* Link it to an existing BM and add 3-4 ad accounts.
 
-> **info**
-> The columns appear in the same order you add them.
+## 4. Pixel API Setup:
 
-![image](/img/5.12/image3.png)
+* Create a Pixel API conversion and name it based on your domain \+ GEO for convenience.
 
-To refine your analysis, use extra filters:
+## 5. Sharing Pixel Access:
 
-*   **Domain, Flow name, or Comment** – helpful if you manage multiple Flows and need to focus on one.
-*   **Platform** – see traffic by platform. Options:
-    *   All platforms – shows stats for all Flow types.
-    *   PWA.
-    *   iOS | Android link.
-    *   Smartlink+.
-    *   Naming.
-*   **Application** – view stats for a specific app.
+* Share pixel access with all active ad accounts.    
+![image](/img/5.12/image1.webp)
+![image](/img/5.12/image2.webp)
 
-![image](/img/5.12/image4.png)
+* If one of the accounts gets fully blocked, remove it from the BM.
 
-*   **Search by team member** – view statistics for a specific user.
+* Add user access for a pixel
 
-![image](/img/5.12/image5.png)
+## ZM Apps \ PWA 
+Go to https://zm.app/, create a PWA design, and customize it.
 
-To reset everything, click `Reset Filters`.
+## Launching an advertising account
 
-#### Saving Filters
+1. Campaign Launch Strategy (1:3:1):  
+   * For fresh accounts, use the 1:3:1 system:  
+     * 1 Campaign  
+     * 3 Ad Sets  
+     * 1 Ad  
+   * After reaching a certain spend threshold, you can launch new campaigns.
 
-To save your filter settings, click `+` and name the template.
+2. Campaign Scheduling:  
+   * Set the campaign launch time to 00:00 based on the account’s time zone. This is mandatory as it helps improve ad delivery.
 
-![image](/img/5.12/image6.png)
+## Recommendations 
 
-Later, you can quickly apply saved filter combinations.
+When setting up an ad on FB, select the “play” button
 
-#### Exporting Data
+In the “link to show” field, paste the link to Google Play there
 
-Click `.CSV` to download the statistics.
+We launch traffic only on mobile devices (depending on the Android/iOS offer)
 
-![image](/img/5.12/image7.png)
+We use UTM tags for our link to the offer, write values for different Sub
 
-### Table Overview
+You need to post at least 5 comments on our PWA
 
-The statistics table includes key metrics:
+   
+**Rules for passing moderation:**
 
-*   **Click** – number of clicks.
-*   **Inst** – number of installs.
-*   **Reg** – number of registrations.
-*   **Dep** – number of users who entered payment details.
-*   **click2inst** – installs per click.
-*   **inst2reg** – registrations per install.
-*   **reg2dep** – deposits per registration.
+- Be sure to set the scheduled launch for 00:00 the next day, according to the time zone of your account  
+    
+- Video creative should last more than 3 minutes (our content is about 30-40 seconds, then we give white content)
 
-> **info**
-> If your Flow includes multiple apps, you can track clicks, installs, registrations, and deposits for each one. Just enable the `Application` column in the filters.
+- You need to remove metadata before uploading to Ads manager [https://online-metadata.com/en](https://online-metadata.com/en) 
 
-![image](/img/5.12/image8.png)
+
+- Video should be compressed to 20mb [https://www.video2edit.com/](https://www.video2edit.com/) 
+
+- Create or generate a unique cover for the video, add the cover in the ad settings
+
+<img src="/img/5.12/image3.webp" alt="image" width="50%">
+
+Example
+
+![image](/img/5.12/image4.webp)
+
+![image](/img/5.12/image5.webp)
+
+- Uniqueize texts through various services [https://fsymbols.com/generators/](https://fsymbols.com/generators/) 
+
+- Fill in as many ad fields as possible (title, description, body text) to reduce the risk of being banned. We can test the text or emoji with a country flag or something else. In the title, we can try to give the emoji a star, sometimes it works well
+
+- In the targeting settings, we add Antarctica to the geo we have chosen, there will be no impressions there, but it will help to confuse the FB moderation
+
+## Our Global Goal
+
+1. Drive Traffic from Multiple Accounts Linked to Our Pixel:  
+   * Use several accounts connected to our pixel to maximize data collection.
+
+2. Gather as Much Data as Possible:  
+   * Allow the pixel to learn and understand which audience to target.
+
+3. Pixel Training for Specific GEO and Audience:  
+   * The pixel learns based on the specific GEO and audience, enabling it to be linked to other Business Managers and accounts in the future.
+
+4. Launch Traffic, Pass Moderation, and Start Showing Ads:  
+   * Begin traffic campaigns, ensure ads pass moderation, and start displaying them.
+
+5. Monitor Metrics and Optimize:

@@ -1,66 +1,85 @@
-# A Deeper Dive into PWA
+# Main Types of Casino Games
 
-PWAs are revolutionizing the way we approach gambling traffic, but to make the most of them, it's important to understand the practical details of how they interact with users and how they can be integrated into your campaigns. Here’s a more detailed explanation of the key features and how they work for gambling.
+### Crash/Instant Win (Chicken Road, Crash, Aviator, Balloon)
 
-![image](/img/5.2/image1.webp)
+These games have simple gameplay: place a bet, watch the multiplier grow, and “cash out” at the right moment — the player decides when to exit and take the winnings. A key feature is high volatility, fast dynamics, and the risk of losing almost instantly, which in practice attracts younger users from the crypto and TikTok audiences. Players often don’t stick around long, so traffic quality may be lower.
 
-## How PWA Works for Gambling Campaigns
+**Chicken Road** — a variation of a crash game. The player chooses difficulty, watches the chicken go through the level, and cashes out before it “burns.”
 
-**Instant Access with No Download**
+**Aviator/Balloon** — analogues with the same mechanics: the excitement is built on the fear of holding longer to win bigger.
 
-1. One of the biggest advantages of PWAs is that users don't need to download the app from an app store. Instead, they can access the application through a browser link. This is especially crucial for gambling offers, where instant access is key. No more waiting for users to find your app in the store—just share a link, and users can start playing immediately.
+**Crash (Spribe, Turbo, others)** — the classic multiplier game where the key point is to “catch the cashout.”
 
-**Offline Capabilities**
+Such games usually perform well in specific GEOs (e.g., LATAM/CIS); players love the fast process, but LTV is low.
 
-2. PWAs have the ability to work offline to some extent. While this is an advantage for users who might experience intermittent connectivity, it’s also useful in gambling because users can continue to view content, check promotions, or keep up with games and activities even when their connection drops.  
-   * For gambling: This can mean users can keep checking their account balance, read terms, or stay updated on the latest promotions. However, actual gambling activities will require a stable connection.
 
-**Push Notifications**
+### Plinko
 
-3. One of the most powerful features of PWAs is their ability to send push notifications directly to users' browsers, even when the app isn’t open. This is particularly valuable for gambling since you can keep users engaged with updates on bonuses, new games, or special offers.  
-   * For gambling: This could mean sending a push notification to encourage players to come back for an upcoming match or to take advantage of an exclusive bonus for deposits.
+**Plinko** is a game where a ball or chip drops through a field of obstacles and lands in a slot that determines the payout. It’s an **arcade casino game** that works well for short sessions and instant-win mechanics.
 
-**Smooth User Experience on Mobile**
+The risk: players switch quickly, and the market is saturated with Plinko variations, so conversion depends heavily on design, RTP, extra features, and target GEO.
 
-4. PWAs are designed to be responsive, so they adjust perfectly to both smartphones and tablets, giving users an app-like experience without taking up device storage.  
-   * For gambling: This is crucial because many players are mobile-first and need quick access to their accounts, games, or bets.
+### Slots (Slot Games, Joker, HellHot, SunEgypt, Zeus Olimp)
 
-**Fast Loading and Engagement**
+**Slots** are the most stable casino game type with the best player retention. Games differ by themes, number of reels, bonuses, graphics, and volatility.
 
-5. PWAs load almost instantly due to their cached data. This is essential for gambling since you want users to stay engaged without waiting for long loading times, especially in mobile-heavy markets where speed can impact conversion rates.
+**Joker, HellHot, SunEgypt, Zeus Olimp** — classic video slots with various themes (Egypt, myths, fruits, etc.).
 
-## Practical Interaction with PWA for Gambling Campaigns
+Differences between versions (e.g., multiple Zeus Olimp) are separate instances of the same offer — they may have different RTPs, designs, bonuses, or be optimized for different GEOs or operators. The reason is marketing testing for specific markets, providers, or language versions.
 
-So, how does this translate into your daily activities as a traffic arbitrageur? Here's a breakdown of what you can do:
 
-**Integrate PWA Links in Your Ads**
+### Other Relevant Formats
 
-1. When running ads, especially for gambling offers, you can now use PWA links in your Facebook or Google Ads. Instead of sending users to a regular mobile site, you send them to a PWA-enabled gambling platform. This will improve user engagement and retention, as the app-like experience will feel seamless.
+* **Mines, Dice, Wheel of Fortune** — simple instant-win games, popular in crypto casinos.
 
-**Optimize for GEOs**
+* **Live Casino (Roulette, Blackjack)** — provide higher lifetime value but are harder to convert.
 
-2. Since geographical locations can influence gambling traffic, PWAs allow you to target specific GEOs with optimized content for local payment methods, currency, and user preferences. This way, you can reduce bounce rates and improve conversion in regions where users are more likely to engage with mobile-first gambling experiences.
+* **Keno, Lotteries** — perform best in GEOs like CIS and LATAM.
 
-**Leverage Push Notifications for Retargeting**
 
-3. Once users opt-in to your PWA, you can use push notifications to retarget them. You can notify them about special offers, jackpots, or limited-time bonuses. This ensures that your audience stays engaged, which is particularly important in gambling, where the competition for users is fierce.
+### Short Classification & Recommendations
 
-## Challenges to Keep in Mind
+| Game | Type | Characteristic | Traffic Quality |
+| ----- | ----- | ----- | ----- |
+| **Chicken Road** | Crash | Instant, high volatility | Medium, quick churn |
+| **Plinko** | Arcade Win | RNG, design variations | Low/medium, quick churn |
+| **Crash/Aviator** | Crash | RNG \+ manual cashout | Medium, depends on RTP |
+| **Balloon** | Crash | Visual, similar to Aviator | Medium/low |
+| **Slot Games** | Slots | Many bonuses | High, strong retention |
+| **Joker/HellHot** | Slots | Classic, varied themes | High |
 
-While PWAs are a game-changer, there are a few things you need to be aware of:
 
-**User Permission for Push Notifications**
+### GEO Trends in 2025
 
-1. Not all users will agree to push notifications, so you need to create compelling reasons for them to opt in. Offering a welcome bonus or exclusive promotions when they enable notifications can be an effective strategy.
+* **Tier 1 (Canada, Germany, Sweden, UK):** Live casino, AR/VR slots, classic slots, VIP offers; high LTV, minimal churn.
 
-**Legal Compliance**
+* **Tier 2 (Brazil, India, Turkey):** Crash games (Aviator, Crash), mini-games, mobile-first offers, localized slots; mobile growth. (Gates of Olympus at the top)
 
-2. In gambling, legal compliance is crucial. PWAs for gambling apps must be compliant with local laws in the regions where you're running ads. Ensure that the PWA provider follows the necessary licensing and regulatory guidelines in each GEO.
+* **Tier 3 (Nigeria, Philippines, Africa, LATAM):** Balloon, Chicken Road, Plinko, crash and fast-win games; simple UX, low check size, high churn, low LTV; demand for local payment methods.
 
-**Performance on Low-End Devices**
 
-3. While PWAs are known for their fast loading speeds, users with older devices or slower internet might experience lag or delayed loading times. Make sure the gambling site you're working with optimizes its PWA to run smoothly even on lower-end mobile devices.
+### Why Are There Multiple Versions of the Same Game?
 
-## Download Landing Page Mask
+Different versions (e.g., Plinko or Zeus Olimp) are products from different providers. Each tweaks RTP, visuals, or bonus mechanics.
 
-- [Download Example PWA](/img/5.1/landing-mask.zip)
+For a media buyer this means:
+
+* Different player retention levels
+
+* Different CTR/conversion rates for various audiences
+
+* Ability to test multiple offers under the same game name → more options for A/B testing
+
+Some versions burn out quickly due to low RTP or basic gameplay, while others maintain a “long wave” of retention.
+
+### Key Games to Know and Test in 2025
+
+* **Crash:** Aviator, Crash, Balloon, Chicken Road, Plinko
+
+* **Slots:** Joker, HellHot, Sun Egypt, Zeus Olimp, Book of Dead, Gates of Olympus
+
+* **Live Casino:** Evolution, Pragmatic Live, Authentic Gaming
+
+* **Mini-games:** JetX, Mines, Dice, Scratch Games, Coin Flip
+
+* **Experimental:** VR slots, fantasy sports, esports betting
