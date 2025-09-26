@@ -29,7 +29,7 @@ export default function Home() {
                 
                 <div className="flex justify-center mb-8 md:mb-12">
                   <a 
-                    href="https://miro.com/app/board/uXjVJP7S_D4=/" 
+                    href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-red-500/25 transform hover:scale-105 transition-all duration-300 ease-out"
