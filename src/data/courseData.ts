@@ -321,75 +321,69 @@ export const courseData: Section[] = [
       },
       {
         id: 'lesson-5-3',
-        title: 'A Deeper Dive into PWA',
+        title: 'Link VS Apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-3.md'
       },
       {
         id: 'lesson-5-4',
-        title: 'PWA',
+        title: 'A Deeper Dive into PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-4.md'
       },
       {
         id: 'lesson-5-5',
-        title: 'New PWA Flow',
+        title: 'PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-5.md'
       },
       {
         id: 'lesson-5-6',
-        title: 'PWA Builder',
+        title: 'New PWA Flow',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-6.md'
       },
       {
         id: 'lesson-5-7',
-        title: 'Test PWA Installation',
+        title: 'PWA Builder',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-7.md'
       },
       {
         id: 'lesson-5-8',
-        title: 'Integration with Trackers and ZM apps',
+        title: 'Test PWA Installation',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-8.md'
       },
       {
         id: 'lesson-5-9',
-        title: 'Voluum Integration and ZM apps',
+        title: 'Integration with Trackers and ZM apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-9.md'
       },
       {
         id: 'lesson-5-10',
-        title: 'Traffic Split Between Campaigns in Trackers',
+        title: 'Voluum Integration and ZM apps',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-10.md'
       },
       {
         id: 'lesson-5-11',
-        title: 'Setup - From buying to launching',
+        title: 'Traffic Split Between Campaigns in Trackers',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-11.md'
       },
       {
         id: 'lesson-5-12',
-        title: 'Setting up flow via PWA',
+        title: 'Setup - From buying to launching',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-12.md'
       },
       {
         id: 'lesson-5-13',
-        title: 'Statistics',
+        title: 'Setting up flow via PWA',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-5-13.md'
-      },
-      {
-        id: 'lesson-5-14',
-        title: 'Create a Push Notification',
-        type: 'lesson',
-        contentPath: '@/data/lessons/lesson-5-14.md'
       }
     ]
   },
@@ -399,51 +393,57 @@ export const courseData: Section[] = [
     lessons: [
       {
         id: 'lesson-6-1',
-        title: 'Choosing the Right Offer for Gambling',
+        title: 'Statistics',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-1.md'
       },
       {
         id: 'lesson-6-2',
-        title: 'Reasons for Low Conversion in Gambling and Betting',
+        title: 'Create a Push Notification',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-2.md'
       },
       {
         id: 'lesson-6-3',
-        title: 'Case study - ROI 94.21%',
+        title: 'Choosing the Right Offer for Gambling',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-3.md'
       },
       {
         id: 'lesson-6-4',
-        title: 'What Creatives and Promo Materials to Use',
+        title: 'Reasons for Low Conversion in Gambling and Betting',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-4.md'
       },
       {
         id: 'lesson-6-5',
-        title: 'List of Prohibited/Trigger Words and Phrases',
+        title: 'Case study - ROI 94.21%',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-5.md'
       },
       {
         id: 'lesson-6-6',
-        title: 'Push notification',
+        title: 'What Creatives and Promo Materials to Use',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-6.md'
       },
       {
         id: 'lesson-6-7',
-        title: 'Lead Calculator - Gambling',
+        title: 'List of Prohibited/Trigger Words and Phrases',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-7.md'
       },
       {
         id: 'lesson-6-8',
-        title: 'FB Campaign Settings',
+        title: 'Push notification',
         type: 'lesson',
         contentPath: '@/data/lessons/lesson-6-8.md'
+      },
+      {
+        id: 'lesson-6-9',
+        title: 'FB Campaign Settings',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-6-9.md'
       }
     ]
   },

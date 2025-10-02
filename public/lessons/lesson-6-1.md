@@ -1,82 +1,86 @@
-# Choosing the Right Offer for Gambling (Gambling Offers)
+# Statistics
 
-Now, let’s get into something that requires a bit more expertise: Gambling offers. This vertical is a goldmine, but it’s also tricky and requires extra precautions.  
-Why is it tricky?
+The Statistics section helps you track user activity at every stage of your Flow. You can check key metrics, filter data, and download reports in CSV format.
 
-Because platforms like Facebook have extremely strict rules when it comes to gambling ads. It’s a high-risk, high-reward game. Facebook will ban accounts or ads in a heartbeat if you're not careful.
+![image](/img/6.1/image1.png)
 
-## How to Choose the Right Gambling Offer
+### How to Use Statistics
 
-1. Work with Trusted Networks: The most successful affiliates in the gambling vertical know the importance of partnering with reliable affiliate networks. Look for networks like LeadsGenerals, 1Win Partners, Welcome.Partners, Pin-Up Partners, and Leadshub. These have strong reputations and know how to navigate Facebook’s strict ad policies.
+#### Setting Filters
 
-2. Look for Offers with Good Landing Pages: The landing page for the gambling offer should be clear, attractive, and user-friendly. A slow or confusing page will not convert well. Make sure the registration process is simple and that deposits are easy for players to make.
+Choose a date range:
 
-3. Check GEOs for Gambling: When it comes to gambling offers, choosing the right GEO is crucial. You’ll want to target countries where gambling is legalized and where people are already actively engaging in online gambling. For example, Eastern Europe and Asia are great markets to explore for gambling, where you can find cheap traffic and high conversion rates.
+*   Day
+*   Week
+*   Month
+*   Custom dates and time
 
-4. Assess Payouts and Minimum Deposits: For gambling, always consider the minimum deposit a user has to make. In Tier 2 countries, people might only be able to deposit $1-$2, while in Tier 1 countries, it’s more likely to be €10-€20. Make sure the offer aligns with the economic realities of your target audience.
+Click `Select` to update the data.
 
-## Best Practices for Gambling Offers
+![image](/img/6.1/image2.png)
 
-* Creativity is Key: Since Facebook bans most direct gambling-related images or content, get creative with your ad copy and visuals. Use metaphors or playful imagery (like cucumbers, bananas, etc.) for sensitive topics. It’s all about staying compliant while still being engaging.
+You can also customize which data is shown. Pick any three columns:
 
-* Monitor Performance: Gambling ads can get tricky when it comes to performance. Be ready to track your campaigns, test different GEOs, and adjust your creatives to avoid bans.
+*   **Domain** – the Flow’s domain name.
+*   **Application** – the app linked to the Flow.
+*   **IP** – users’ IP addresses.
+*   **Date** – when the action happened.
+*   **UUID** – a unique user ID.
+*   **GEO** – users’ location.
 
-An offer is a deal from an advertiser or affiliate network where you get paid for sending users who take specific actions. In iGaming arbitrage, you earn commissions by driving users to:
+Click `Apply Filters` to update the table.
 
-* Register at an online casino  
-* Make a deposit (e.g. $10 or more)  
-* Place a sports bet
+> **info**
+> The columns appear in the same order you add them.
 
-## Key Elements of an Offer
+![image](/img/6.1/image3.png)
 
-The offer is the core of your campaign. Even strong creatives won’t help if the offer itself is weak. Key elements include:
+To refine your analysis, use extra filters:
 
-| Element | Description |
-| ----- | ----- |
-| **Conditions** | Required user actions (e.g. registration, deposit, first bet) |
-| **Payout** | How much you earn when a user completes the action |
-| **GEOs** | Countries where the offer is active |
-| **Creatives** | Banners, videos, or landing pages provided or recommended |
-| **Limits** | Daily or weekly rules (e.g. "Max 100 registrations" or "Min deposit $20") |
-| **Cap** | Maximum allowed conversions or ad spend |
-| **Compliance** | Rules for moderation, content, and legal requirements |
+*   **Domain, Flow name, or Comment** – helpful if you manage multiple Flows and need to focus on one.
+*   **Platform** – see traffic by platform. Options:
+    *   All platforms – shows stats for all Flow types.
+    *   PWA.
+    *   iOS | Android link.
+    *   Smartlink+.
+    *   Naming.
+*   **Application** – view stats for a specific app.
 
-**How to Evaluate an Offer**
+![image](/img/6.1/image4.png)
 
-### Conversion Conditions
+*   **Search by team member** – view statistics for a specific user.
 
-* Registration – Easy to convert, low payout, high CR  
-* Deposit – Medium difficulty, higher payout  
-* Activity – Hardest (e.g. placing a first bet or playing a slot), but may unlock higher revenue
+![image](/img/6.1/image5.png)
 
-### Payouts (Earnings Per Action)
+To reset everything, click `Reset Filters`.
 
-* Bigger payouts often mean more risk and higher competition  
-* Example:  
-  * Registration: $2–5  
-  * First deposit: $20–60
+#### Saving Filters
 
-### GEO (Country Targeting)
+To save your filter settings, click `+` and name the template.
 
-* One of the most important parts of offer selection  
-* Different countries have different gambling laws, user behavior, and conversion rates  
-* Example:  
-  * LatAm (Brazil, Colombia) – High traffic, low ARPU  
-  * Europe – Lower traffic, high ARPU
+![image](/img/6.1/image6.png)
 
-### Cap and Limits
+Later, you can quickly apply saved filter combinations.
 
-* Many offers have caps to control traffic quality  
-* Example: "Max 200 registrations per day"
+#### Exporting Data
 
-**Brand and Licensing**
+Click `.CSV` to download the statistics.
 
-* Licensed brands – Safer and more reliable, but with stricter ad rules  
-* Unlicensed brands – Often convert better, but carry more risk of bans or penalties
+![image](/img/6.1/image7.png)
 
-## Conclusion:
+### Table Overview
 
-Choosing the right offer is all about balancing risk and reward. You want offers that have a high conversion rate, good payout, and a trusted affiliate network behind them. For gambling offers, work with trusted networks, and target the right GEOs to maximize your profit.
+The statistics table includes key metrics:
 
-Remember, always ask your affiliate manager for advice, monitor the performance of your campaigns, and keep testing until you find the perfect balance. Success in affiliate marketing is about consistency, knowledge, and strategy — and you’ve got all of that covered\!
+*   **Click** – number of clicks.
+*   **Inst** – number of installs.
+*   **Reg** – number of registrations.
+*   **Dep** – number of users who entered payment details.
+*   **click2inst** – installs per click.
+*   **inst2reg** – registrations per install.
+*   **reg2dep** – deposits per registration.
 
+> **info**
+> If your Flow includes multiple apps, you can track clicks, installs, registrations, and deposits for each one. Just enable the `Application` column in the filters.
+
+![image](/img/6.1/image8.png)

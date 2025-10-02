@@ -1,93 +1,66 @@
-# Creating and Configuring a New Flow
+# App Banned: What to Do If You Only Know How to Run Traffic on Apps, and They Keep Getting Banned?
 
-Follow these steps to create and configure your new flow:
+Many verticals, especially gambling, heavily rely on apps—primarily for Android. As a result, an affiliate marketer’s setup becomes dependent not only on the whims of Facebook but also on the policies of the Google Play Store.
 
-### Step 1. Create a Flow
+![image](/img/5.5/image1.webp)
 
-Navigate to the `Flows` section in the left-side menu of ZM apps.
-![image](/img/5.5/image1.png)
+### What Happens When the Store Goes into an Aggressive Phase?
 
-Click `Create` to begin setting up your new flow.
-![image](/img/5.5/image2.png)
+* A wave of app bans follows.  
+* Sellers run out of available apps and rent out the last remaining ones, which are also likely to get banned soon.  
+* Affiliate marketers face the frustration of paused ad campaigns, banned ad accounts, and wasted budgets on dead apps.
 
-### Step 2. Select an App
+### How to Adapt?
 
-Choose the flow type `ZM apps link` and select `PWA` as the app type.
-![image](/img/5.5/image3.png)
+Many teams are now directing most of their traffic to PWA (Progressive Web Apps). Others are gradually learning to work with PWAs, as app bans are only going to increase. If you’re not prepared for this shift, your team could face financial ruin.
 
-**How to create your PWA?**
-Check out our guide for detailed instructions.
+At the very least, most teams will struggle until they master running traffic on PWAs—at least reaching the same skill level they had with native apps.  
 
-Click `Select` to confirm your choice.
-![image](/img/5.5/image4.png)
+### Why PWA?
 
-### Step 3. Set Up a Pixel
+1. Permanence:  
+   * The app is not removed from traffic sources (unlike Google Play, where blocks are possible).
 
-You can:
-* Select an existing pixel from the list.
-* Create a new pixel directly while setting up the flow.
-* Continue without a pixel — in this case, events will not be sent to the source.
+2. Flexibility:  
+   * You can create any type of landing page (even aggressive or non-standard ones, which are prohibited in official app stores).  
+   * Example: A landing page styled to look like Google Play for a casino.
 
-![image](/img/5.5/image5.png)
+3. Push Notifications:  
+   * Ability to send notifications to users (just like in regular apps).
 
-> **info**
-> Learn more about creating and editing pixels in our guide.
+4. Traffic Sources:  
+   * You can use any traffic sources (Facebook, manual ad purchases from bloggers, Telegram, etc.).  
+   * No additional costs for "padding" (if the advertiser accepts traffic without moderation).
 
-#### Dynamic Pixel
+3\. Disadvantages of PWA:
 
-When creating a flow, the selected pixel is automatically added to the final link’s parameters.
-If you need to manually add an extra Facebook or Tiktok pixel, follow these steps:
+1. Cost:  
+   * Free PWA builders are rare. Usually, you need to pay for access to platforms or bots.
 
-* Make sure the needed pixel is saved in the `My Pixels` section.
-* Add this parameter to the final link: `&pixel_fb=ID of the required pixel`
+2. Promotion Complexity:  
+   * Traffic is often "lost" due to Facebook/Google filters.  
+   * No optimization for deposits (only for installs), which reduces conversion rates.
 
-Example:
-```
-https://example.com/?sub1={sub1}&pixel_fb=12344321234
-```
+3. Lack of Trust:  
+   * Users notice that the app is not from Google Play, which can raise suspicions.
 
-### Step 4. Configure GEO and Whitepage Settings
+4. Limited Effectiveness:  
+   * Based on feedback, PWAs often show lower performance compared to official apps.
 
-If GEO cloaking is not required, select `Without Cloaking` and proceed to the next step.
-![image](/img/5.5/image6.png)
+4\. How to Run Ads for PWA (Using Facebook as an Example):
 
-To enable GEO cloaking, select `GEO Cloaking`. In the dropdown list, select the regions where your ad will be available. Users from other GEOs will see a white page.
-![image](/img/5.5/image7.png)
+1. Campaign Setup:  
+   * Objective: "Leads."  
+   * Placements: Mobile devices only (Android 9.0+).  
+   * Targeting: Age/gender audience, geolocation (based on offer requirements).
 
-To use your own whitepage instead of the default one from ZM apps, enter the URL in the `Whitepage Source` field.
-![image](/img/5.5/image8.png)
+2. Pixel Creation:  
+   * Add a Facebook pixel to track conversions.  
+   * In the "Site URL" field, insert the link to the PWA.
 
-If necessary, add a comment to the flow.
-![image](/img/5.5/image9.png)
+3. Ad Creation:  
+   * Use aggressive headlines and images (e.g., "Money, slots, cards\!").  
+   * Add the fb\_eq=Pixel\_ID parameter to the URL for tracking.
 
-### Step 5. Set Up a Prelanding Page
-
-If a prelanding page is not needed, click `Continue Without Prelanding`.
-![image](/img/5.5/image10.png)
-
-To add an existing prelanding page, click `Select Prelanding`.
-![image](/img/5.5/image11.png)
-
-### Step 6. Link to Your Offer/Tracker
-
-Paste the offer or tracker link in the `URL` field.
-![image](/img/5.5/image12.png)
-
-> **info**
-> Ensure the link is correct. For more details, check our Tracker Integration Guide.
-
-### Step 7. Complete the Setup
-
-Review the details in the `Information Check` section and click `Finish`.
-![image](/img/5.5/image13.png)
-
-After completing the setup, you will receive the final link for traffic redirection. Copy it for further use.
-
-> **info**
-> If you are working with TikTok traffic and using TikTok Pixel, make sure to add `?ttclid=__CLICKID__` as the first parameter in the final URL.
->
-> Without it, events will not be properly tracked by the pixel.
->
-> Example: `https://example708.info?ttclid=__CLICKID__`
-
-All set! Your flow is now ready and will appear in the `My Flows` section.
+4. Publishing:  
+   * Launch the campaign and monitor statistics.

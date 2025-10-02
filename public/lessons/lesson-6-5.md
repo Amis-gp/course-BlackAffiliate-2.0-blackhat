@@ -1,63 +1,61 @@
-# List of Prohibited/Trigger Words and Phrases
+# ROI 94.21%: A Spicy Mexican Case Study
 
-Although Facebook doesn’t officially admit it, it has a list of words it doesn’t like to see in ads. While context is key, there are still certain words and phrases that FB dislikes. After some research and discussions with other ad managers, here’s an approximate list:  
+Mexico \- the land of cacti, tequila, and spicy food \- is also a place where One Partners loves to add some heat. Today, we’ll dive into a spicy gambling offer case study from this vibrant country, revealing all the applied strategies and life hacks.  
 
-### 1. Facebook-Related Words
+### Quick Stats:
 
-* Facebook, FB – It’s a trademark, and the company doesn’t want people using its name.
+* Offer: PWA  
+* GEO: Mexico  
+* Platform: Facebook Apps  
+* Test Period: 08.09 \- 08.10.2024  
+* Spent: $5,731.00  
+* Revenue: $11,130.00  
+* Profit: $5,399.00  
+* ROI: 94.21%
 
-### 2. Coronavirus-Related Words
+![image](/img/6.5/image1.webp)
 
-* Avoid any words related to the topic: Pandemic, Corona, Coronavirus, infection, anxious, disease.
+### Case Study Breakdown
 
-### 3. Profanity or Symbols Representing Profanity
+1. GEO Selection:  
+Mexico, located in the southern part of North America, is one of the largest countries in Latin America. The official language is Mexican Spanish, but there are also many local languages spoken in certain regions. The currency is the Mexican Peso, and the population is around 130 million. Most people live in cities, with Mexico City (the capital), Guadalajara, Puebla, and Tijuana being the most prominent.
+The average salary in Mexico is $630, placing it in the Tier-2 or even Tier-3 category. Gambling is particularly appealing here because slot machines are banned, and Mexicans are known for their love of risk-taking and difficulty saying "no." Other cultural traits that work in favor of affiliate marketers include their relaxed, pleasure-seeking lifestyle, emotional nature, and, in some cases, lower levels of education.  
 
-* Any swear words or symbols like 🍆👌. Even GPT can read such symbols, let alone FB.
+2. Traffic Source:  
+High-speed internet is widespread, so there are no issues with running video creatives. Social media users in Mexico exceed 100 million, with Facebook being the most popular platform, boasting around 90 million users. This is why we chose Facebook as our placement \- the audience here is ready to spend and is highly receptive.
 
-### 4. Words That Push Too Hard for a Purchase
+3. Creative Selection:  
+Emotionally impactful video creatives work best. The approach to creating creatives here is similar to the American market: bright, eye-catching messages about bonuses, discounts, sales, and promotions. 
+Visuals associated with luck, such as slot machines or wheels of fortune, also perform well. If the ad targets locals, it should be in Spanish. Creatives featuring attractive women playing slots also convert well.  
+Example of a Creative:
 
-* Buy  
-* Marked down  
-* Coupon  
-* Discount  
-* Sale  
-* % off  
-* Order
+[Link to the creative](https://uaff.media/wp-content/uploads/2024/10/kreatyv.mp4)  
 
-### 5. Promotions and Giveaways
+4. Campaign Setup:
 
-* Giveaway  
-* Deal  
-* Win  
-* Enter  
-* Contest  
-* Free
+During the campaign launch, the team used in-house PWAs, with Facebook as the placement. The target audience was clearly defined: men aged 25 and older.
 
-### 6. Time Limits/Scarcity
+Key Campaign Parameters:
 
-* Limited time  
-* Today only  
-* Only X days left  
-* Ending soon  
-* Door close  
-* While supplies last
+* Objective: FTD (First-Time Deposit)  
+* GEOs: BD, MX, PK  
+* Cap: 20 deposits  
+* Minimum Deposit:  
+  * BD: 400 BDT  
+  * MX: 40 MXN  
+  * PK: 200 PKR  
+* KPI: Minimum deposit, playing traffic.
 
-### 7. Direct Address to the User
+Prohibited:
 
-* Phrases like "You can buy it only today" combined with words from the list above.
+* Mentioning the minimum deposit amount in creatives.  
+* Multi-accounts, fraud, chargebacks.  
+* Exceeding the cap.  
+* Misleading content, motivation, or celebrities in creatives.  
+* Changing traffic sources without approval.  
+* Targeting users under 25\.  
+* Using media personalities, athletes, politicians, singers, bloggers, etc.
 
-## Additional Tips
+## Conclusion:
 
-* Avoid Excessive Caps Lock: If caps lock dominates the text in a sentence, the ad will be rejected 100%.  
-* Negative Emotions: FB doesn’t like ads that directly address people’s "pain points" or evoke negative emotions.  
-  * 🟥: "Would you like to lose 30 pounds?"  
-  * 🟩: "Learn about weight loss tips."  
-  * 🟥: "Would you like to avoid foreclosure?"  
-  * 🟩: "Make your monthly mortgage payments easily."  
-* Personal Data: Avoid mentioning personal details like race, religion, age, etc. FB blocks ads that discuss personal data.  
-* Get-Rich-Quick Schemes: FB dislikes spammy phrases like "Earn $10,000 in 1 month."  
-* Negative or Aggressive Phrases:  
-  * Threatening or aggressive statements.  
-  * Offensive statements, especially sexist, homophobic, racist, or derogatory ones.  
-  * Words related to harmful stereotypes, e.g., "You’ll only be happy if you’re thin."
-
+Mexico turned out to be a successful GEO for this offer. By leveraging PWAs and considering the unique characteristics of the country’s population, we achieved outstanding results. In the end, this hot country yielded to us, the conquistadors of affiliate marketing, and delivered impressive results, making all our efforts worthwhile.  
