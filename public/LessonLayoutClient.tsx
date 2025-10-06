@@ -64,8 +64,8 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
         
         <div className={`fixed lg:static inset-y-0 left-0 z-50 w-80 bg-[#0f1012] transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isMobileNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="flex items-center justify-between p-4 border-b border-gray-700">
-            <h2 className="text-lg font-semibold text-white lg:block hidden">Course Navigation</h2>
-            <h2 className="text-lg font-semibold text-white lg:hidden">Course Navigation</h2>
+            <h2 className="text-lg font-semibold text-white lg:block hidden">Navigation</h2>
+            <h2 className="text-lg font-semibold text-white lg:hidden">Navigation</h2>
             <button onClick={() => setIsMobileNavOpen(false)} className="text-gray-400 hover:text-white lg:hidden">
               <X className="w-6 h-6" />
             </button>

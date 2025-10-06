@@ -37,7 +37,7 @@ export default function Footer() {
               <img src="/img/logo.webp" width={120} alt="BlackAffiliate 2.0" />
             </div>
             <p className="text-gray-400 text-sm">
-              Master the art of affiliate marketing with our comprehensive course
+              Master the art of affiliate marketing with our comprehensive Master the art of affiliate marketing with our comprehensive training program
             </p>
           </div>
 

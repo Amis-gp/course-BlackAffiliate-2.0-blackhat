@@ -7,8 +7,8 @@ const geologica = {
 }
 
 export const metadata: Metadata = {
-  title: 'BlackAffiliate 2.0 Course',
-  description: 'Master the art of affiliate marketing with our comprehensive course',
+  title: 'Training program - BlackAffiliate 2.0',
+  description: 'Master the art of affiliate marketing with our comprehensive training program',
 }
 
 export default function RootLayout({

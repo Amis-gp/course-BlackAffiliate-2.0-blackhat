@@ -24,7 +24,7 @@ export default function Home() {
                   Black Affiliate 2.0
                 </h1>
                 <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-12 px-4">
-                  Traffic arbitrage and affiliate marketing course
+                  Traffic arbitrage and affiliate marketing training program
                 </p>
                 
                 <div className="flex justify-center mb-8 md:mb-12">

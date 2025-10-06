@@ -141,7 +141,7 @@ export default function AdminPanel() {
         <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Admin Panel</h1>
-            <p className="text-gray-400">Manage course users</p>
+            <p className="text-gray-400">Manage training program users</p>
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
             <div className="text-left sm:text-right w-full sm:w-auto">
@@ -150,7 +150,7 @@ export default function AdminPanel() {
             </div>
             <Link href="/" className="flex items-center justify-center w-full sm:w-auto gap-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition-colors">
               <ArrowLeft className="w-4 h-4" />
-              Back to course
+              Back to training program
             </Link>
           </div>
         </div>
