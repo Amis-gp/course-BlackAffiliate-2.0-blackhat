@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Fragment } from 'react';
 import { Offer, SortField, SortDirection } from '@/types/offers';
 import { ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 
@@ -173,9 +173,8 @@ export default function OffersTable({ offers }: OffersTableProps) {
           </thead>
           <tbody>
             {sortedOffers.map((offer) => (
-              <>
+              <Fragment key={offer.id}>
                 <tr 
-                  key={offer.id} 
                   className="hover:bg-gray-800/30 transition-colors cursor-pointer border-b border-gray-800"
                   onClick={() => setExpandedRow(expandedRow === offer.id ? null : offer.id)}
                 >
@@ -278,7 +277,7 @@ export default function OffersTable({ offers }: OffersTableProps) {
                     </td>
                   </tr>
                 )}
-              </>
+              </Fragment>
             ))}
           </tbody>
         </table>

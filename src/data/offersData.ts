@@ -40,7 +40,7 @@ export const offersData: Offer[] = [
   {
     id: '3',
     name: '1xBet',
-    category: 'Betting',
+    category: 'Gambling',
     payout: '$150-400 CPA',
     country: 'Brazil',
     network: 'AffiliateHub',
@@ -58,7 +58,7 @@ export const offersData: Offer[] = [
   {
     id: '4',
     name: 'Pin-Up Casino',
-    category: 'Casino',
+    category: 'Gambling',
     payout: '$80-250 CPA',
     country: 'India',
     network: 'MaxBounty',
@@ -93,21 +93,21 @@ export const offersData: Offer[] = [
   },
   {
     id: '6',
-    name: 'Betano Sports',
-    category: 'Sports Betting',
-    payout: '€100-180 CPA',
-    country: 'Portugal',
-    network: 'Direct',
-    metrics: 'Player LTV',
-    website: 'https://betano.pt/',
-    offerTypes: 'CPA: €100-180 / RevShare: 30-45%',
-    targetAction: 'Qualified Player (QP)',
-    testCap: 'Unlimited (with performance review)',
-    hold: '14 days',
-    kpi: 'Player LTV ≥ €300, Active for 30+ days',
-    acceptedGeos: 'Portugal, Romania, Germany, Greece, Czech Republic, Brazil',
-    traffic: 'All quality sources (no bot traffic)',
-    notes: 'Licensed operator; Focus on sports events; Seasonal bonuses during major tournaments; Real-time stats dashboard'
+    name: 'Keto Burn Max',
+    category: 'Nutra',
+    payout: '$65 CPA',
+    country: 'UK',
+    network: 'OfferVault',
+    metrics: 'Approve ≥ 60%',
+    website: 'https://ketoburnmax.com/',
+    offerTypes: 'CPA: $65 per confirmed order',
+    targetAction: 'Sale + Email Confirmation',
+    testCap: '30 sales (10 days)',
+    hold: '30 days',
+    kpi: 'Approval Rate ≥ 60%, Average Order Value ≥ $80',
+    acceptedGeos: 'United Kingdom, Ireland, Germany, France, Belgium, Netherlands, Austria',
+    traffic: 'Native Ads, Facebook (compliant creatives only), Google (whitehat), Email Marketing',
+    notes: 'Premium weight loss supplement; COD available for select GEOs; High conversion landers provided; No misleading claims allowed'
   }
 ];
 
