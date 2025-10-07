@@ -2,7 +2,7 @@
 
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Link from 'next/link';
-import { ArrowRight, Play, FileText, HelpCircle, Map } from 'lucide-react';
+import { ArrowRight, Play, FileText, HelpCircle, Map, Tag } from 'lucide-react';
 import { courseData } from '@/data/courseData';
 
 console.log('NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_URL);
@@ -27,7 +27,7 @@ export default function Home() {
                   Traffic arbitrage and affiliate marketing training program
                 </p>
                 
-                <div className="flex justify-center mb-8 md:mb-12">
+                <div className="flex flex-wrap justify-center gap-4 mb-8 md:mb-12">
                   <a 
                     href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653" 
                     target="_blank" 
@@ -38,6 +38,15 @@ export default function Home() {
                     <span>Road Map</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                   </a>
+                  
+                  <Link 
+                    href="/offers"
+                    className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-orange-500/25 transform hover:scale-105 transition-all duration-300 ease-out"
+                  >
+                    <Tag className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                    <span>Offers</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
                 </div>
               </div>
 
