@@ -21,7 +21,7 @@ export default function Home() {
             <div className="container mx-auto px-4 py-6 md:py-12">
               <div className="text-center mb-8 md:mb-16">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
-                  Black Affiliate 2.0
+                  Black Affiliate
                 </h1>
                 <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-12 px-4">
                   Traffic arbitrage and affiliate marketing training program

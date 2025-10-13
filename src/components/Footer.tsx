@@ -30,6 +30,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#0f1012] text-white mt-auto relative">
+      
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">

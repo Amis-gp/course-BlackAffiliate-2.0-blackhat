@@ -56,50 +56,47 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
   };
 
   return (
-    <div className="w-80 bg-[#0f1012] border-r border-gray-800 lg:flex-1 lg:min-h-0 overflow-y-auto max-h-[calc(100vh-61px)] lg:max-h-none">
-      <div className="p-4">
-        
-        <div className="space-y-2">
-          {courseData.map((section) => {
-            const isExpanded = expandedSections.includes(section.id);
-            
-            return (
-              <div key={section.id} className="border border-gray-800 rounded-lg">
-                <button
-                  onClick={() => toggleSection(section.id)}
-                  className="w-full p-4 text-left flex items-center justify-between hover:bg-gray-800 transition-colors duration-200 rounded-lg"
-                >
-                  <span className="font-semibold text-white">{section.title}</span>
-                  {isExpanded ? (
-                    <ChevronDown className="w-5 h-5 text-primary" />
-                  ) : (
-                    <ChevronRight className="w-5 h-5 text-primary" />
-                  )}
-                </button>
-                
-                {isExpanded && (
-                  <div className="border-t border-gray-800">
-                    {section.lessons.map((lesson, index) => (
-                      <Link
-                        href={`/lesson/${lesson.id}`}
-                        key={lesson.id}
-                        onClick={() => onLessonSelect && onLessonSelect(lesson.id)}
-                        className={`w-full p-3 text-left flex items-center space-x-3 hover:bg-gray-800 transition-colors duration-200 ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'} ${currentLessonId === lesson.id ? 'bg-primary/20 border-r-2 border-primary' : ''}`}>
-                        <span className={`${isLessonCompleted(lesson.id) ? 'text-gray-600' : 'text-primary'}`}>
-                          {getLessonIcon(lesson.type)}
-                        </span>
-                        <div className="flex-1">
-                          <div className="text-sm text-gray-400">#{index + 1}</div>
-                          <div className={`text-sm ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'}`}>{lesson.title}</div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
+    <div className="w-72 m-4 rounded-lg lg:flex-1 lg:min-h-0 overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
+      <div className="space-y-2">
+        {courseData.map((section) => {
+          const isExpanded = expandedSections.includes(section.id);
+          
+          return (
+            <div key={section.id} className="border border-gray-800 rounded-lg">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full p-4 text-left flex items-center justify-between hover:bg-gray-800 transition-colors duration-200 rounded-lg"
+              >
+                <span className="font-semibold text-white">{section.title}</span>
+                {isExpanded ? (
+                  <ChevronDown className="w-5 h-5 text-primary" />
+                ) : (
+                  <ChevronRight className="w-5 h-5 text-primary" />
                 )}
-              </div>
-            );
-          })}
-        </div>
+              </button>
+              
+              {isExpanded && (
+                <div className="border-t border-gray-800">
+                  {section.lessons.map((lesson, index) => (
+                    <Link
+                      href={`/lesson/${lesson.id}`}
+                      key={lesson.id}
+                      onClick={() => onLessonSelect && onLessonSelect(lesson.id)}
+                      className={`w-full p-3 text-left flex items-center space-x-3 hover:bg-gray-800 transition-colors duration-200 ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'} ${currentLessonId === lesson.id ? 'bg-primary/20 border-r-2 border-primary' : ''}`}>
+                      <span className={`${isLessonCompleted(lesson.id) ? 'text-gray-600' : 'text-primary'}`}>
+                        {getLessonIcon(lesson.type)}
+                      </span>
+                      <div className="flex-1">
+                        <div className="text-sm text-gray-400">#{index + 1}</div>
+                        <div className={`text-sm ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'}`}>{lesson.title}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

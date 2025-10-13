@@ -105,7 +105,7 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
           const images: {src: string; alt: string}[] = [];
           let imageMatch;
           while ((imageMatch = imageRegex.exec(data.content)) !== null) {
-            images.push({ src: imageMatch[2], alt: imageMatch[1] || 'Зображення уроку' });
+            images.push({ src: imageMatch[2], alt: imageMatch[1] || 'image from lesson' });
           }
           setModalImages(images);
           
