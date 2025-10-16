@@ -109,7 +109,7 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
           />
 
           <div className='px-4 pb-4'>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-4">
               <a
                 href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
                 target="_blank"
