@@ -2,7 +2,7 @@
 
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Link from 'next/link';
-import { ArrowRight, Play, FileText, HelpCircle, Map, Tag } from 'lucide-react';
+import { ArrowRight, Play, FileText, HelpCircle, Map, Tag, Wrench } from 'lucide-react';
 import { courseData } from '@/data/courseData';
 
 console.log('NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_URL);
@@ -45,6 +45,15 @@ export default function Home() {
                   >
                     <Tag className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
                     <span>Offers</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
+                  
+                  <Link 
+                    href="/tools"
+                    className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-green-500/25 transform hover:scale-105 transition-all duration-300 ease-out"
+                  >
+                    <Wrench className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                    <span>Tools</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                   </Link>
                 </div>
