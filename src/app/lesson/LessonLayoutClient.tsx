@@ -85,7 +85,7 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
 
   return (
     <LessonContext.Provider value={{ courseData, currentLessonId, handlePreviousLesson, handleNextLesson, hasPrevious, hasNext }}>
-      <div className="min-h-screen bg-background flex relative">
+      <div className="min-h-[100dvh] bg-background flex relative">
         {isMobileNavOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setIsMobileNavOpen(false)} />
         )}
