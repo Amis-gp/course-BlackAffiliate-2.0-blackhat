@@ -98,14 +98,12 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto">
               <CourseNavigation 
                 courseData={courseData}
                 currentLessonId={currentLessonId}
                 onLessonSelect={handleLessonSelect}
               />
               
-            </div>
             <div className='px-4 pb-4'>
                 <div className="grid grid-cols-3 gap-4">
                   <a
