@@ -98,13 +98,14 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                 <X className="w-6 h-6" />
               </button>
             </div>
+            <div className="flex-1 overflow-y-auto">
               <CourseNavigation 
                 courseData={courseData}
                 currentLessonId={currentLessonId}
                 onLessonSelect={handleLessonSelect}
               />
-              
-            <div className='px-4 pb-4'>
+               </div>
+              <div className='px-4 pb-4'>
                 <div className="grid grid-cols-3 gap-4">
                   <a
                     href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
@@ -125,7 +126,7 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                   </Link>
                 </div>
               </div>
-            <div className="p-4 border-t border-gray-700 mt-auto">
+            <div className="p-4 border-t border-gray-700">
               <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
               <div className="text-white font-medium mb-3">{user?.email}</div>
               <div className="flex flex-col gap-2">
