@@ -91,60 +91,56 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
         )}
         
         <div className={`fixed lg:static inset-y-0 left-0 z-50 w-80 bg-[#0f1012] transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isMobileNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="flex items-center justify-between p-4 border-b border-gray-700">
-            <h2 className="text-lg font-semibold text-white">Navigation</h2>
-            <button onClick={() => setIsMobileNavOpen(false)} className="text-gray-400 hover:text-white lg:hidden">
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          
-          
-          
-          
-          <CourseNavigation 
-            courseData={courseData}
-            currentLessonId={currentLessonId}
-            onLessonSelect={handleLessonSelect}
-          />
-
-          <div className='px-4 pb-4'>
-            <div className="grid grid-cols-3 gap-4">
-              <a
-                href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-3 rounded-lg transition-colors text-white font-medium"
-              >
-                <Map className="w-4 h-4" />
-                <span className="text-center">Road Map</span>
-              </a>
-              <Link href="/offers" className="flex flex-col items-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
-                <Tag className="w-4 h-4" />
-                <span className="text-center">Offers</span>
-              </Link>
-              <Link href="/tools" className="flex flex-col items-center gap-1 text-xs bg-green-600 hover:bg-green-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
-                <Wrench className="w-4 h-4" />
-                <span className="text-center">Tools</span>
-              </Link>
-            </div>
-          </div>
-
-          <div className="p-4 border-t border-gray-700">
-            <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
-            <div className="text-white font-medium mb-3">{user?.email}</div>
-            <div className="flex flex-col gap-2">
-              
-              {isAdmin() && (
-                <Link href="/admin" className="flex items-center gap-2 text-sm bg-primary hover:bg-red-700 px-3 py-2 rounded-lg transition-colors">
-                  <Settings className="w-4 h-4" />
-                  Admin Panel
-                </Link>
-              )}
-              <button onClick={logout} className="flex items-center gap-2 text-sm bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg transition-colors">
-                <LogOut className="w-4 h-4" />
-                Logout
+          <div className="flex h-full flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-gray-700">
+              <h2 className="text-lg font-semibold text-white">Navigation</h2>
+              <button onClick={() => setIsMobileNavOpen(false)} className="text-gray-400 hover:text-white lg:hidden">
+                <X className="w-6 h-6" />
               </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <CourseNavigation 
+                courseData={courseData}
+                currentLessonId={currentLessonId}
+                onLessonSelect={handleLessonSelect}
+              />
+              <div className='px-4 pb-4'>
+                <div className="grid grid-cols-3 gap-4">
+                  <a
+                    href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-3 rounded-lg transition-colors text-white font-medium"
+                  >
+                    <Map className="w-4 h-4" />
+                    <span className="text-center">Road Map</span>
+                  </a>
+                  <Link href="/offers" className="flex flex-col items-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
+                    <Tag className="w-4 h-4" />
+                    <span className="text-center">Offers</span>
+                  </Link>
+                  <Link href="/tools" className="flex flex-col items-center gap-1 text-xs bg-green-600 hover:bg-green-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
+                    <Wrench className="w-4 h-4" />
+                    <span className="text-center">Tools</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 border-t border-gray-700">
+              <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
+              <div className="text-white font-medium mb-3">{user?.email}</div>
+              <div className="flex flex-col gap-2">
+                {isAdmin() && (
+                  <Link href="/admin" className="flex items-center gap-2 text-sm bg-primary hover:bg-red-700 px-3 py-2 rounded-lg transition-colors">
+                    <Settings className="w-4 h-4" />
+                    Admin Panel
+                  </Link>
+                )}
+                <button onClick={logout} className="flex items-center gap-2 text-sm bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg transition-colors">
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </div>
