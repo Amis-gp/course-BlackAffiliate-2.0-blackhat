@@ -98,35 +98,34 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto">
-              <CourseNavigation 
-                courseData={courseData}
-                currentLessonId={currentLessonId}
-                onLessonSelect={handleLessonSelect}
-              />
-               </div>
-              <div className='px-4 pb-4'>
-                <div className="grid grid-cols-3 gap-4">
-                  <a
-                    href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-3 rounded-lg transition-colors text-white font-medium"
-                  >
-                    <Map className="w-4 h-4" />
-                    <span className="text-center">Road Map</span>
-                  </a>
-                  <Link href="/offers" className="flex flex-col items-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
-                    <Tag className="w-4 h-4" />
-                    <span className="text-center">Offers</span>
-                  </Link>
-                  <Link href="/tools" className="flex flex-col items-center gap-1 text-xs bg-green-600 hover:bg-green-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
-                    <Wrench className="w-4 h-4" />
-                    <span className="text-center">Tools</span>
-                  </Link>
-                </div>
+            <CourseNavigation 
+              courseData={courseData}
+              currentLessonId={currentLessonId}
+              onLessonSelect={handleLessonSelect}
+            />
+              
+            <div className='px-4 pb-4 border-b border-gray-700'>
+              <div className="grid grid-cols-3 gap-4">
+                <a
+                  href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-3 rounded-lg transition-colors text-white font-medium"
+                >
+                  <Map className="w-4 h-4" />
+                  <span className="text-center">Road Map</span>
+                </a>
+                <Link href="/offers" className="flex flex-col items-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
+                  <Tag className="w-4 h-4" />
+                  <span className="text-center">Offers</span>
+                </Link>
+                <Link href="/tools" className="flex flex-col items-center gap-1 text-xs bg-green-600 hover:bg-green-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
+                  <Wrench className="w-4 h-4" />
+                  <span className="text-center">Tools</span>
+                </Link>
               </div>
-            <div className="p-4 border-t border-gray-700">
+            </div>
+            <div className="p-4 mt-auto">
               <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
               <div className="text-white font-medium mb-3">{user?.email}</div>
               <div className="flex flex-col gap-2">
