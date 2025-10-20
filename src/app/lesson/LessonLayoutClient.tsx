@@ -125,7 +125,7 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                   </Link>
                 </div>
               </div>
-            <div className="p-4 border-t border-gray-700">
+            <div className="p-4 border-t border-gray-700 mt-auto">
               <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
               <div className="text-white font-medium mb-3">{user?.email}</div>
               <div className="flex flex-col gap-2">
