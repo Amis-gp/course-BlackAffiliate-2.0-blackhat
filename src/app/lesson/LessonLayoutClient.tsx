@@ -98,6 +98,11 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                 <X className="w-6 h-6" />
               </button>
             </div>
+
+            <Link href="/" className="mx-4 mt-4 flex items-center gap-2 text-sm bg-red-600 hover:bg-red-700 px-3 py-3 rounded-lg transition-colors text-white font-medium">
+              <Home className="w-4 h-4" />
+              Home
+            </Link>
             <CourseNavigation 
               courseData={courseData}
               currentLessonId={currentLessonId}
@@ -110,16 +115,16 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                   href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-3 rounded-lg transition-colors text-white font-medium"
+                  className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-2 rounded-lg transition-colors text-white font-medium"
                 >
                   <Map className="w-4 h-4" />
                   <span className="text-center">Road Map</span>
                 </a>
-                <Link href="/offers" className="flex flex-col items-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
+                <Link href="/offers" className="flex flex-col items-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
                   <Tag className="w-4 h-4" />
                   <span className="text-center">Offers</span>
                 </Link>
-                <Link href="/tools" className="flex flex-col items-center gap-1 text-xs bg-green-600 hover:bg-green-700 px-2 py-3 rounded-lg transition-colors text-white font-medium">
+                <Link href="/tools" className="flex flex-col items-center gap-1 text-xs bg-green-600 hover:bg-green-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
                   <Wrench className="w-4 h-4" />
                   <span className="text-center">Tools</span>
                 </Link>
