@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   try {
     const { data: users, error } = await supabaseAdmin
       .from('profiles')
-      .select('id, email, name, role, created_at')
+      .select('id, email, name, role, created_at, access_level')
       .order('created_at', { ascending: false });
     
     if (error) {
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, name, role } = await request.json();
+    const { email, password, name, role, access_level } = await request.json();
     
     const { data: existingProfile } = await supabaseAdmin
       .from('profiles')
@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
         email,
         name: name || email,
         role: role || 'user',
+        access_level: access_level || 1,
         is_approved: true
       })
       .select()

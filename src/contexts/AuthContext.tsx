@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { User, LoginCredentials, AuthContextType, RegisterCredentials, RegistrationRequest } from '@/types/auth';
+import { User, LoginCredentials, AuthContextType, RegisterCredentials, RegistrationRequest, AccessLevel } from '@/types/auth';
 import { supabase } from '@/lib/supabase';
 import type { AuthUser } from '@supabase/supabase-js';
 
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('id, name, role, created_at, is_approved')
+          .select('id, name, role, created_at, is_approved, access_level')
           .eq('id', session.user.id)
           .single();
 
@@ -101,6 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             password: '',
             name: profile.name,
             role: profile.role,
+            access_level: profile.access_level,
             created_at: profile.created_at,
             lastLogin: new Date(),
             isApproved: true,
@@ -154,7 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (session?.user) {
             const { data: profile } = await supabase
               .from('profiles')
-              .select('id, name, role, created_at, is_approved')
+              .select('id, name, role, created_at, is_approved, access_level')
               .eq('id', session.user.id)
               .single();
 
@@ -166,6 +167,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 password: '',
                 name: profile.name,
                 role: profile.role,
+                access_level: profile.access_level,
                 created_at: profile.created_at,
                 lastLogin: new Date(),
                 isApproved: true,
@@ -245,7 +247,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log('👤 AuthContext: Supabase login successful');
         const { data: profile } = await supabase
           .from('profiles')
-          .select('*')
+          .select('id, name, role, created_at, is_approved, access_level')
           .eq('id', data.user.id)
           .single();
           
@@ -256,6 +258,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             password: '',
             name: profile.name,
             role: profile.role,
+            access_level: profile.access_level,
             created_at: profile.created_at,
             lastLogin: new Date(),
             isApproved: true,
@@ -293,6 +296,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isAdmin = useCallback((): boolean => {
     return user?.role === 'admin';
   }, [user?.role]);
+
+  const hasAccess = useCallback((requiredLevel: AccessLevel): boolean => {
+    if (!user) return false;
+    return user.access_level >= requiredLevel;
+  }, [user]);
 
   const sendTelegramNotification = async (message: string) => {
     console.log('Attempting to send Telegram notification:', message);
@@ -480,6 +488,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     logout,
     isAdmin,
+    hasAccess,
     register,
     getRegistrationRequests,
     loadRegistrationRequests,

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { User as UserType, RegistrationRequest } from '@/types/auth';
+import { User as UserType, RegistrationRequest, ACCESS_LEVELS, AccessLevel } from '@/types/auth';
 
 export default function AdminPanel() {
   const { user, logout, getRegistrationRequests, loadRegistrationRequests, rejectRegistration } = useAuth();
@@ -16,8 +16,10 @@ export default function AdminPanel() {
     email: '',
     password: '',
     name: '',
-    role: 'user' as 'admin' | 'user'
+    role: 'user' as 'admin' | 'user',
+    access_level: 1 as AccessLevel
   });
+  const [selectedPackage, setSelectedPackage] = useState<AccessLevel>(1);
 
   const loadUsers = async () => {
     try {
@@ -100,7 +102,7 @@ export default function AdminPanel() {
     }
   };
 
-  const handleApproveRequest = async (requestId: string) => {
+  const handleApproveRequest = async (requestId: string, accessLevel: AccessLevel) => {
     try {
       const response = await fetch('/api/admin/approve-registration', {
         method: 'POST',
@@ -109,7 +111,7 @@ export default function AdminPanel() {
           'Content-Type': 'application/json',
           'Cache-Control': 'no-cache'
         },
-        body: JSON.stringify({ requestId }),
+        body: JSON.stringify({ requestId, access_level: accessLevel }),
       });
 
       const data = await response.json();
@@ -240,18 +242,34 @@ export default function AdminPanel() {
                     required
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Role
-                  </label>
-                  <select
-                    value={newUser.role}
-                    onChange={(e) => setNewUser(prev => ({ ...prev, role: e.target.value as 'admin' | 'user' }))}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="user">User</option>
-                    <option value="admin">Administrator</option>
-                  </select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Role
+                    </label>
+                    <select
+                      value={newUser.role}
+                      onChange={(e) => setNewUser(prev => ({ ...prev, role: e.target.value as 'admin' | 'user' }))}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="user">User</option>
+                      <option value="admin">Administrator</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Access Level
+                    </label>
+                    <select
+                      value={newUser.access_level}
+                      onChange={(e) => setNewUser(prev => ({ ...prev, access_level: parseInt(e.target.value) as AccessLevel }))}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value={1}>Basic</option>
+                      <option value={2}>Premium</option>
+                      <option value={3}>VIP</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -290,6 +308,9 @@ export default function AdminPanel() {
                             Admin
                           </div>
                         )}
+                        <div className="flex items-center gap-1 bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-xs">
+                          {ACCESS_LEVELS[userItem.access_level].name}
+                        </div>
                       </div>
                       {userItem.name && (
                         <div className="text-sm text-gray-300 mt-1">
@@ -348,23 +369,36 @@ export default function AdminPanel() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex gap-2 w-full md:w-auto">
-                        <button
-                          onClick={() => handleApproveRequest(request.id)}
-                          className="bg-green-600 hover:bg-green-700 p-2 rounded-lg transition-colors flex-1 flex items-center justify-center gap-2"
-                          title="Approve registration"
-                        >
-                          <Check className="w-4 h-4" />
-                          <span className="md:hidden">Approve</span>
-                        </button>
-                        <button
-                          onClick={() => handleRejectRequest(request.id)}
-                          className="bg-red-600 hover:bg-red-700 p-2 rounded-lg transition-colors flex-1 flex items-center justify-center gap-2"
-                          title="Reject registration"
-                        >
-                          <X className="w-4 h-4" />
-                          <span className="md:hidden">Reject</span>
-                        </button>
+                      <div className="flex flex-col gap-2 w-full md:w-auto">
+                        <div className="flex gap-2">
+                          <select
+                            value={selectedPackage}
+                            onChange={(e) => setSelectedPackage(parseInt(e.target.value) as AccessLevel)}
+                            className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                          >
+                            <option value={1}>Пакет 1 - Базовий</option>
+                            <option value={2}>Пакет 2 - Преміум</option>
+                            <option value={3}>Пакет 3 - VIP</option>
+                          </select>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleApproveRequest(request.id, selectedPackage)}
+                            className="bg-green-600 hover:bg-green-700 p-2 rounded-lg transition-colors flex-1 flex items-center justify-center gap-2"
+                            title="Approve registration"
+                          >
+                            <Check className="w-4 h-4" />
+                            <span className="md:hidden">Approve</span>
+                          </button>
+                          <button
+                            onClick={() => handleRejectRequest(request.id)}
+                            className="bg-red-600 hover:bg-red-700 p-2 rounded-lg transition-colors flex-1 flex items-center justify-center gap-2"
+                            title="Reject registration"
+                          >
+                            <X className="w-4 h-4" />
+                            <span className="md:hidden">Reject</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

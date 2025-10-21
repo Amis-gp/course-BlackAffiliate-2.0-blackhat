@@ -3,6 +3,7 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import CourseNavigation from '@/components/CourseNavigation';
 import { useAuth } from '@/contexts/AuthContext';
+import AccessControl from '@/components/AccessControl';
 import { Menu, X, Settings, LogOut, Home, Map, Tag, Wrench } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -111,23 +112,43 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
               
             <div className='px-4 pb-4 border-b border-gray-700'>
               <div className="grid grid-cols-3 gap-4">
-                <a
-                  href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-2 rounded-lg transition-colors text-white font-medium"
-                >
-                  <Map className="w-4 h-4" />
-                  <span className="text-center">Road Map</span>
-                </a>
-                <Link href="/offers" className="flex flex-col items-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
+                <AccessControl requiredLevel={3} fallback={
+                  <div 
+                    className="flex flex-col items-center gap-1 text-xs bg-gray-600 px-2 py-2 rounded-lg text-white font-medium cursor-not-allowed opacity-50"
+                    title="VIP Only"
+                  >
+                    <Map className="w-4 h-4" />
+                    <span className="text-center">Road Map</span>
+                  </div>
+                }>
+                  <a
+                    href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-2 rounded-lg transition-colors text-white font-medium"
+                  >
+                    <Map className="w-4 h-4" />
+                    <span className="text-center">Road Map</span>
+                  </a>
+                </AccessControl>
+                <Link href="/offers" className="flex flex-col items-center justify-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
                   <Tag className="w-4 h-4" />
                   <span className="text-center">Offers</span>
                 </Link>
-                <Link href="/tools" className="flex flex-col items-center gap-1 text-xs bg-green-600 hover:bg-green-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
-                  <Wrench className="w-4 h-4" />
-                  <span className="text-center">Tools</span>
-                </Link>
+                <AccessControl requiredLevel={2} fallback={
+                  <div 
+                    className="flex flex-col items-center gap-1 text-xs bg-gray-600 px-2 py-2 rounded-lg text-white font-medium cursor-not-allowed opacity-50"
+                    title="Premium+"
+                  >
+                    <Wrench className="w-4 h-4" />
+                    <span className="text-center">Tools</span>
+                  </div>
+                }>
+                  <Link href="/tools" className="flex flex-col items-center gap-1 text-xs bg-green-600 hover:bg-green-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
+                    <Wrench className="w-4 h-4" />
+                    <span className="text-center">Tools</span>
+                  </Link>
+                </AccessControl>
               </div>
             </div>
             <div className="p-4 mt-auto">
