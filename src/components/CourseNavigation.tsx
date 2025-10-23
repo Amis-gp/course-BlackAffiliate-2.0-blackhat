@@ -56,7 +56,7 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
   };
 
   return (
-    <div className="w-72 m-4 rounded-lg lg:flex-1 lg:min-h-0 overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
+    <div className="w-72 m-4 rounded-lg overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
       <div className="space-y-2">
         {courseData.map((section) => {
           const isExpanded = expandedSections.includes(section.id);

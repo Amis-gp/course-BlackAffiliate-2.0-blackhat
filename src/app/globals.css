@@ -32,4 +32,37 @@
   .lesson-item {
     @apply p-4 border border-gray-800 rounded-lg hover:border-primary transition-colors duration-200 cursor-pointer;
   }
+  
+  .table-container {
+    @apply overflow-x-auto -mx-4 px-4;
+    scrollbar-width: thin;
+    scrollbar-color: #374151 #1f2937;
+  }
+  
+  .table-container::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .table-container::-webkit-scrollbar-track {
+    @apply bg-gray-800;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 rounded-full;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+  
+  @media (max-width: 768px) {
+    .prose table {
+      font-size: 0.75rem;
+    }
+    
+    .prose th,
+    .prose td {
+      padding: 0.25rem 0.5rem;
+    }
+  }
 }

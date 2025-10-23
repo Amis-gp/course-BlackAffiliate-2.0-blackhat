@@ -36,6 +36,21 @@ Differences between versions (e.g., multiple Zeus Olimp) are separate instances 
 
 * **Keno, Lotteries** — perform best in GEOs like CIS and LATAM.
 
+### Social Casino
+
+Social casino is a free-to-play game format that doesn't involve betting real money. Players use coins or credits, which they buy or get as bonuses, and play slots, wheel games, poker, or bingo. All winnings are only in in-game currency, with no real monetization, though some social casinos offer prizes, trips, or bonuses to partner casinos.
+
+The most popular games: Buffalo, Classic Fruits/777, Zeus (similar to Gate of Olympus), Vegas Nights, Wheel of Fortune, Gold Fish, Dragon & Panda Slots.
+
+Top platforms/products: Slotomania, House of Fun, Huuuge Casino, DoubleDown, myVegas, Caesars Casino.
+
+Regions: USA, Canada, UK, Australia, Asia.
+
+Typical RTP: 94–96%, design is bright and cartoonish.
+
+Social casino is often used in a mix to drive traffic to real casino offers, since the traffic is cheaper, easier to moderate, and aimed at casual audiences. You can also use creatives featuring demo mode from popular slots to guide users toward original games or partner promotions.
+
+For affiliate teams, this is a separate type of creative that lets you test new audiences, use entertainment value, and funnel a wider user base. Later on, you can retarget them to real casinos or special social casino bonus deals.
 
 ### Short Classification & Recommendations
 
@@ -43,7 +58,7 @@ Differences between versions (e.g., multiple Zeus Olimp) are separate instances 
 | ----- | ----- | ----- | ----- |
 | **Chicken Road** | Crash | Instant, high volatility | Medium, quick churn |
 | **Plinko** | Arcade Win | RNG, design variations | Low/medium, quick churn |
-| **Crash/Aviator** | Crash | RNG \+ manual cashout | Medium, depends on RTP |
+| **Crash/Aviator** | Crash | RNG + manual cashout | Medium, depends on RTP |
 | **Balloon** | Crash | Visual, similar to Aviator | Medium/low |
 | **Slot Games** | Slots | Many bonuses | High, strong retention |
 | **Joker/HellHot** | Slots | Classic, varied themes | High |

@@ -10,20 +10,23 @@ Launching your Facebook campaign is just the beginning. The real work starts onc
 
 3. Deselect everything so you can start fresh.  
 4. Add the metrics that you find relevant. We recommend the following:  
+   * Off/On  
+   * Ad set  
    * Delivery  
-   * Attribution settings  
-   * Date created  
-   * Bid strategy  
    * Budget  
-   * Amount spent  
-   * Purchases (total and cost)  
-   * ROAS  
-   * Outbound clicks  
-   * Outbound CTR  
-   * Cost per outbound click  
-   * CPM  
    * Reach  
-   * Impressions
+   * Impressions  
+   * Results  
+   * Cost per result  
+   * Amount spent  
+   * Clicks (all)  
+   * CPC (all)  
+   * Leads  
+   * Cost per lead  
+   * Registrations Completed  
+   * Cost per registration  
+   * CTR (all)  
+   * CPM
 
 #### App-Specific Metrics for Gambling
 
@@ -45,14 +48,6 @@ tip
 
 If your Cost per Install (CPI) is too high, you may need to optimize your ad creatives, audience targeting, or bidding strategy. If your Click-Through Rate (CTR) is low, your ads might not be engaging enough.
 
-## Ad Set Configuration
-
-* Give your sets clear, descriptive names (e.g., PL\_25-45\_Male) so you can analyze results later without confusion.  
-* Use website as your traffic destination, and don’t forget to set up a Facebook Pixel. Just choose the “I don’t have a website” option during setup.  
-* Audience setup should include the obvious filters (age, gender, language, location), but be sure to switch to the original audience options interface to fine-tune these manually.  
-* Your creative strategy should match the user’s expectations and the compliance standards of Facebook. Stick with a single image or video unless you have experience using Carousel formats. Include a headline, body text, and an optional description.  
-* Use pre-landings to improve quality and reduce bans.
-
 ## What to Do After You Find a Winning Combination
 
 If you've found a campaign setup that generates positive ROI and stable results, you’ve entered the next phase: optimization and scaling.  
@@ -69,7 +64,7 @@ You are running ads in Brazil for a deposit offer. Your data:
 
 * Cost per Install → $12  
 * CPM → $15  
-* CTR (Click-Through Rate) → 3%  
+* CTR (Click-Through Rate) → 1%  
 * Total Spend → $360  
 * Installs → 30  
 * Registrations → 10  
@@ -127,14 +122,6 @@ If you’re using apps, take the following into account:
 * WebView apps are harder to scale due to stricter moderation.  
 * Change package name, app icon, title, and signature (keystore) when cloning.  
 * PWA setups are the easiest to clone, just duplicate the landing page and domain.
-
-pro tip
-
-To reach consistent results above $1,000 profit per day, you need real infrastructure:
-
-* Multiple domains, preferably routed through Cloudflare or your own DNS  
-* A robust tracker with link replacement and split-testing (Keitaro, RedTrack, etc.)  
-* A dedicated testing budget of at least three times the CPA payout per bundle. If your payout is $300, allocate up to $900 for testing.
 
 ## Why Testing Is Always Important
 

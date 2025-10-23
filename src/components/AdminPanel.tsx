@@ -67,7 +67,7 @@ export default function AdminPanel() {
       
       if (data.success) {
         await loadUsers();
-        setNewUser({ email: '', password: '', name: '', role: 'user' });
+        setNewUser({ email: '', password: '', name: '', role: 'user', access_level: 1 });
         setShowAddForm(false);
       } else {
         alert(data.message || 'Error creating user');
