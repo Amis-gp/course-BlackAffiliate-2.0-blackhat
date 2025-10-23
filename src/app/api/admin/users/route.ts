@@ -80,6 +80,41 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function PUT(request: NextRequest) {
+  try {
+    const { id, access_level, role } = await request.json();
+    
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'User ID not specified' }, { status: 400 });
+    }
+    
+    const updateData: any = {};
+    if (access_level !== undefined) updateData.access_level = access_level;
+    if (role !== undefined) updateData.role = role;
+    
+    const { data: updatedProfile, error: profileError } = await supabaseAdmin
+      .from('profiles')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (profileError) {
+      console.error('Error updating profile:', profileError);
+      return NextResponse.json({ success: false, message: 'Failed to update user profile' }, { status: 500 });
+    }
+    
+    return NextResponse.json({ 
+      success: true, 
+      message: 'User updated',
+      user: updatedProfile
+    });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+  }
+}
+
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
