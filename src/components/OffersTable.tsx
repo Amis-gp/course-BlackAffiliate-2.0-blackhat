@@ -43,6 +43,29 @@ export default function OffersTable({ offers }: OffersTableProps) {
 
   const hasActiveFilters = searchQuery !== '' || selectedCategory !== 'all' || selectedCountry !== 'all';
 
+  const getCategoryColor = (category: string) => {
+    switch (category.toLowerCase()) {
+      case 'gambling':
+        return 'bg-red-500/20 text-red-400 border-red-500/30';
+      case 'nutra':
+        return 'bg-green-500/20 text-green-400 border-green-500/30';
+      case 'crypto':
+        return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+      case 'dating':
+        return 'bg-pink-500/20 text-pink-400 border-pink-500/30';
+      case 'finance':
+        return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+      case 'health':
+        return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
+      case 'tech':
+        return 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30';
+      case 'ecommerce':
+        return 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30';
+      default:
+        return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+    }
+  };
+
   const filteredOffers = offers.filter(offer => {
     const matchesSearch = 
       offer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -189,7 +212,7 @@ export default function OffersTable({ offers }: OffersTableProps) {
                     {offer.name}
                   </td>
                   <td className="px-6 py-4 text-sm">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(offer.category)}`}>
                       {offer.category}
                     </span>
                   </td>
