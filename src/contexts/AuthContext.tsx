@@ -387,11 +387,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const getRegistrationRequests = (): RegistrationRequest[] => {
+  const getRegistrationRequests = useCallback((): RegistrationRequest[] => {
     return registrationRequests;
-  };
+  }, [registrationRequests]);
 
-  const loadRegistrationRequests = async () => {
+  const loadRegistrationRequests = useCallback(async () => {
     console.log('📋 AuthContext: Starting loadRegistrationRequests');
     try {
       const { data, error } = await supabase
@@ -420,7 +420,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('💥 AuthContext: Catch block - Error loading requests:', error);
     }
     console.log('🏁 AuthContext: Finished loadRegistrationRequests');
-  };
+  }, []);
 
   const remindAdmin = async (requestId: string): Promise<{ success: boolean; message: string }> => {
     try {

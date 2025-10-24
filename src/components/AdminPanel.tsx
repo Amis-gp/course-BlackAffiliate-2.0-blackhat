@@ -53,7 +53,7 @@ export default function AdminPanel() {
       loadUsers();
     };
     loadData();
-  }, [loadRegistrationRequests, getRegistrationRequests]);
+  }, []); // Видаляємо залежності, які викликають нескінченний цикл
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,6 +178,16 @@ export default function AdminPanel() {
             <h1 className="text-3xl font-bold mb-2">Admin Panel</h1>
             <p className="text-gray-400">Manage training program users</p>
           </div>
+          <button
+            onClick={() => {
+              loadUsers();
+              loadRegistrationRequests();
+              setRegistrationRequests(getRegistrationRequests());
+            }}
+            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+          >
+            <span>Refresh</span>
+          </button>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
             <div className="text-left sm:text-right w-full sm:w-auto">
               <p className="text-sm text-gray-400">Logged in as</p>
