@@ -160,9 +160,6 @@ export default function OffersTable({ offers }: OffersTableProps) {
               >
                 Offer <SortIcon field="name" />
               </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
-                Manager
-              </th>
               <th 
                 className="px-6 py-4 text-left text-sm font-semibold text-gray-300 cursor-pointer hover:bg-gray-800/50 transition-colors"
                 onClick={() => handleSort('category')}
@@ -174,6 +171,9 @@ export default function OffersTable({ offers }: OffersTableProps) {
                 onClick={() => handleSort('payout')}
               >
                 Payout <SortIcon field="payout" />
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
+                Manager
               </th>
               <th 
                 className="px-6 py-4 text-left text-sm font-semibold text-gray-300 cursor-pointer hover:bg-gray-800/50 transition-colors"
@@ -213,6 +213,14 @@ export default function OffersTable({ offers }: OffersTableProps) {
                     {offer.name}
                   </td>
                   <td className="px-6 py-4 text-sm">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(offer.category)}`}>
+                      {offer.category}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-white font-semibold">
+                    {offer.payout}
+                  </td>
+                  <td className="px-6 py-4 text-sm">
                     {offer.manager ? (
                       <a 
                         href={offer.manager} 
@@ -227,14 +235,6 @@ export default function OffersTable({ offers }: OffersTableProps) {
                     ) : (
                       <span className="text-gray-500">-</span>
                     )}
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(offer.category)}`}>
-                      {offer.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-white font-semibold">
-                    {offer.payout}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-400">
                     {offer.metrics}
