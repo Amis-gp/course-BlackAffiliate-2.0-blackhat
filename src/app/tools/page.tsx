@@ -53,6 +53,18 @@ export default function ToolsPage() {
               <p className="text-gray-400">Essential services for traffic arbitrage and affiliate marketing</p>
             </div>
 
+            <div className="bg-yellow-900/20 border border-yellow-600/30 rounded-lg p-4 mb-8">
+              <div className="flex items-start gap-3">
+                <div className="text-yellow-400 text-lg font-bold">⚠️</div>
+                <div>
+                  <h3 className="text-yellow-400 font-semibold mb-2">Disclaimer!</h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    We recommend services that we've personally used at different times, and from our experience, we haven't had any issues with them. The affiliate marketing market is pretty dynamic, so some services may change their policies and offerings. It's always a good idea to confirm everything with support before making a purchase.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <ToolsSections tools={toolsData} />
           </div>
         </div>
