@@ -333,7 +333,21 @@ export default function AdminPanel() {
               ) : users.length === 0 ? (
                 <div className="text-center py-8">
                   <User className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400">No users found</p>
+                  <p className="text-gray-400 mb-4">No users found</p>
+                  <button
+                    onClick={loadUsers}
+                    disabled={loading}
+                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <div className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}>
+                      {loading ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                      ) : (
+                        <User className="w-4 h-4" />
+                      )}
+                    </div>
+                    Refresh Users
+                  </button>
                 </div>
               ) : (
                 users.map((userItem) => (
