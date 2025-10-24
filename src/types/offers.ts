@@ -7,6 +7,7 @@ export interface Offer {
   network: string;
   metrics: string;
   website?: string;
+  manager?: string;
   offerTypes?: string;
   targetAction?: string;
   testCap?: string;

@@ -46,6 +46,7 @@ export const offersData: Offer[] = [
     network: 'Direct',
     metrics: 'RD ≥ 20%',
     website: 'https://29bet.net/',
+    manager: 'https://t.me/Mang29bet',
     offerTypes: 'CPA (varies by region) / RevShare up to 45% / Hybrid (CPA + RS)',
     targetAction: 'First Deposit (FTD)',
     testCap: 'To be discussed separately (typically 10-20 days)',
@@ -53,7 +54,7 @@ export const offersData: Offer[] = [
     kpi: 'Re-Deposit (RD) of unique users ≥ 20%',
     acceptedGeos: 'All GEOs except: France, Spain, Italy, Portugal, Netherlands, Sweden, Denmark, Greece, Australia, USA, United Kingdom, Switzerland, Israel, Russia, Lebanon, Peru, Brazil',
     traffic: 'All sources accepted - SEO, PPC, influencers, media buying, Telegram, social media, email, SMS, push, forums',
-    notes: 'Manager: @Mang29bet - CPA varies by region; RevShare up to 45%; Hybrid model available; No negative carryover for affiliates active 4+ months; Fast monthly payouts via crypto'
+    notes: 'CPA varies by region; RevShare up to 45%; Hybrid model available; No negative carryover for affiliates active 4+ months; Fast monthly payouts via crypto; Manager: @Mang29bet'
   }
 ];
 

@@ -160,6 +160,9 @@ export default function OffersTable({ offers }: OffersTableProps) {
               >
                 Offer <SortIcon field="name" />
               </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
+                Manager
+              </th>
               <th 
                 className="px-6 py-4 text-left text-sm font-semibold text-gray-300 cursor-pointer hover:bg-gray-800/50 transition-colors"
                 onClick={() => handleSort('category')}
@@ -208,6 +211,22 @@ export default function OffersTable({ offers }: OffersTableProps) {
                   </td>
                   <td className="px-6 py-4 text-sm text-white font-medium">
                     {offer.name}
+                  </td>
+                  <td className="px-6 py-4 text-sm">
+                    {offer.manager ? (
+                      <a 
+                        href={offer.manager} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        Contact Manager
+                      </a>
+                    ) : (
+                      <span className="text-gray-500">-</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(offer.category)}`}>
