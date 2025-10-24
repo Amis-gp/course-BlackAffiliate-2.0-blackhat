@@ -30,12 +30,18 @@ export default function Home() {
                 <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 px-4">
                   Traffic arbitrage and affiliate marketing training program
                 </p>
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-full px-4 py-2 mb-8 md:mb-12">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-gray-300">Package:</span>
-                  <span className="text-sm font-bold text-blue-400">
-                    {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
-                  </span>
+                <div className="relative inline-flex items-center gap-3 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30 border-2 border-blue-400/50 rounded-full px-6 py-3 mb-8 md:mb-12 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-sm"></div>
+                  <div className="relative flex items-center gap-3">
+                    <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse shadow-lg shadow-blue-400/50"></div>
+                    <span className="text-sm font-medium text-white/90">Package:</span>
+                    <span className="text-lg font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
+                      {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
+                    </span>
+                    {user?.access_level === 3 && (
+                      <div className="text-yellow-400 text-lg">👑</div>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="flex flex-wrap justify-center gap-4 mb-8 md:mb-12">

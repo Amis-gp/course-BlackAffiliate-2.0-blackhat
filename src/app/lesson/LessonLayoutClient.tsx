@@ -154,12 +154,18 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
             <div className="p-4 mt-auto">
               <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
               <div className="text-white font-medium mb-2">{user?.email}</div>
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-lg px-3 py-2 mb-3">
-                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-gray-300">Package:</span>
-                <span className="text-xs font-bold text-blue-400">
-                  {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
-                </span>
+              <div className="relative inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/25 via-purple-500/25 to-pink-500/25 border border-blue-400/40 rounded-lg px-3 py-2 mb-3 shadow-md shadow-blue-500/20">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg blur-sm"></div>
+                <div className="relative flex items-center gap-2">
+                  <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse shadow-sm shadow-blue-400/50"></div>
+                  <span className="text-xs font-medium text-white/80">Package:</span>
+                  <span className="text-xs font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
+                  </span>
+                  {user?.access_level === 3 && (
+                    <div className="text-yellow-400 text-xs">👑</div>
+                  )}
+                </div>
               </div>
               <div className="flex flex-col gap-2">
                 {isAdmin() && (
