@@ -154,18 +154,11 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
             <div className="p-4 mt-auto">
               <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
               <div className="text-white font-medium mb-2">{user?.email}</div>
-              <div className="relative inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/25 via-purple-500/25 to-pink-500/25 border border-blue-400/40 rounded-lg px-3 py-2 mb-3 shadow-md shadow-blue-500/20">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg blur-sm"></div>
-                <div className="relative flex items-center gap-2">
-                  <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse shadow-sm shadow-blue-400/50"></div>
-                  <span className="text-xs font-medium text-white/80">Package:</span>
-                  <span className="text-xs font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
-                  </span>
-                  {user?.access_level === 3 && (
-                    <div className="text-yellow-400 text-xs">👑</div>
-                  )}
-                </div>
+              <div className="inline-flex items-center gap-2 bg-blue-600 text-white rounded px-2 py-1 mb-3 text-xs font-medium">
+                <span>Package:</span>
+                <span className="font-bold">
+                  {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
+                </span>
               </div>
               <div className="flex flex-col gap-2">
                 {isAdmin() && (
