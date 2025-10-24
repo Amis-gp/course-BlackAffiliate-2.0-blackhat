@@ -2,6 +2,7 @@
 
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AccessControl from '@/components/AccessControl';
+import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { ArrowRight, Play, FileText, HelpCircle, Map, Tag, Wrench } from 'lucide-react';
 import { courseData } from '@/data/courseData';
@@ -10,6 +11,8 @@ console.log('NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_URL);
 console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 export default function Home() {
+  const { user } = useAuth();
+  
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-black">
@@ -24,9 +27,14 @@ export default function Home() {
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
                   Black Affiliate
                 </h1>
-                <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-12 px-4">
+                <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 px-4">
                   Traffic arbitrage and affiliate marketing training program
                 </p>
+                <div className="text-sm text-blue-400 mb-8 md:mb-12">
+                  Package: <span className="font-semibold">
+                    {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
+                  </span>
+                </div>
                 
                 <div className="flex flex-wrap justify-center gap-4 mb-8 md:mb-12">
                   <AccessControl requiredLevel={3} fallback={
