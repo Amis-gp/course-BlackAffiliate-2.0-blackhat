@@ -172,9 +172,6 @@ export default function OffersTable({ offers }: OffersTableProps) {
               >
                 Payout <SortIcon field="payout" />
               </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
-                Manager
-              </th>
               <th 
                 className="px-6 py-4 text-left text-sm font-semibold text-gray-300 cursor-pointer hover:bg-gray-800/50 transition-colors"
                 onClick={() => handleSort('metrics')}
@@ -220,22 +217,6 @@ export default function OffersTable({ offers }: OffersTableProps) {
                   <td className="px-6 py-4 text-sm text-white font-semibold">
                     {offer.payout}
                   </td>
-                  <td className="px-6 py-4 text-sm">
-                    {offer.manager ? (
-                      <a 
-                        href={offer.manager} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ExternalLink className="w-3 h-3" />
-                        Contact Manager
-                      </a>
-                    ) : (
-                      <span className="text-gray-500">-</span>
-                    )}
-                  </td>
                   <td className="px-6 py-4 text-sm text-gray-400">
                     {offer.metrics}
                   </td>
@@ -250,6 +231,21 @@ export default function OffersTable({ offers }: OffersTableProps) {
                   <tr className="border-b border-gray-800">
                     <td colSpan={8} className="px-6 py-6 bg-gray-900/30">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {offer.manager && (
+                          <div>
+                            <h4 className="text-sm font-semibold text-gray-300 mb-2">Manager</h4>
+                            <a 
+                              href={offer.manager} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-blue-300 inline-flex items-center gap-2"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              Contact Manager
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          </div>
+                        )}
                         {offer.website && (
                           <div>
                             <h4 className="text-sm font-semibold text-gray-300 mb-2">Website</h4>
