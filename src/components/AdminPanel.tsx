@@ -36,11 +36,20 @@ export default function AdminPanel() {
       
       if (data.success) {
         setUsers(data.users);
+        // Якщо користувачів немає, це помилка - оновлюємо негайно
+        if (data.users.length === 0) {
+          console.log('No users found, retrying immediately...');
+          setTimeout(() => loadUsers(), 1000);
+        }
       } else {
         console.error('Failed to load users:', data.message);
+        // При помилці також повторюємо
+        setTimeout(() => loadUsers(), 2000);
       }
     } catch (error) {
       console.error('Error loading users:', error);
+      // При помилці також повторюємо
+      setTimeout(() => loadUsers(), 2000);
     } finally {
       setLoading(false);
     }
@@ -339,9 +348,9 @@ export default function AdminPanel() {
                 </div>
               ) : users.length === 0 ? (
                 <div className="text-center py-8">
-                  <User className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400">No users found</p>
-                  <p className="text-xs text-gray-500 mt-2">Auto-refreshing every 5 seconds...</p>
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+                  <p className="text-gray-400">No users found - retrying...</p>
+                  <p className="text-xs text-gray-500 mt-2">This should not happen, checking again...</p>
                 </div>
               ) : (
                 users.map((userItem) => (
