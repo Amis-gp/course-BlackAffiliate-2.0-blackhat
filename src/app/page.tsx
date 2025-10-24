@@ -30,8 +30,10 @@ export default function Home() {
                 <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 px-4">
                   Traffic arbitrage and affiliate marketing training program
                 </p>
-                <div className="text-sm text-blue-400 mb-8 md:mb-12">
-                  Package: <span className="font-semibold">
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-full px-4 py-2 mb-8 md:mb-12">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                  <span className="text-sm text-gray-300">Package:</span>
+                  <span className="text-sm font-bold text-blue-400">
                     {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
                   </span>
                 </div>
