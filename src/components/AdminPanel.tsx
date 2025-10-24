@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell } from 'lucide-react';
+import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { User as UserType, RegistrationRequest, ACCESS_LEVELS, AccessLevel } from '@/types/auth';
 
@@ -178,16 +178,6 @@ export default function AdminPanel() {
             <h1 className="text-3xl font-bold mb-2">Admin Panel</h1>
             <p className="text-gray-400">Manage training program users</p>
           </div>
-          <button
-            onClick={() => {
-              loadUsers();
-              loadRegistrationRequests();
-              setRegistrationRequests(getRegistrationRequests());
-            }}
-            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-          >
-            <span>Refresh</span>
-          </button>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
             <div className="text-left sm:text-right w-full sm:w-auto">
               <p className="text-sm text-gray-400">Logged in as</p>
@@ -413,7 +403,7 @@ export default function AdminPanel() {
                           className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg transition-colors flex items-center justify-center gap-2"
                           title="Edit access level"
                         >
-                          <Shield className="w-4 h-4" />
+                          <Edit3 className="w-4 h-4" />
                           <span className="md:hidden">Edit</span>
                         </button>
                       )}
