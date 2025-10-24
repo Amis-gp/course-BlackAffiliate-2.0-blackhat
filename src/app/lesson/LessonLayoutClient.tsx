@@ -154,9 +154,9 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
             <div className="p-4 mt-auto">
               <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
               <div className="text-white font-medium mb-2">{user?.email}</div>
-              <div className="inline-flex items-center gap-2 bg-blue-600 text-white rounded px-2 py-1 mb-3 text-xs font-medium">
-                <span>Package:</span>
-                <span className="font-bold">
+              <div className="text-white mb-3">
+                <span className="text-xs text-gray-400">Package: </span>
+                <span className="text-xs font-bold text-white">
                   {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
                 </span>
               </div>
