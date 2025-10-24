@@ -341,6 +341,7 @@ export default function AdminPanel() {
                 <div className="text-center py-8">
                   <User className="w-12 h-12 text-gray-600 mx-auto mb-4" />
                   <p className="text-gray-400">No users found</p>
+                  <p className="text-xs text-gray-500 mt-2">Auto-refreshing every 5 seconds...</p>
                 </div>
               ) : (
                 users.map((userItem) => (
@@ -467,9 +468,9 @@ export default function AdminPanel() {
                             onChange={(e) => setSelectedPackage(parseInt(e.target.value) as AccessLevel)}
                             className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                           >
-                            <option value={1}>Пакет 1 - Базовий</option>
-                            <option value={2}>Пакет 2 - Преміум</option>
-                            <option value={3}>Пакет 3 - VIP</option>
+                            <option value={1}>Basic</option>
+                            <option value={2}>Premium</option>
+                            <option value={3}>VIP</option>
                           </select>
                         </div>
                         <div className="flex gap-2">
