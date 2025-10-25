@@ -21,10 +21,8 @@ export default function AdminPanel() {
   });
   const [selectedPackage, setSelectedPackage] = useState<AccessLevel>(1);
   const [editingUser, setEditingUser] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const loadUsers = async () => {
-    setLoading(true);
     try {
       const response = await fetch('/api/admin/users', {
         cache: 'no-store',
@@ -36,13 +34,9 @@ export default function AdminPanel() {
       
       if (data.success) {
         setUsers(data.users);
-      } else {
-        console.error('Failed to load users:', data.message);
       }
     } catch (error) {
       console.error('Error loading users:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -53,14 +47,7 @@ export default function AdminPanel() {
       loadUsers();
     };
     loadData();
-
-    // Автоматичне оновлення кожні 5 секунд
-    const interval = setInterval(() => {
-      loadUsers();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []); // Видаляємо залежності, які викликають нескінченний цикл
+  }, [loadRegistrationRequests, getRegistrationRequests]);
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,7 +154,6 @@ export default function AdminPanel() {
       if (data.success) {
         await loadUsers();
         setEditingUser(null);
-        alert('User access level updated successfully');
       } else {
         alert(data.message || 'Error updating user access level');
       }
@@ -332,102 +318,89 @@ export default function AdminPanel() {
 
           {activeTab === 'users' && (
             <div className="space-y-4">
-              {loading ? (
-                <div className="text-center py-8">
-                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                  <p className="mt-2 text-gray-400">Loading users...</p>
-                </div>
-              ) : users.length === 0 ? (
-                <div className="text-center py-8">
-                  <User className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400">No users found</p>
-                  <p className="text-xs text-gray-500 mt-2">Auto-refreshing every 5 seconds...</p>
-                </div>
-              ) : (
-                users.map((userItem) => (
-                  <div key={userItem.id} className="bg-gray-800 rounded-lg p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                    <div className="flex items-start gap-4 w-full">
-                      <div className="bg-gray-700 p-3 rounded-lg mt-1">
-                        <User className="w-5 h-5" />
-                      </div>
-                      <div className="flex-grow">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                          <span className="font-medium break-all">{userItem.email}</span>
-                          {userItem.role === 'admin' && (
-                            <div className="flex items-center gap-1 bg-primary/20 text-primary px-2 py-1 rounded text-xs">
-                              <Shield className="w-3 h-3" />
-                              Admin
-                            </div>
-                          )}
-                          {editingUser === userItem.id ? (
-                            <div className="flex items-center gap-2">
-                              <select
-                                value={userItem.access_level}
-                                onChange={(e) => handleUpdateUserAccess(userItem.id, parseInt(e.target.value) as AccessLevel)}
-                                className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                              >
-                                <option value={1}>Basic</option>
-                                <option value={2}>Premium</option>
-                                <option value={3}>VIP</option>
-                              </select>
-                              <button
-                                onClick={() => setEditingUser(null)}
-                                className="text-gray-400 hover:text-white"
-                              >
-                                <X className="w-4 h-4" />
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="flex items-center gap-1 bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-xs">
-                              {ACCESS_LEVELS[userItem.access_level].name}
-                              <button
-                                onClick={() => setEditingUser(userItem.id)}
-                                className="ml-1 hover:text-blue-300"
-                                title="Edit access level"
-                              >
-                                ✏️
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                        {userItem.name && (
-                          <div className="text-sm text-gray-300 mt-1">
-                            <span className="font-medium">Name: {userItem.name}</span>
+              {users.map((userItem) => (
+                <div key={userItem.id} className="bg-gray-800 rounded-lg p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                  <div className="flex items-start gap-4 w-full">
+                    <div className="bg-gray-700 p-3 rounded-lg mt-1">
+                      <User className="w-5 h-5" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <span className="font-medium break-all">{userItem.email}</span>
+                        {userItem.role === 'admin' && (
+                          <div className="flex items-center gap-1 bg-primary/20 text-primary px-2 py-1 rounded text-xs">
+                            <Shield className="w-3 h-3" />
+                            Admin
                           </div>
                         )}
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-gray-400 mt-2">
+                        {editingUser === userItem.id ? (
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            <span>Created: {new Date(userItem.created_at).toLocaleDateString('en-US')}</span>
+                            <select
+                              value={userItem.access_level}
+                              onChange={(e) => handleUpdateUserAccess(userItem.id, parseInt(e.target.value) as AccessLevel)}
+                              className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                            >
+                              <option value={1}>Basic</option>
+                              <option value={2}>Premium</option>
+                              <option value={3}>VIP</option>
+                            </select>
+                            <button
+                              onClick={() => setEditingUser(null)}
+                              className="text-gray-400 hover:text-white"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
                           </div>
+                        ) : (
+                          <div className="flex items-center gap-1 bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-xs">
+                            {ACCESS_LEVELS[userItem.access_level].name}
+                            <button
+                              onClick={() => setEditingUser(userItem.id)}
+                              className="ml-1 hover:text-blue-300"
+                              title="Edit access level"
+                            >
+                              ✏️
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      {userItem.name && (
+                        <div className="text-sm text-gray-300 mt-1">
+                          <span className="font-medium">Name: {userItem.name}</span>
+                        </div>
+                      )}
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-gray-400 mt-2">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          <span>Created: {new Date(userItem.created_at).toLocaleDateString('en-US')}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex gap-2">
-                      {editingUser !== userItem.id && (
-                        <button
-                          onClick={() => setEditingUser(userItem.id)}
-                          className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg transition-colors flex items-center justify-center gap-2"
-                          title="Edit access level"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                          <span className="md:hidden">Edit</span>
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleDeleteUser(userItem.id)}
-                        disabled={userItem.id === user?.id}
-                        className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed p-2 rounded-lg transition-colors flex items-center justify-center gap-2"
-                        title={userItem.id === user?.id ? 'You cannot delete your own account' : 'Delete user'}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        <span className="md:hidden">Delete</span>
-                      </button>
-                    </div>
                   </div>
-                ))
-              )}
+                  <div className="flex gap-2">
+                    {editingUser !== userItem.id && (
+                      <button
+                        onClick={() => setEditingUser(userItem.id)}
+                        className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+                        title="Edit access level"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                        <span className="md:hidden">Edit</span>
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDeleteUser(userItem.id)}
+                      disabled={userItem.id === user?.id}
+                      className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed p-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      title={userItem.id === user?.id ? 'You cannot delete your own account' : 'Delete user'}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      <span className="md:hidden">Delete</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 

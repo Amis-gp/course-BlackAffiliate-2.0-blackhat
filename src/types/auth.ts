@@ -42,28 +42,20 @@ export type AccessLevel = 1 | 2 | 3;
 export interface AccessLevelInfo {
   level: AccessLevel;
   name: string;
-  description: string;
-  features: string[];
 }
 
 export const ACCESS_LEVELS: Record<AccessLevel, AccessLevelInfo> = {
   1: {
     level: 1,
-    name: 'Пакет 1',
-    description: 'Базовий доступ до курсу',
-    features: ['Основні уроки курсу', 'Базові інструменти', 'Обмежений доступ до спільноти']
+    name: 'Basic'
   },
   2: {
     level: 2,
-    name: 'Пакет 2',
-    description: 'Преміум доступ з сервісами',
-    features: ['Всі уроки курсу', 'Розширені інструменти', 'Доступ до сервісів', 'Пріоритетна підтримка']
+    name: 'Premium'
   },
   3: {
     level: 3,
-    name: 'Пакет 3',
-    description: 'VIP доступ з Road map',
-    features: ['Все з попередніх пакетів', 'Road map (ексклюзивно)', 'Персональний ментор', 'Ексклюзивні матеріали']
+    name: 'VIP'
   }
 };
 
