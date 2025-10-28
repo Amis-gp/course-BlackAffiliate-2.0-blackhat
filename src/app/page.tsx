@@ -1,17 +1,76 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AccessControl from '@/components/AccessControl';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { ArrowRight, Play, FileText, HelpCircle, Map, Tag, Wrench } from 'lucide-react';
 import { courseData } from '@/data/courseData';
+import AnnouncementsButton from '@/components/AnnouncementsButton';
+import AnnouncementBanner from '@/components/AnnouncementBanner';
+import AnnouncementsList from '@/components/AnnouncementsList';
+import { AnnouncementWithReadStatus } from '@/types/announcements';
+import { supabase } from '@/lib/supabase';
 
 console.log('NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_URL);
 console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 export default function Home() {
   const { user } = useAuth();
+  const [announcements, setAnnouncements] = useState<AnnouncementWithReadStatus[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showAnnouncementsList, setShowAnnouncementsList] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
+
+  const loadAnnouncements = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const response = await fetch('/api/announcements', {
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setAnnouncements(data.announcements);
+        setUnreadCount(data.unread_count);
+      }
+    } catch (error) {
+      console.error('Error loading announcements:', error);
+    }
+  };
+
+  const handleMarkAsRead = async (id: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const response = await fetch(`/api/announcements/${id}/mark-read`, {
+        method: 'POST',
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await loadAnnouncements();
+      }
+    } catch (error) {
+      console.error('Error marking announcement as read:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      loadAnnouncements();
+    }
+  }, [user]);
   
   return (
     <ProtectedRoute>
@@ -24,9 +83,15 @@ export default function Home() {
           <div className="relative z-10">
             <div className="container mx-auto px-4 py-6 md:py-12">
               <div className="text-center mb-8 md:mb-16">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
-                  Black Affiliate
-                </h1>
+                <div className="flex items-center justify-center gap-4 mb-4 md:mb-6">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white">
+                    Black Affiliate
+                  </h1>
+                  <AnnouncementsButton
+                    unreadCount={unreadCount}
+                    onClick={() => setShowAnnouncementsList(true)}
+                  />
+                </div>
                 <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 px-4">
                   Traffic arbitrage and affiliate marketing training program
                 </p>
@@ -135,6 +200,22 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {showBanner && announcements.some(a => !a.is_read) && (
+          <AnnouncementBanner
+            announcements={announcements}
+            onMarkAsRead={handleMarkAsRead}
+            onClose={() => setShowBanner(false)}
+          />
+        )}
+
+        {showAnnouncementsList && (
+          <AnnouncementsList
+            announcements={announcements}
+            onMarkAsRead={handleMarkAsRead}
+            onClose={() => setShowAnnouncementsList(false)}
+          />
+        )}
       </div>
     </ProtectedRoute>
   );

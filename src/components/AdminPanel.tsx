@@ -2,16 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3 } from 'lucide-react';
+import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3, Megaphone } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { User as UserType, RegistrationRequest, ACCESS_LEVELS, AccessLevel } from '@/types/auth';
+import { AnnouncementWithReadStatus, CreateAnnouncementRequest } from '@/types/announcements';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminPanel() {
   const { user, logout, getRegistrationRequests, loadRegistrationRequests, rejectRegistration } = useAuth();
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [activeTab, setActiveTab] = useState<'users' | 'requests'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'requests' | 'announcements'>('users');
   const [newUser, setNewUser] = useState({
     email: '',
     password: '',
@@ -21,6 +23,12 @@ export default function AdminPanel() {
   });
   const [selectedPackage, setSelectedPackage] = useState<AccessLevel>(1);
   const [editingUser, setEditingUser] = useState<string | null>(null);
+  const [announcements, setAnnouncements] = useState<AnnouncementWithReadStatus[]>([]);
+  const [newAnnouncement, setNewAnnouncement] = useState({
+    title: '',
+    content: '',
+    image_url: ''
+  });
 
   const loadUsers = async () => {
     try {
@@ -40,11 +48,34 @@ export default function AdminPanel() {
     }
   };
 
+  const loadAnnouncements = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const response = await fetch('/api/announcements', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Authorization': token ? `Bearer ${token}` : '',
+        }
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setAnnouncements(data.announcements);
+      }
+    } catch (error) {
+      console.error('Error loading announcements:', error);
+    }
+  };
+
   useEffect(() => {
     const loadData = async () => {
       await loadRegistrationRequests();
       setRegistrationRequests(getRegistrationRequests());
       loadUsers();
+      loadAnnouncements();
     };
     loadData();
   }, [loadRegistrationRequests, getRegistrationRequests]);
@@ -163,6 +194,70 @@ export default function AdminPanel() {
     }
   };
 
+  const handleCreateAnnouncement = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newAnnouncement.title || !newAnnouncement.content) {
+      alert('Title and content are required');
+      return;
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const response = await fetch('/api/announcements', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
+        body: JSON.stringify(newAnnouncement),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setNewAnnouncement({ title: '', content: '', image_url: '' });
+        await loadAnnouncements();
+      } else {
+        alert(data.message || 'Error creating announcement');
+      }
+    } catch (error) {
+      console.error('Error creating announcement:', error);
+      alert('Error creating announcement');
+    }
+  };
+
+  const handleDeleteAnnouncement = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this announcement?')) {
+      return;
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const response = await fetch(`/api/announcements/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await loadAnnouncements();
+      } else {
+        alert(data.message || 'Error deleting announcement');
+      }
+    } catch (error) {
+      console.error('Error deleting announcement:', error);
+      alert('Error deleting announcement');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="container mx-auto px-4 py-8">
@@ -211,6 +306,17 @@ export default function AdminPanel() {
                     {registrationRequests.length}
                   </span>
                 )}
+              </button>
+              <button
+                onClick={() => setActiveTab('announcements')}
+                className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                  activeTab === 'announcements'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+              >
+                <Megaphone className="w-4 h-4" />
+                Announcements ({announcements.length})
               </button>
             </div>
             {activeTab === 'users' && (
@@ -472,6 +578,119 @@ export default function AdminPanel() {
                   </div>
                 ))
               )}
+            </div>
+          )}
+
+          {activeTab === 'announcements' && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6">
+                <h3 className="text-xl font-semibold mb-4">Create New Announcement</h3>
+                <form onSubmit={handleCreateAnnouncement} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      value={newAnnouncement.title}
+                      onChange={(e) => setNewAnnouncement(prev => ({ ...prev, title: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="Enter announcement title"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Content
+                    </label>
+                    <textarea
+                      value={newAnnouncement.content}
+                      onChange={(e) => setNewAnnouncement(prev => ({ ...prev, content: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                      placeholder="Enter announcement content"
+                      rows={4}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Image URL (optional)
+                    </label>
+                    <input
+                      type="url"
+                      value={newAnnouncement.image_url}
+                      onChange={(e) => setNewAnnouncement(prev => ({ ...prev, image_url: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="https://example.com/image.jpg"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="bg-primary hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    Create Announcement
+                  </button>
+                </form>
+              </div>
+
+              <div className="bg-gray-800 rounded-lg p-6">
+                <h3 className="text-xl font-semibold mb-4">Existing Announcements</h3>
+                <div className="space-y-4">
+                  {announcements.length === 0 ? (
+                    <p className="text-gray-400 text-center py-8">No announcements yet</p>
+                  ) : (
+                    announcements.map((announcement) => (
+                      <div key={announcement.id} className="bg-gray-700 rounded-lg p-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <h4 className="text-lg font-semibold text-white mb-2">
+                              {announcement.title}
+                            </h4>
+                            <p className="text-gray-300 text-sm mb-3 whitespace-pre-wrap">
+                              {announcement.content}
+                            </p>
+                            {announcement.image_url && (
+                              <div className="mb-3">
+                                <img
+                                  src={announcement.image_url}
+                                  alt={announcement.title}
+                                  className="max-h-32 rounded object-cover"
+                                />
+                              </div>
+                            )}
+                            <div className="flex items-center gap-4 text-xs text-gray-400">
+                              <span>
+                                {new Date(announcement.created_at).toLocaleDateString('uk-UA', {
+                                  day: 'numeric',
+                                  month: 'long',
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                              {announcement.read_count !== undefined && announcement.total_users !== undefined && (
+                                <span>
+                                  Read by {announcement.read_count} of {announcement.total_users} users
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteAnnouncement(announcement.id)}
+                            className="bg-red-600 hover:bg-red-700 p-2 rounded-lg transition-colors"
+                            title="Delete announcement"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
