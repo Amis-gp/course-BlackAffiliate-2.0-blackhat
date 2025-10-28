@@ -59,7 +59,7 @@ export const ACCESS_LEVELS: Record<AccessLevel, AccessLevelInfo> = {
   },
   4: {
     level: 4,
-    name: 'Without Buttons'
+    name: 'Without Road Map'
   }
 };
 

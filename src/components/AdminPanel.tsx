@@ -294,7 +294,7 @@ export default function AdminPanel() {
                       <option value={1}>Basic</option>
                       <option value={2}>Premium</option>
                       <option value={3}>VIP</option>
-                      <option value={4}>Without Buttons</option>
+                      <option value={4}>Without Road Map</option>
                     </select>
                   </div>
                 </div>
