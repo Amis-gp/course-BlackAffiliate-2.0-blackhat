@@ -294,6 +294,7 @@ export default function AdminPanel() {
                       <option value={1}>Basic</option>
                       <option value={2}>Premium</option>
                       <option value={3}>VIP</option>
+                      <option value={4}>Without Buttons</option>
                     </select>
                   </div>
                 </div>
@@ -344,6 +345,7 @@ export default function AdminPanel() {
                               <option value={1}>Basic</option>
                               <option value={2}>Premium</option>
                               <option value={3}>VIP</option>
+                              <option value={4}>Without Buttons</option>
                             </select>
                             <button
                               onClick={() => setEditingUser(null)}
@@ -444,6 +446,7 @@ export default function AdminPanel() {
                             <option value={1}>Basic</option>
                             <option value={2}>Premium</option>
                             <option value={3}>VIP</option>
+                            <option value={4}>Without Buttons</option>
                           </select>
                         </div>
                         <div className="flex gap-2">

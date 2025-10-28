@@ -111,26 +111,28 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
             />
               
             <div className='px-4 pb-4 border-b border-gray-700'>
-              <div className="grid grid-cols-3 gap-4">
-                <AccessControl requiredLevel={3} fallback={
-                  <div 
-                    className="flex flex-col items-center gap-1 text-xs bg-gray-600 px-2 py-2 rounded-lg text-white font-medium cursor-not-allowed opacity-50"
-                    title="VIP Only"
-                  >
-                    <Map className="w-4 h-4" />
-                    <span className="text-center">Road Map</span>
-                  </div>
-                }>
-                  <a
-                    href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-2 rounded-lg transition-colors text-white font-medium"
-                  >
-                    <Map className="w-4 h-4" />
-                    <span className="text-center">Road Map</span>
-                  </a>
-                </AccessControl>
+              <div className={`grid ${user?.access_level === 4 ? 'grid-cols-2' : 'grid-cols-3'} gap-4`}>
+                {user?.access_level !== 4 && (
+                  <AccessControl requiredLevel={3} fallback={
+                    <div 
+                      className="flex flex-col items-center gap-1 text-xs bg-gray-600 px-2 py-2 rounded-lg text-white font-medium cursor-not-allowed opacity-50"
+                      title="VIP Only"
+                    >
+                      <Map className="w-4 h-4" />
+                      <span className="text-center">Road Map</span>
+                    </div>
+                  }>
+                    <a
+                      href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center gap-1 text-xs bg-red-600 hover:bg-red-700 px-2 py-2 rounded-lg transition-colors text-white font-medium"
+                    >
+                      <Map className="w-4 h-4" />
+                      <span className="text-center">Road Map</span>
+                    </a>
+                  </AccessControl>
+                )}
                 <Link href="/offers" className="flex flex-col items-center justify-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
                   <Tag className="w-4 h-4" />
                   <span className="text-center">Offers</span>
@@ -154,12 +156,14 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
             <div className="p-4 mt-auto">
               <div className="text-sm text-gray-400 mb-2">Logged in as:</div>
               <div className="text-white font-medium mb-2">{user?.email}</div>
-              <div className="text-white mb-3">
-                <span className="text-xs text-gray-400">Package: </span>
-                <span className="text-xs font-bold text-white">
-                  {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
-                </span>
-              </div>
+              {user?.access_level !== 4 && (
+                <div className="text-white mb-3">
+                  <span className="text-xs text-gray-400">Package: </span>
+                  <span className="text-xs font-bold text-white">
+                    {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
+                  </span>
+                </div>
+              )}
               <div className="flex flex-col gap-2">
                 {isAdmin() && (
                   <Link href="/admin" className="flex items-center gap-2 text-sm bg-primary hover:bg-red-700 px-3 py-2 rounded-lg transition-colors">

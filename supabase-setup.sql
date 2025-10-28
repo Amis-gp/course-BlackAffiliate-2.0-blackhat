@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   name TEXT NOT NULL,
   role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
   is_approved BOOLEAN NOT NULL DEFAULT false,
-  access_level INTEGER NOT NULL DEFAULT 1 CHECK (access_level IN (1, 2, 3)),
+  access_level INTEGER NOT NULL DEFAULT 1 CHECK (access_level IN (1, 2, 3, 4)),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

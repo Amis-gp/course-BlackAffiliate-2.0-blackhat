@@ -30,32 +30,36 @@ export default function Home() {
                 <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 px-4">
                   Traffic arbitrage and affiliate marketing training program
                 </p>
-                <div className="text-white mb-8 md:mb-12">
-                  <span className="text-sm text-gray-300">Package: </span>
-                  <span className="text-sm font-bold text-white">
-                    {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
-                  </span>
-                </div>
+                {user?.access_level !== 4 && (
+                  <div className="text-white mb-8 md:mb-12">
+                    <span className="text-sm text-gray-300">Package: </span>
+                    <span className="text-sm font-bold text-white">
+                      {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : 'VIP'}
+                    </span>
+                  </div>
+                )}
                 
                 <div className="flex flex-wrap justify-center gap-4 mb-8 md:mb-12">
-                  <AccessControl requiredLevel={3} fallback={
-                    <div className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold rounded-lg shadow-lg cursor-not-allowed opacity-50">
-                      <Map className="w-5 h-5" />
-                      <span>Road Map (VIP Only)</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </div>
-                  }>
-                    <a 
-                      href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-red-500/25 transform hover:scale-105 transition-all duration-300 ease-out"
-                    >
-                      <Map className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                      <span>Road Map</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                    </a>
-                  </AccessControl>
+                  {user?.access_level !== 4 && (
+                    <AccessControl requiredLevel={3} fallback={
+                      <div className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold rounded-lg shadow-lg cursor-not-allowed opacity-50">
+                        <Map className="w-5 h-5" />
+                        <span>Road Map (VIP Only)</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                    }>
+                      <a 
+                        href="https://miro.com/app/board/uXjVJP7Hcs8=/?embedMode=view_only_without_ui&moveToViewport=-51326,-112706,83650,46586&embedId=621168039653" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-red-500/25 transform hover:scale-105 transition-all duration-300 ease-out"
+                      >
+                        <Map className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                        <span>Road Map</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      </a>
+                    </AccessControl>
+                  )}
                   
                   <Link 
                     href="/offers"
