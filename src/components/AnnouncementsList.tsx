@@ -27,12 +27,12 @@ export default function AnnouncementsList({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      <div className="bg-gray-900 rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between p-6 border-b border-gray-700">
+      <div className="bg-[#0f1012] rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col border border-red-900/40">
+        <div className="flex items-center justify-between p-6 border-b border-red-800/40 bg-gradient-to-r from-red-900/30 to-transparent">
           <h2 className="text-2xl font-bold text-white">Announcements</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-red-400 hover:text-red-300 transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -47,18 +47,18 @@ export default function AnnouncementsList({
             announcements.map((announcement) => (
               <div
                 key={announcement.id}
-                className={`bg-gray-800 rounded-lg p-4 border-l-4 ${
+                className={`bg-[#15171a] rounded-lg p-4 border-l-4 ${
                   announcement.is_read
-                    ? 'border-gray-600'
-                    : 'border-red-500'
-                }`}
+                    ? 'border-gray-700'
+                    : 'border-red-600'
+                } shadow shadow-black/30`}
               >
                 <div className="flex items-start gap-3">
                   <button
                     onClick={() => !announcement.is_read && onMarkAsRead(announcement.id)}
                     className={`mt-1 flex-shrink-0 ${
                       announcement.is_read
-                        ? 'text-gray-500 cursor-default'
+                        ? 'text-gray-600 cursor-default'
                         : 'text-red-500 hover:text-red-400 cursor-pointer'
                     }`}
                     disabled={announcement.is_read}
@@ -77,13 +77,13 @@ export default function AnnouncementsList({
                       }`}>
                         {announcement.title}
                       </h3>
-                      <span className="text-xs text-gray-500 whitespace-nowrap">
+                      <span className="text-xs text-gray-400 whitespace-nowrap">
                         {formatDate(announcement.created_at)}
                       </span>
                     </div>
 
                     <p className={`text-sm whitespace-pre-wrap ${
-                      announcement.is_read ? 'text-gray-400' : 'text-gray-300'
+                      announcement.is_read ? 'text-gray-400' : 'text-gray-200'
                     }`}>
                       {announcement.content}
                     </p>
@@ -93,7 +93,7 @@ export default function AnnouncementsList({
                         <img
                           src={announcement.image_url}
                           alt={announcement.title}
-                          className="max-h-64 rounded-lg object-cover"
+                          className="max-h-64 rounded-lg object-cover border border-red-800/30"
                         />
                       </div>
                     )}

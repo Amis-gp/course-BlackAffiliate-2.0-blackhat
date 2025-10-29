@@ -203,6 +203,13 @@ export default function AdminPanel() {
     }
 
     try {
+      const normalizedImageUrl = (() => {
+        const raw = (newAnnouncement.image_url || '').trim();
+        if (!raw) return '';
+        if (raw.startsWith('http://') || raw.startsWith('https://') || raw.startsWith('/')) return raw;
+        return `https://${raw}`;
+      })();
+
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
       
@@ -212,16 +219,29 @@ export default function AdminPanel() {
           'Content-Type': 'application/json',
           'Authorization': token ? `Bearer ${token}` : '',
         },
-        body: JSON.stringify(newAnnouncement),
+        body: JSON.stringify({
+          title: newAnnouncement.title,
+          content: newAnnouncement.content,
+          image_url: normalizedImageUrl || undefined,
+        }),
       });
 
-      const data = await response.json();
+      let data: any = null;
+      try {
+        data = await response.json();
+      } catch (e) {
+        const text = await response.text();
+        console.error('Announcements create: non-JSON response', text);
+        alert('Server error while creating announcement');
+        return;
+      }
 
-      if (data.success) {
+      if (response.ok && data?.success) {
         setNewAnnouncement({ title: '', content: '', image_url: '' });
         await loadAnnouncements();
       } else {
-        alert(data.message || 'Error creating announcement');
+        console.error('Announcements create failed:', data);
+        alert(data?.message || 'Error creating announcement');
       }
     } catch (error) {
       console.error('Error creating announcement:', error);
@@ -619,11 +639,11 @@ export default function AdminPanel() {
                       Image URL (optional)
                     </label>
                     <input
-                      type="url"
+                      type="text"
                       value={newAnnouncement.image_url}
                       onChange={(e) => setNewAnnouncement(prev => ({ ...prev, image_url: e.target.value }))}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="https://example.com/image.jpg"
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+                      placeholder="https://example.com/image.jpg або /img/promo.webp"
                     />
                   </div>
 

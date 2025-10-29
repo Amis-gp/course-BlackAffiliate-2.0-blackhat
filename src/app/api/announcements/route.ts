@@ -98,13 +98,28 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, content, image_url } = body;
+    const { title, content } = body as { title?: string; content?: string; image_url?: string };
+    let { image_url } = body as { image_url?: string };
 
     if (!title || !content) {
       return NextResponse.json(
         { success: false, message: 'Title and content are required' },
         { status: 400 }
       );
+    }
+
+    // normalize image url server-side as well
+    if (image_url) {
+      image_url = image_url.trim();
+      image_url = image_url.replace(/^[^A-Za-z/]+/, '');
+      if (
+        image_url &&
+        !image_url.startsWith('http://') &&
+        !image_url.startsWith('https://') &&
+        !image_url.startsWith('/')
+      ) {
+        image_url = `https://${image_url}`;
+      }
     }
 
     const { data: announcement, error } = await supabaseAdmin
@@ -128,10 +143,8 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error creating announcement:', error);
-    return NextResponse.json(
-      { success: false, message: 'Failed to create announcement' },
-      { status: 500 }
-    );
+    const message = (error as any)?.message || 'Failed to create announcement';
+    return NextResponse.json({ success: false, message }, { status: 500 });
   }
 }
 

@@ -83,14 +83,16 @@ export default function Home() {
           <div className="relative z-10">
             <div className="container mx-auto px-4 py-6 md:py-12">
               <div className="text-center mb-8 md:mb-16">
-                <div className="flex items-center justify-center gap-4 mb-4 md:mb-6">
+                <div className="relative mb-4 md:mb-6">
                   <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white">
                     Black Affiliate
                   </h1>
-                  <AnnouncementsButton
-                    unreadCount={unreadCount}
-                    onClick={() => setShowAnnouncementsList(true)}
-                  />
+                  <div className="absolute top-0 right-0">
+                    <AnnouncementsButton
+                      unreadCount={unreadCount}
+                      onClick={() => setShowAnnouncementsList(true)}
+                    />
+                  </div>
                 </div>
                 <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 px-4">
                   Traffic arbitrage and affiliate marketing training program

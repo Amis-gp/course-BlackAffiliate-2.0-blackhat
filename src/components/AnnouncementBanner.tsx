@@ -54,60 +54,53 @@ export default function AnnouncementBanner({
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 animate-slide-down">
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-xl">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-start gap-4">
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-lg font-bold">{currentAnnouncement.title}</h3>
+    <div className="fixed bottom-4 right-4 z-50 animate-slide-up">
+      <div className="bg-[#0f1012] text-white shadow-2xl border border-red-900/40 rounded-xl max-w-sm w-[92vw] sm:w-96 overflow-hidden">
+        <div className="px-4 py-3 bg-gradient-to-r from-red-900/30 to-transparent flex items-center justify-between">
+          <h3 className="text-sm font-semibold truncate pr-2">{currentAnnouncement.title}</h3>
+          <button
+            onClick={handleClose}
+            className="text-red-300 hover:text-red-200 transition-colors"
+            title="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {currentAnnouncement.image_url && (
+          <img
+            src={currentAnnouncement.image_url}
+            alt={currentAnnouncement.title}
+            className="w-full max-h-40 object-cover border-b border-red-900/30"
+          />
+        )}
+
+        <div className="px-4 py-3">
+          <p className="text-white/90 text-sm mb-3 whitespace-pre-wrap">
+            {currentAnnouncement.content}
+          </p>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleMarkAsRead}
+              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors"
+            >
+              Mark as Read
+            </button>
+            {hasMore && (
+              <>
                 <button
-                  onClick={handleClose}
-                  className="text-white/80 hover:text-white transition-colors"
-                  title="Close"
+                  onClick={handleNext}
+                  className="bg-[#1a1d22] hover:bg-[#22262c] text-white px-3 py-1.5 rounded text-xs font-medium transition-colors flex items-center gap-1 border border-red-900/40"
                 >
-                  <X className="w-5 h-5" />
+                  Next
+                  <ChevronRight className="w-4 h-4" />
                 </button>
-              </div>
-              
-              <p className="text-white/90 text-sm mb-3 whitespace-pre-wrap">
-                {currentAnnouncement.content}
-              </p>
-
-              {currentAnnouncement.image_url && (
-                <div className="mb-3">
-                  <img
-                    src={currentAnnouncement.image_url}
-                    alt={currentAnnouncement.title}
-                    className="max-h-48 rounded-lg object-cover"
-                  />
-                </div>
-              )}
-
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleMarkAsRead}
-                  className="bg-white text-red-600 hover:bg-gray-100 px-4 py-2 rounded font-medium text-sm transition-colors"
-                >
-                  Mark as Read
-                </button>
-
-                {hasMore && (
-                  <>
-                    <button
-                      onClick={handleNext}
-                      className="bg-red-800 hover:bg-red-900 text-white px-4 py-2 rounded font-medium text-sm transition-colors flex items-center gap-1"
-                    >
-                      Next
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                    <span className="text-white/70 text-sm">
-                      {currentIndex + 1} of {unreadAnnouncements.length}
-                    </span>
-                  </>
-                )}
-              </div>
-            </div>
+                <span className="text-white/60 text-xs ml-auto">
+                  {currentIndex + 1} / {unreadAnnouncements.length}
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>
