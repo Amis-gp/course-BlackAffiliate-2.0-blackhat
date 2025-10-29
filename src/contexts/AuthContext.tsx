@@ -299,6 +299,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const hasAccess = useCallback((requiredLevel: AccessLevel): boolean => {
     if (!user) return false;
+    if (user.access_level === 5) return false;
     return user.access_level >= requiredLevel;
   }, [user]);
 
@@ -480,7 +481,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value: AuthContextType = {
     user,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user && user.access_level !== 5,
     isLoading,
     isInitializing,
     loadingStage,

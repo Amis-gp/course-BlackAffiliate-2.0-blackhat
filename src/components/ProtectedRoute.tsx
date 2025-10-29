@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import LoginForm from '@/components/LoginForm';
 import RegisterForm from '@/components/RegisterForm';
@@ -11,7 +11,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
-  const { isAuthenticated, isAdmin, isInitializing } = useAuth();
+  const { isAuthenticated, isAdmin, isInitializing, user } = useAuth();
   const [showRegister, setShowRegister] = useState(false);
   
   console.log('🛡️ ProtectedRoute: Current state:', { isAuthenticated, isInitializing });
@@ -28,6 +28,15 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
   }
 
   if (!isAuthenticated) {
+    useEffect(() => {
+      if (user && user.access_level === 5) {
+        window.location.href = '/service-unavailable';
+      }
+    }, [user]);
+
+    if (user && user.access_level === 5) {
+      return null;
+    }
     if (showRegister) {
       return <RegisterForm />;
     }

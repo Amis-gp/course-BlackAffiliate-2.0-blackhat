@@ -5,7 +5,7 @@
 DO $$
 BEGIN
   BEGIN
-    ALTER TABLE public.profiles ADD COLUMN access_level INTEGER NOT NULL DEFAULT 1 CHECK (access_level IN (1, 2, 3, 4));
+    ALTER TABLE public.profiles ADD COLUMN access_level INTEGER NOT NULL DEFAULT 1 CHECK (access_level IN (1, 2, 3, 4, 5));
     RAISE NOTICE 'access_level column added successfully';
   EXCEPTION
     WHEN duplicate_column THEN

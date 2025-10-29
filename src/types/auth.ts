@@ -4,7 +4,7 @@ export interface User {
   password: string;
   name: string;
   role: 'admin' | 'user';
-  access_level: 1 | 2 | 3 | 4;
+  access_level: 1 | 2 | 3 | 4 | 5;
   created_at: string;
   lastLogin?: Date;
   isApproved: boolean;
@@ -37,7 +37,7 @@ export interface AuthState {
   isLoading: boolean;
 }
 
-export type AccessLevel = 1 | 2 | 3 | 4;
+export type AccessLevel = 1 | 2 | 3 | 4 | 5;
 
 export interface AccessLevelInfo {
   level: AccessLevel;
@@ -60,6 +60,10 @@ export const ACCESS_LEVELS: Record<AccessLevel, AccessLevelInfo> = {
   4: {
     level: 4,
     name: 'Without Road Map'
+  },
+  5: {
+    level: 5,
+    name: 'Blocked'
   }
 };
 

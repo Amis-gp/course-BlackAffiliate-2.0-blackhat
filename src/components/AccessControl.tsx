@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { AccessLevel } from '@/types/auth';
 
@@ -22,6 +22,16 @@ export default function AccessControl({ children, requiredLevel, fallback }: Acc
         </div>
       </div>
     );
+  }
+
+  useEffect(() => {
+    if (user && user.access_level === 5) {
+      window.location.href = '/service-unavailable';
+    }
+  }, [user]);
+
+  if (user && user.access_level === 5) {
+    return null;
   }
 
   if (!hasAccess(requiredLevel)) {
