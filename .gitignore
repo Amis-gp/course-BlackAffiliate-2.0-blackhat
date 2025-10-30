@@ -49,11 +49,6 @@ coverage
 *.webm
 *.mkv
 
-# Large files
-*.zip
-*.rar
-*.tar.gz
-*.7z
 
 # Original lessons directories with invalid filename characters
 /public/lessons/original/
