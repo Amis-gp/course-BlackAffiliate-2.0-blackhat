@@ -6,5 +6,5 @@
 
 - [PUSH Glory BD2.en.xlsx](/img/6.8/PUSH%20Glory%20BD2.en.xlsx)
 - [PWA PUSH.xlsx](/img/6.8/PWA%20PUSH%20.xlsx)
-- [Push for apps.zip](/img/6.8/Push%20for%20apps.zip)
+- [Push for apps.zip](/img/6.8/Push-for-apps.zip)
 
