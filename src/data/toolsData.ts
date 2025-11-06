@@ -62,6 +62,14 @@ export const toolsData: Tool[] = [
   // Agency Accounts
   {
     id: '8',
+    name: 'ADhunt - 4% (Write that you are from @Alexon21)',
+    type: 'agency_accounts',
+    category: 'Agency Accounts',
+    website: 'https://t.me/adhunt_eva',
+    languages: ['English']
+  },
+  {
+    id: '9',
     name: 'FunAgency',
     type: 'agency_accounts',
     category: 'Agency Accounts',
@@ -69,7 +77,7 @@ export const toolsData: Tool[] = [
     languages: ['English']
   },
   {
-    id: '9',
+    id: '10',
     name: 'DynamicEvo',
     type: 'agency_accounts',
     category: 'Agency Accounts',
@@ -77,7 +85,7 @@ export const toolsData: Tool[] = [
     languages: ['English']
   },
   {
-    id: '10',
+    id: '11',
     name: 'LoloLemon',
     type: 'agency_accounts',
     category: 'Agency Accounts',
@@ -87,7 +95,7 @@ export const toolsData: Tool[] = [
 
   // Mobile Proxies
   {
-    id: '11',
+    id: '12',
     name: 'ProxyUAH',
     type: 'proxy_providers',
     category: 'Mobile Proxies',
@@ -97,7 +105,7 @@ export const toolsData: Tool[] = [
 
   // Virtual Cards
   {
-    id: '12',
+    id: '13', 
     name: 'Lamanche Payments',
     type: 'payment_methods',
     category: 'Virtual Cards',
@@ -105,7 +113,7 @@ export const toolsData: Tool[] = [
     languages: ['English']
   },
   {
-    id: '13',
+    id: '14',
     name: 'E.PN',
     type: 'payment_methods',
     category: 'Virtual Cards',
@@ -113,7 +121,7 @@ export const toolsData: Tool[] = [
     languages: ['English']
   },
   {
-    id: '14',
+    id: '15',
     name: 'Pay2House',
     type: 'payment_methods',
     category: 'Virtual Cards',
@@ -123,7 +131,7 @@ export const toolsData: Tool[] = [
 
   // Anti-Detection Browsers
   {
-    id: '15',
+    id: '16',
     name: 'Browser Vision',
     type: 'antidetect_browsers',
     category: 'Anti-Detection Browsers',
@@ -131,7 +139,7 @@ export const toolsData: Tool[] = [
     languages: ['English']
   },
   {
-    id: '16',
+    id: '17',
     name: 'Dolphin Anty',
     type: 'antidetect_browsers',
     category: 'Anti-Detection Browsers',
@@ -139,7 +147,7 @@ export const toolsData: Tool[] = [
     languages: ['English', 'Russian']
   },
   {
-    id: '17',
+    id: '18',
     name: 'GoLogin',
     type: 'antidetect_browsers',
     category: 'Anti-Detection Browsers',
@@ -149,7 +157,7 @@ export const toolsData: Tool[] = [
 
   // Tracking Solutions
   {
-    id: '18',
+    id: '19',
     name: 'Keitaro',
     type: 'tracking',
     category: 'Tracking Solutions',
@@ -159,7 +167,7 @@ export const toolsData: Tool[] = [
 
   // Hosting
   {
-    id: '19',
+    id: '20',
     name: 'FriendHosting',
     type: 'hosting',
     category: 'Hosting Services',
@@ -169,7 +177,7 @@ export const toolsData: Tool[] = [
 
   // Spy Tools
   {
-    id: '20',
+    id: '21',
     name: 'Tyver',
     type: 'spy_tools',
     category: 'Spy Tools',
@@ -177,7 +185,7 @@ export const toolsData: Tool[] = [
     languages: ['English']
   },
   {
-    id: '21',
+    id: '22',
     name: 'Facebook Ads Library',
     type: 'spy_tools',
     category: 'Spy Tools',
@@ -185,7 +193,7 @@ export const toolsData: Tool[] = [
     languages: ['English', 'Multiple']
   },
   {
-    id: '22',
+    id: '23',
     name: 'AdHeart',
     type: 'spy_tools',
     category: 'Spy Tools',
@@ -195,7 +203,7 @@ export const toolsData: Tool[] = [
 
   // Virtual Numbers
   {
-    id: '23',
+    id: '24',
     name: 'SMS-Activate',
     type: 'virtual_numbers',
     category: 'Virtual Numbers',
@@ -205,7 +213,7 @@ export const toolsData: Tool[] = [
 
   // PWA Services
   {
-    id: '24',
+    id: '25',
     name: 'PWA Group',
     type: 'pwa_services',
     category: 'PWA Services',
@@ -213,7 +221,7 @@ export const toolsData: Tool[] = [
     languages: ['English']
   },
   {
-    id: '25',
+    id: '26',
     name: 'ZM Apps',
     type: 'pwa_services',
     category: 'PWA Services',
