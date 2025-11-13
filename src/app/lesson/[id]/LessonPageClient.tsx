@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Play, FileText, HelpCircle, Download, ChevronRight, Megaphone } from 'lucide-react';
+import { Play, FileText, HelpCircle, Download, ChevronRight, Bell } from 'lucide-react';
 import { Lesson } from '@/data/courseData';
 import Footer from '@/components/Footer';
 import ImageModal from '@/components/ImageModal';
@@ -149,15 +149,18 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
           </h1>
           <button
             onClick={() => setShowAnnouncementsList(true)}
-            className="absolute top-0 right-0 p-2 text-white hover:text-red-400 transition-colors"
+            className="absolute top-0 right-0 p-2 text-white hover:text-red-400 transition-all duration-300 hover:scale-110 group"
             title="View updates"
           >
-            <span className="relative inline-block">
-              <Megaphone className="w-6 h-6" />
+            <span className={`relative inline-block ${unreadCount > 0 ? 'animate-pulse' : ''}`}>
+              <Bell className="w-6 h-6 group-hover:animate-swing transition-transform duration-300" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center shadow-lg shadow-red-900/40">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
+                <>
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-red-700 text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center shadow-lg shadow-red-900/60 animate-bounce border-2 border-black">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                  <span className="absolute -top-1 -right-1 bg-red-600 rounded-full w-5 h-5 animate-ping opacity-75"></span>
+                </>
               )}
             </span>
           </button>
@@ -390,7 +393,6 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
               });
               const data = await res.json();
               if (data?.success) {
-                // refresh list and badge
                 const listRes = await fetch('/api/announcements', { headers: { Authorization: `Bearer ${token}` } });
                 const listData = await listRes.json();
                 if (listData?.success) {
@@ -400,6 +402,34 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
               }
             } catch (e) {
               console.error('Mark read failed:', e);
+            }
+          }}
+          onMarkAllAsRead={async () => {
+            try {
+              const { data: { session } } = await supabase.auth.getSession();
+              const token = session?.access_token;
+              if (!token) return;
+              
+              const unreadIds = announcements.filter(a => !a.is_read).map(a => a.id);
+              if (unreadIds.length === 0) return;
+              
+              await Promise.all(
+                unreadIds.map(id =>
+                  fetch(`/api/announcements/${id}/mark-read`, {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${token}` }
+                  })
+                )
+              );
+
+              const listRes = await fetch('/api/announcements', { headers: { Authorization: `Bearer ${token}` } });
+              const listData = await listRes.json();
+              if (listData?.success) {
+                setAnnouncements(listData.announcements);
+                setUnreadCount(listData.unread_count);
+              }
+            } catch (e) {
+              console.error('Mark all as read failed:', e);
             }
           }}
           onClose={() => setShowAnnouncementsList(false)}
