@@ -1,20 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AccessControl from '@/components/AccessControl';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
-import { ArrowRight, Play, FileText, HelpCircle, Map, Tag, Wrench } from 'lucide-react';
+import { ArrowRight, Play, FileText, HelpCircle, Map, Tag, Wrench, Settings } from 'lucide-react';
 import { courseData } from '@/data/courseData';
 import AnnouncementsButton from '@/components/AnnouncementsButton';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
 import AnnouncementsList from '@/components/AnnouncementsList';
+import PushNotificationSettings from '@/components/PushNotificationSettings';
 import { AnnouncementWithReadStatus } from '@/types/announcements';
 import { supabase } from '@/lib/supabase';
-
-console.log('NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_URL);
-console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 export default function Home() {
   const { user } = useAuth();
@@ -22,6 +20,7 @@ export default function Home() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showAnnouncementsList, setShowAnnouncementsList] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
 
   const loadAnnouncements = async () => {
     try {
@@ -66,6 +65,32 @@ export default function Home() {
     }
   };
 
+  const handleMarkAllAsRead = useCallback(async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const unreadIds = announcements.filter(a => !a.is_read).map(a => a.id);
+      
+      if (unreadIds.length === 0) return;
+      
+      await Promise.all(
+        unreadIds.map(id =>
+          fetch(`/api/announcements/${id}/mark-read`, {
+            method: 'POST',
+            headers: {
+              'Authorization': token ? `Bearer ${token}` : '',
+            },
+          })
+        )
+      );
+
+      await loadAnnouncements();
+    } catch (error) {
+      console.error('Error marking all announcements as read:', error);
+    }
+  }, [announcements]);
+
   useEffect(() => {
     if (user) {
       loadAnnouncements();
@@ -87,7 +112,7 @@ export default function Home() {
                   <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white">
                     Black Affiliate
                   </h1>
-                  <div className="absolute top-0 right-0">
+                  <div className="absolute top-0 right-0 flex items-center gap-2">
                     <AnnouncementsButton
                       unreadCount={unreadCount}
                       onClick={() => setShowAnnouncementsList(true)}
@@ -215,8 +240,30 @@ export default function Home() {
           <AnnouncementsList
             announcements={announcements}
             onMarkAsRead={handleMarkAsRead}
+            onMarkAllAsRead={handleMarkAllAsRead}
             onClose={() => setShowAnnouncementsList(false)}
           />
+        )}
+
+        {showSettings && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-fade-in">
+            <div className="bg-gradient-to-b from-[#1a1d22] to-[#0f1012] rounded-2xl shadow-2xl max-w-2xl w-full border border-gray-700">
+              <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                <h2 className="text-2xl font-bold text-white">Notification Settings</h2>
+                <button
+                  onClick={() => setShowSettings(false)}
+                  className="text-gray-400 hover:text-white transition-all hover:rotate-90 duration-300"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="p-6">
+                <PushNotificationSettings />
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </ProtectedRoute>

@@ -5,6 +5,8 @@ export interface Announcement {
   image_url?: string;
   created_at: string;
   created_by: string;
+  updated_at?: string;
+  is_edited?: boolean;
 }
 
 export interface UserReadAnnouncement {
@@ -21,6 +23,12 @@ export interface AnnouncementWithReadStatus extends Announcement {
 }
 
 export interface CreateAnnouncementRequest {
+  title: string;
+  content: string;
+  image_url?: string;
+}
+
+export interface UpdateAnnouncementRequest {
   title: string;
   content: string;
   image_url?: string;

@@ -65,10 +65,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('[API] POST /api/announcements - Request received');
+    
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     
     if (!token) {
+      console.log('[API] No token provided');
       return NextResponse.json(
         { success: false, message: 'Not authenticated' },
         { status: 401 }
@@ -78,11 +81,14 @@ export async function POST(request: NextRequest) {
     const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
     
     if (userError || !user) {
+      console.log('[API] Auth error:', userError?.message);
       return NextResponse.json(
         { success: false, message: 'Not authenticated' },
         { status: 401 }
       );
     }
+
+    console.log('[API] User authenticated:', user.email);
 
     const { data: userData } = await supabaseAdmin
       .from('profiles')
@@ -91,17 +97,23 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (!userData || userData.role !== 'admin') {
+      console.log('[API] User is not admin. Role:', userData?.role);
       return NextResponse.json(
         { success: false, message: 'Unauthorized - Admin only' },
         { status: 403 }
       );
     }
 
+    console.log('[API] User is admin, proceeding...');
+
     const body = await request.json();
+    console.log('[API] Request body:', { title: body.title, content: body.content?.substring(0, 50), has_image: !!body.image_url });
+    
     const { title, content } = body as { title?: string; content?: string; image_url?: string };
     let { image_url } = body as { image_url?: string };
 
     if (!title || !content) {
+      console.log('[API] Missing required fields');
       return NextResponse.json(
         { success: false, message: 'Title and content are required' },
         { status: 400 }
@@ -122,6 +134,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    console.log('[API] Inserting into database...');
+    
     const { data: announcement, error } = await supabaseAdmin
       .from('announcements')
       .insert({
@@ -134,15 +148,18 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
+      console.error('[API] Database error:', error);
       throw error;
     }
+
+    console.log('[API] Announcement created successfully:', announcement.id);
 
     return NextResponse.json({
       success: true,
       announcement
     });
   } catch (error) {
-    console.error('Error creating announcement:', error);
+    console.error('[API] Error creating announcement:', error);
     const message = (error as any)?.message || 'Failed to create announcement';
     return NextResponse.json({ success: false, message }, { status: 500 });
   }
