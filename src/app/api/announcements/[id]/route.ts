@@ -3,9 +3,11 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+    
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     
@@ -69,7 +71,7 @@ export async function PUT(
         content,
         image_url: image_url || null,
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 
@@ -90,10 +92,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log('[API] DELETE /api/announcements/' + params.id);
+    const { id } = await params;
+    
+    console.log('[API] DELETE /api/announcements/' + id);
     
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
@@ -137,7 +141,7 @@ export async function DELETE(
     const { error } = await supabaseAdmin
       .from('announcements')
       .delete()
-      .eq('id', params.id);
+      .eq('id', id);
 
     if (error) {
       console.error('[API] Database error on DELETE:', error);

@@ -3,9 +3,11 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+    
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     
@@ -29,7 +31,7 @@ export async function POST(
       .from('user_read_announcements')
       .select('id')
       .eq('user_id', user.id)
-      .eq('announcement_id', params.id)
+      .eq('announcement_id', id)
       .single();
 
     if (existing) {
@@ -43,7 +45,7 @@ export async function POST(
       .from('user_read_announcements')
       .insert({
         user_id: user.id,
-        announcement_id: params.id
+        announcement_id: id
       });
 
     if (error) {
