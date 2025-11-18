@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Play, FileText, HelpCircle, Download, ChevronRight } from 'lucide-react';
+import { Play, FileText, HelpCircle, Download, ChevronRight, Bell } from 'lucide-react';
 import { Lesson } from '@/data/courseData';
 import Footer from '@/components/Footer';
 import ImageModal from '@/components/ImageModal';
@@ -11,6 +11,9 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { useLessonContext } from '@/app/lesson/LessonLayoutClient';
 import { slugify } from '@/lib/utils';
+import AnnouncementsList from '@/components/AnnouncementsList';
+import { AnnouncementWithReadStatus } from '@/types/announcements';
+import { supabase } from '@/lib/supabase';
 
 interface LessonPageClientProps {
   initialLesson: Lesson | null;
@@ -25,6 +28,9 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
   const [modalImages, setModalImages] = useState<{src: string; alt: string}[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [announcements, setAnnouncements] = useState<AnnouncementWithReadStatus[]>([]);
+  const [showAnnouncementsList, setShowAnnouncementsList] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     if (lesson?.content) {
@@ -48,6 +54,27 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
       setHeadings(foundHeadings);
     }
   }, [lesson]);
+
+  useEffect(() => {
+    const loadAnnouncements = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        if (!token) return;
+        const res = await fetch('/api/announcements', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data?.success) {
+          setAnnouncements(data.announcements);
+          setUnreadCount(data.unread_count);
+        }
+      } catch (e) {
+        console.error('Announcements load error:', e);
+      }
+    };
+    loadAnnouncements();
+  }, []);
 
   if (!lesson) {
     return (
@@ -107,7 +134,7 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
         <div className="absolute top-0 right-0 bottom-0 w-20 md:w-32 bg-gradient-to-l from-red-500/15 via-red-400/5 to-transparent "></div>
       
         <div className="w-full z-30 relative">
-          <div className="mb-8">
+          <div className="mb-8 relative">
             <div className="flex items-center space-x-3 mb-4">
             <div className={`p-2 rounded-lg ${typeInfo.bgColor}`}>
               {typeInfo.icon}
@@ -120,6 +147,23 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-6">
             {lesson.title}
           </h1>
+          <button
+            onClick={() => setShowAnnouncementsList(true)}
+            className="absolute top-0 right-0 p-2 text-white hover:text-red-400 transition-all duration-300 hover:scale-110 group"
+            title="View updates"
+          >
+            <span className={`relative inline-block ${unreadCount > 0 ? 'animate-pulse' : ''}`}>
+              <Bell className="w-6 h-6 group-hover:animate-swing transition-transform duration-300" />
+              {unreadCount > 0 && (
+                <>
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-red-700 text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center shadow-lg shadow-red-900/60 animate-bounce border-2 border-black">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                  <span className="absolute -top-1 -right-1 bg-red-600 rounded-full w-5 h-5 animate-ping opacity-75"></span>
+                </>
+              )}
+            </span>
+          </button>
         </div>
 
         {lesson.videoUrl && (
@@ -335,6 +379,62 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
       />
       
       <Footer />
+      {showAnnouncementsList && (
+        <AnnouncementsList
+          announcements={announcements}
+          onMarkAsRead={async (id: string) => {
+            try {
+              const { data: { session } } = await supabase.auth.getSession();
+              const token = session?.access_token;
+              if (!token) return;
+              const res = await fetch(`/api/announcements/${id}/mark-read`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` }
+              });
+              const data = await res.json();
+              if (data?.success) {
+                const listRes = await fetch('/api/announcements', { headers: { Authorization: `Bearer ${token}` } });
+                const listData = await listRes.json();
+                if (listData?.success) {
+                  setAnnouncements(listData.announcements);
+                  setUnreadCount(listData.unread_count);
+                }
+              }
+            } catch (e) {
+              console.error('Mark read failed:', e);
+            }
+          }}
+          onMarkAllAsRead={async () => {
+            try {
+              const { data: { session } } = await supabase.auth.getSession();
+              const token = session?.access_token;
+              if (!token) return;
+              
+              const unreadIds = announcements.filter(a => !a.is_read).map(a => a.id);
+              if (unreadIds.length === 0) return;
+              
+              await Promise.all(
+                unreadIds.map(id =>
+                  fetch(`/api/announcements/${id}/mark-read`, {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${token}` }
+                  })
+                )
+              );
+
+              const listRes = await fetch('/api/announcements', { headers: { Authorization: `Bearer ${token}` } });
+              const listData = await listRes.json();
+              if (listData?.success) {
+                setAnnouncements(listData.announcements);
+                setUnreadCount(listData.unread_count);
+              }
+            } catch (e) {
+              console.error('Mark all as read failed:', e);
+            }
+          }}
+          onClose={() => setShowAnnouncementsList(false)}
+        />
+      )}
     </div>
   );
 }

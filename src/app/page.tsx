@@ -1,17 +1,101 @@
 'use client';
 
+import { useState, useEffect, useCallback } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AccessControl from '@/components/AccessControl';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
-import { ArrowRight, Play, FileText, HelpCircle, Map, Tag, Wrench } from 'lucide-react';
+import { ArrowRight, Play, FileText, HelpCircle, Map, Tag, Wrench, Settings } from 'lucide-react';
 import { courseData } from '@/data/courseData';
-
-console.log('NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_URL);
-console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+import AnnouncementsButton from '@/components/AnnouncementsButton';
+import AnnouncementBanner from '@/components/AnnouncementBanner';
+import AnnouncementsList from '@/components/AnnouncementsList';
+import PushNotificationSettings from '@/components/PushNotificationSettings';
+import { AnnouncementWithReadStatus } from '@/types/announcements';
+import { supabase } from '@/lib/supabase';
 
 export default function Home() {
   const { user } = useAuth();
+  const [announcements, setAnnouncements] = useState<AnnouncementWithReadStatus[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showAnnouncementsList, setShowAnnouncementsList] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
+
+  const loadAnnouncements = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const response = await fetch('/api/announcements', {
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setAnnouncements(data.announcements);
+        setUnreadCount(data.unread_count);
+      }
+    } catch (error) {
+      console.error('Error loading announcements:', error);
+    }
+  };
+
+  const handleMarkAsRead = async (id: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const response = await fetch(`/api/announcements/${id}/mark-read`, {
+        method: 'POST',
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await loadAnnouncements();
+      }
+    } catch (error) {
+      console.error('Error marking announcement as read:', error);
+    }
+  };
+
+  const handleMarkAllAsRead = useCallback(async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      const unreadIds = announcements.filter(a => !a.is_read).map(a => a.id);
+      
+      if (unreadIds.length === 0) return;
+      
+      await Promise.all(
+        unreadIds.map(id =>
+          fetch(`/api/announcements/${id}/mark-read`, {
+            method: 'POST',
+            headers: {
+              'Authorization': token ? `Bearer ${token}` : '',
+            },
+          })
+        )
+      );
+
+      await loadAnnouncements();
+    } catch (error) {
+      console.error('Error marking all announcements as read:', error);
+    }
+  }, [announcements]);
+
+  useEffect(() => {
+    if (user) {
+      loadAnnouncements();
+    }
+  }, [user]);
   
   return (
     <ProtectedRoute>
@@ -24,9 +108,17 @@ export default function Home() {
           <div className="relative z-10">
             <div className="container mx-auto px-4 py-6 md:py-12">
               <div className="text-center mb-8 md:mb-16">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
-                  Black Affiliate
-                </h1>
+                <div className="relative mb-4 md:mb-6">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white">
+                    Black Affiliate
+                  </h1>
+                  <div className="absolute top-0 right-0 flex items-center gap-2">
+                    <AnnouncementsButton
+                      unreadCount={unreadCount}
+                      onClick={() => setShowAnnouncementsList(true)}
+                    />
+                  </div>
+                </div>
                 <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 px-4">
                   Traffic arbitrage and affiliate marketing training program
                 </p>
@@ -135,6 +227,44 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {showBanner && announcements.some(a => !a.is_read) && (
+          <AnnouncementBanner
+            announcements={announcements}
+            onMarkAsRead={handleMarkAsRead}
+            onClose={() => setShowBanner(false)}
+          />
+        )}
+
+        {showAnnouncementsList && (
+          <AnnouncementsList
+            announcements={announcements}
+            onMarkAsRead={handleMarkAsRead}
+            onMarkAllAsRead={handleMarkAllAsRead}
+            onClose={() => setShowAnnouncementsList(false)}
+          />
+        )}
+
+        {showSettings && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-fade-in">
+            <div className="bg-gradient-to-b from-[#1a1d22] to-[#0f1012] rounded-2xl shadow-2xl max-w-2xl w-full border border-gray-700">
+              <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                <h2 className="text-2xl font-bold text-white">Notification Settings</h2>
+                <button
+                  onClick={() => setShowSettings(false)}
+                  className="text-gray-400 hover:text-white transition-all hover:rotate-90 duration-300"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="p-6">
+                <PushNotificationSettings />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </ProtectedRoute>
   );

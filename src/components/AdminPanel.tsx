@@ -2,16 +2,99 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3 } from 'lucide-react';
+import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3, Megaphone } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { User as UserType, RegistrationRequest, ACCESS_LEVELS, AccessLevel } from '@/types/auth';
+import { AnnouncementWithReadStatus, CreateAnnouncementRequest } from '@/types/announcements';
+import { supabase } from '@/lib/supabase';
+
+let cachedToken: string | null = null;
+let tokenFetchPromise: Promise<string | null> | null = null;
+
+async function getAuthToken(): Promise<string | null> {
+  if (cachedToken) {
+    console.log('[TOKEN] Using cached token');
+    return cachedToken;
+  }
+
+  if (tokenFetchPromise) {
+    console.log('[TOKEN] Waiting for ongoing token fetch');
+    return tokenFetchPromise;
+  }
+
+  tokenFetchPromise = (async () => {
+    try {
+      console.log('[TOKEN] Trying localStorage...');
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      if (supabaseUrl) {
+        const storageKey = `sb-${new URL(supabaseUrl).hostname.split('.')[0]}-auth-token`;
+        const stored = localStorage.getItem(storageKey);
+        
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            const token = parsed.access_token;
+            if (token && typeof token === 'string') {
+              console.log('[TOKEN] Found token in localStorage');
+              cachedToken = token;
+              return token;
+            }
+          } catch (e) {
+            console.log('[TOKEN] localStorage parse failed');
+          }
+        }
+      }
+
+      console.log('[TOKEN] Trying cookies...');
+      const cookies = document.cookie.split(';');
+      const authCookie = cookies.find(c => c.trim().startsWith('sb-') && c.includes('auth-token'));
+      
+      if (authCookie) {
+        try {
+          const cookieValue = authCookie.split('=')[1];
+          const decoded = JSON.parse(decodeURIComponent(cookieValue));
+          const token = decoded.access_token || decoded;
+          if (token && typeof token === 'string') {
+            console.log('[TOKEN] Found token in cookies');
+            cachedToken = token;
+            return token;
+          }
+        } catch (e) {
+          console.log('[TOKEN] Cookie parse failed');
+        }
+      }
+
+      console.log('[TOKEN] Trying getSession with timeout...');
+      const result = await Promise.race([
+        supabase.auth.getSession(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000))
+      ]) as any;
+      
+      const token = result?.data?.session?.access_token || null;
+      if (token) {
+        console.log('[TOKEN] Got token from getSession');
+        cachedToken = token;
+      } else {
+        console.log('[TOKEN] No token from getSession');
+      }
+      return token;
+    } catch (error) {
+      console.error('[TOKEN] Error getting token:', error);
+      return null;
+    } finally {
+      tokenFetchPromise = null;
+    }
+  })();
+
+  return tokenFetchPromise;
+}
 
 export default function AdminPanel() {
   const { user, logout, getRegistrationRequests, loadRegistrationRequests, rejectRegistration } = useAuth();
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [activeTab, setActiveTab] = useState<'users' | 'requests'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'requests' | 'announcements'>('users');
   const [newUser, setNewUser] = useState({
     email: '',
     password: '',
@@ -21,6 +104,19 @@ export default function AdminPanel() {
   });
   const [selectedPackage, setSelectedPackage] = useState<AccessLevel>(1);
   const [editingUser, setEditingUser] = useState<string | null>(null);
+  const [announcements, setAnnouncements] = useState<AnnouncementWithReadStatus[]>([]);
+  const [newAnnouncement, setNewAnnouncement] = useState({
+    title: '',
+    content: '',
+    image_url: ''
+  });
+  const [editingAnnouncement, setEditingAnnouncement] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({
+    title: '',
+    content: '',
+    image_url: ''
+  });
+  const [isCreating, setIsCreating] = useState(false);
 
   const loadUsers = async () => {
     try {
@@ -40,11 +136,36 @@ export default function AdminPanel() {
     }
   };
 
+  const loadAnnouncements = async () => {
+    try {
+      console.log('[ADMIN] Loading announcements...');
+      const token = await getAuthToken();
+      
+      const response = await fetch('/api/announcements', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Authorization': token ? `Bearer ${token}` : '',
+        }
+      });
+      const data = await response.json();
+      
+      console.log('[ADMIN] Announcements loaded:', data.announcements?.length);
+      
+      if (data.success) {
+        setAnnouncements(data.announcements);
+      }
+    } catch (error) {
+      console.error('Error loading announcements:', error);
+    }
+  };
+
   useEffect(() => {
     const loadData = async () => {
       await loadRegistrationRequests();
       setRegistrationRequests(getRegistrationRequests());
       loadUsers();
+      loadAnnouncements();
     };
     loadData();
   }, [loadRegistrationRequests, getRegistrationRequests]);
@@ -163,6 +284,220 @@ export default function AdminPanel() {
     }
   };
 
+  const handleCreateAnnouncement = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (isCreating) {
+      console.log('[ADMIN] Already creating, ignoring duplicate submit');
+      return;
+    }
+
+    setIsCreating(true);
+    
+    console.log('[ADMIN] Starting announcement creation...');
+    console.log('[ADMIN] Form data:', {
+      title: newAnnouncement.title,
+      contentLength: newAnnouncement.content?.length,
+      hasImage: !!newAnnouncement.image_url
+    });
+    
+    if (!newAnnouncement.title || !newAnnouncement.content) {
+      console.error('[ADMIN] Validation failed: missing required fields');
+      alert('Title and content are required');
+      setIsCreating(false);
+      return;
+    }
+
+    try {
+      const normalizedImageUrl = (() => {
+        const raw = (newAnnouncement.image_url || '').trim();
+        if (!raw) return '';
+        if (raw.startsWith('http://') || raw.startsWith('https://') || raw.startsWith('/')) return raw;
+        return `https://${raw}`;
+      })();
+
+      console.log('[ADMIN] Normalized image URL:', normalizedImageUrl);
+
+      const requestBody = {
+        title: newAnnouncement.title,
+        content: newAnnouncement.content,
+        image_url: normalizedImageUrl || undefined,
+      };
+
+      console.log('[ADMIN] Getting session token...');
+      const token = await getAuthToken();
+
+      if (!token) {
+        console.error('[ADMIN] No auth token available!');
+        alert('Authentication error. Please refresh the page and try again.');
+        setIsCreating(false);
+        return;
+      }
+
+      console.log('[ADMIN] Token acquired successfully');
+
+      console.log('[ADMIN] Sending request to /api/announcements');
+      console.log('[ADMIN] Request body:', requestBody);
+      
+      const response = await fetch('/api/announcements', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      console.log('[ADMIN] Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        headers: Object.fromEntries(response.headers.entries())
+      });
+
+      let data: any = null;
+      try {
+        data = await response.json();
+        console.log('[ADMIN] Response data:', data);
+      } catch (e) {
+        const text = await response.text();
+        console.error('[ADMIN] Failed to parse JSON response:', text);
+        alert('Server error while creating announcement');
+        setIsCreating(false);
+        return;
+      }
+
+      if (response.ok && data?.success) {
+        console.log('[ADMIN] Announcement created successfully!');
+        setNewAnnouncement({ title: '', content: '', image_url: '' });
+        console.log('[ADMIN] Reloading announcements list...');
+        await loadAnnouncements();
+        console.log('[ADMIN] Announcements reloaded, resetting form...');
+        setIsCreating(false);
+        alert('Announcement created successfully!');
+      } else {
+        console.error('[ADMIN] Create failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          data
+        });
+        setIsCreating(false);
+        alert(data?.message || `Error creating announcement: ${response.status} ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('[ADMIN] Exception during creation:', error);
+      setIsCreating(false);
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        alert('Network error: Could not connect to server. Check if server is running.');
+      } else {
+        alert(`Error creating announcement: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+    }
+  };
+
+  const handleEditAnnouncement = (announcement: AnnouncementWithReadStatus) => {
+    setEditingAnnouncement(announcement.id);
+    setEditForm({
+      title: announcement.title,
+      content: announcement.content,
+      image_url: announcement.image_url || ''
+    });
+  };
+
+  const handleUpdateAnnouncement = async (id: string) => {
+    if (!editForm.title || !editForm.content) {
+      alert('Title and content are required');
+      return;
+    }
+
+    try {
+      const token = await getAuthToken();
+
+      if (!token) {
+        alert('Authentication error. Please refresh the page.');
+        return;
+      }
+      
+      const response = await fetch(`/api/announcements/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setEditingAnnouncement(null);
+        setEditForm({ title: '', content: '', image_url: '' });
+        await loadAnnouncements();
+      } else {
+        alert(data.message || 'Error updating announcement');
+      }
+    } catch (error) {
+      console.error('Error updating announcement:', error);
+      alert('Error updating announcement');
+    }
+  };
+
+  const handleDeleteAnnouncement = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this announcement?')) {
+      console.log('[ADMIN] Delete cancelled by user');
+      return;
+    }
+
+    console.log('[ADMIN] Starting announcement deletion...', id);
+
+    try {
+      console.log('[ADMIN] Getting session token...');
+      const token = await getAuthToken();
+
+      if (!token) {
+        console.error('[ADMIN] No auth token!');
+        alert('Authentication error. Please refresh the page.');
+        return;
+      }
+
+      console.log('[ADMIN] Token acquired, sending DELETE request to /api/announcements/' + id);
+      
+      const response = await fetch(`/api/announcements/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      console.log('[ADMIN] DELETE Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
+      });
+
+      const data = await response.json();
+      console.log('[ADMIN] DELETE Response data:', data);
+
+      if (data.success) {
+        console.log('[ADMIN] Announcement deleted successfully!');
+        await loadAnnouncements();
+      } else {
+        console.error('[ADMIN] Delete failed:', {
+          status: response.status,
+          data
+        });
+        alert(data.message || `Error deleting announcement: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('[ADMIN] Exception during deletion:', error);
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        alert('Network error: Could not connect to server. Check if server is running.');
+      } else {
+        alert(`Error deleting announcement: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="container mx-auto px-4 py-8">
@@ -211,6 +546,17 @@ export default function AdminPanel() {
                     {registrationRequests.length}
                   </span>
                 )}
+              </button>
+              <button
+                onClick={() => setActiveTab('announcements')}
+                className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                  activeTab === 'announcements'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+              >
+                <Megaphone className="w-4 h-4" />
+                Announcements ({announcements.length})
               </button>
             </div>
             {activeTab === 'users' && (
@@ -358,7 +704,7 @@ export default function AdminPanel() {
                           </div>
                         ) : (
                           <div className="flex items-center gap-1 bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-xs">
-                            {ACCESS_LEVELS[userItem.access_level].name}
+                            {ACCESS_LEVELS[userItem.access_level as AccessLevel]?.name || 'Unknown'}
                             <button
                               onClick={() => setEditingUser(userItem.id)}
                               className="ml-1 hover:text-blue-300"
@@ -475,6 +821,212 @@ export default function AdminPanel() {
                   </div>
                 ))
               )}
+            </div>
+          )}
+
+          {activeTab === 'announcements' && (
+            <div className="space-y-6">
+              <div className="bg-gray-800 rounded-lg p-6">
+                <h3 className="text-xl font-semibold mb-4">Create New Announcement</h3>
+                <form onSubmit={handleCreateAnnouncement} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      value={newAnnouncement.title}
+                      onChange={(e) => setNewAnnouncement(prev => ({ ...prev, title: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="Enter announcement title"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Content
+                    </label>
+                    <textarea
+                      value={newAnnouncement.content}
+                      onChange={(e) => setNewAnnouncement(prev => ({ ...prev, content: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                      placeholder="Enter announcement content"
+                      rows={4}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Image URL (optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={newAnnouncement.image_url}
+                      onChange={(e) => setNewAnnouncement(prev => ({ ...prev, image_url: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+                      placeholder="https://example.com/image.jpg або /img/promo.webp"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isCreating}
+                    className="bg-primary hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isCreating ? 'Creating...' : 'Create Announcement'}
+                  </button>
+                </form>
+              </div>
+
+              <div className="bg-gray-800 rounded-lg p-6">
+                <h3 className="text-xl font-semibold mb-4">Existing Announcements</h3>
+                <div className="space-y-4">
+                  {announcements.length === 0 ? (
+                    <p className="text-gray-400 text-center py-8">No announcements yet</p>
+                  ) : (
+                    announcements.map((announcement) => (
+                      <div key={announcement.id} className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl p-5 border border-gray-600 shadow-lg hover:shadow-xl transition-all">
+                        {editingAnnouncement === announcement.id ? (
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">
+                                Title
+                              </label>
+                              <input
+                                type="text"
+                                value={editForm.title}
+                                onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
+                                className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">
+                                Content
+                              </label>
+                              <textarea
+                                value={editForm.content}
+                                onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
+                                className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                                rows={4}
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">
+                                Image URL
+                              </label>
+                              <input
+                                type="text"
+                                value={editForm.image_url}
+                                onChange={(e) => setEditForm(prev => ({ ...prev, image_url: e.target.value }))}
+                                className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              />
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleUpdateAnnouncement(announcement.id)}
+                                className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                              >
+                                <Check className="w-4 h-4" />
+                                Save
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setEditingAnnouncement(null);
+                                  setEditForm({ title: '', content: '', image_url: '' });
+                                }}
+                                className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                              >
+                                <X className="w-4 h-4" />
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <h4 className="text-lg font-semibold text-white">
+                                  {announcement.title}
+                                </h4>
+                                {announcement.is_edited && (
+                                  <span className="bg-blue-600/20 text-blue-400 text-xs px-2 py-1 rounded-full border border-blue-500/30">
+                                    Edited
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-gray-300 text-sm mb-3 whitespace-pre-wrap">
+                                {announcement.content}
+                              </p>
+                              {announcement.image_url && (
+                                <div className="mb-3">
+                                  <img
+                                    src={announcement.image_url}
+                                    alt={announcement.title}
+                                    className="max-h-40 rounded-lg object-cover border border-gray-600 shadow-md"
+                                  />
+                                </div>
+                              )}
+                              <div className="flex flex-wrap items-center gap-3 text-xs text-gray-400">
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  <span>
+                                    {new Date(announcement.created_at).toLocaleDateString('en-US', {
+                                      day: 'numeric',
+                                      month: 'short',
+                                      year: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit'
+                                    })}
+                                  </span>
+                                </div>
+                                {announcement.is_edited && announcement.updated_at && (
+                                  <div className="flex items-center gap-1 text-blue-400">
+                                    <Clock className="w-3 h-3" />
+                                    <span>
+                                      Updated: {new Date(announcement.updated_at).toLocaleDateString('en-US', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                      })}
+                                    </span>
+                                  </div>
+                                )}
+                                {announcement.read_count !== undefined && announcement.total_users !== undefined && (
+                                  <div className="flex items-center gap-1">
+                                    <Bell className="w-3 h-3" />
+                                    <span>
+                                      {announcement.read_count} / {announcement.total_users} users read
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleEditAnnouncement(announcement)}
+                                className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg transition-colors group"
+                                title="Edit announcement"
+                              >
+                                <Edit3 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteAnnouncement(announcement.id)}
+                                className="bg-red-600 hover:bg-red-700 p-2 rounded-lg transition-colors group"
+                                title="Delete announcement"
+                              >
+                                <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
