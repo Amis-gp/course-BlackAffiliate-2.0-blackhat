@@ -50,7 +50,7 @@ At the very least, most teams will struggle until they master running traffic on
 4\. How to Run Ads for PWA (Using Facebook as an Example):
 
 1. Campaign Setup:  
-   * Objective: "Leads."  
+   * Objective: "Purchases."  
    * Placements: Mobile devices only (Android 9.0+).  
    * Targeting: Age/gender audience, geolocation (based on offer requirements).
 

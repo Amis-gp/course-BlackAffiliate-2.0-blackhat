@@ -105,7 +105,7 @@ To launch and optimize advertising campaigns for Nutra offers (CPA, CPL, COD mod
   * Target mobile devices (Android/iOS based on offer).  
   * the first ad launch should be for a white product (any product), spend $2-5  
 * **Settings**:  
-  * Objective: Leads  
+  * Objective: Purchases  
   * Budget: Start with $4-25/day per ad set (Depends on geo and CPM)  
   * Audience: Men/Women 25+, GEO.  
 * **Output**: Campaign live, pending moderation.

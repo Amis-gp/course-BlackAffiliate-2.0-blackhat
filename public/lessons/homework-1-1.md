@@ -5,7 +5,7 @@
 3. Go to Facebook Ads Manager.
     - Explore the dashboard and familiarize yourself with key sections (Campaigns, Ad Sets, and Ads).
 4. Create a simple mock ad campaign (it doesn’t have to be published, just set up for learning purposes).
-    - Set the objective to leads (you can use a random link for now).
+    - Set the objective to purchases (you can use a random link for now).
 
 5.  Choose an offer, an affiliate network
 
