@@ -437,8 +437,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
+    try {
+      setIsLoading(true);
+      await supabase.auth.signOut();
+      setUser(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const isAdmin = useCallback((): boolean => {
