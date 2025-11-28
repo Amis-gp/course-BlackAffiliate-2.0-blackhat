@@ -8,6 +8,10 @@ export function useProgress() {
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return;
+    }
+
     try {
       const savedProgress = localStorage.getItem(PROGRESS_KEY);
       if (savedProgress) {
@@ -19,6 +23,10 @@ export function useProgress() {
   }, []);
 
   const saveProgress = (newCompleted: Set<string>) => {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return;
+    }
+
     try {
       localStorage.setItem(PROGRESS_KEY, JSON.stringify(Array.from(newCompleted)));
     } catch (error) {

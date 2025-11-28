@@ -42,6 +42,10 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
     e.preventDefault();
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
     const element = document.getElementById(slug);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -127,6 +131,10 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
       return;
     }
 
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
     const scrollToHash = () => {
       const hash = window.location.hash;
       if (hash) {
@@ -145,7 +153,9 @@ export default function LessonContent({ lesson, onPreviousLesson, onNextLesson, 
     window.addEventListener('hashchange', scrollToHash);
     
     return () => {
-      window.removeEventListener('hashchange', scrollToHash);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('hashchange', scrollToHash);
+      }
     };
   }, [isLoading]);
 

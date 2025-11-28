@@ -24,43 +24,57 @@ async function getAuthToken(): Promise<string | null> {
 
   tokenFetchPromise = (async () => {
     try {
+      if (typeof window === 'undefined') {
+        return null;
+      }
+
       console.log('[TOKEN] Trying localStorage...');
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      if (supabaseUrl) {
-        const storageKey = `sb-${new URL(supabaseUrl).hostname.split('.')[0]}-auth-token`;
-        const stored = localStorage.getItem(storageKey);
-        
-        if (stored) {
-          try {
-            const parsed = JSON.parse(stored);
-            const token = parsed.access_token;
-            if (token && typeof token === 'string') {
-              console.log('[TOKEN] Found token in localStorage');
-              cachedToken = token;
-              return token;
+      if (supabaseUrl && typeof localStorage !== 'undefined') {
+        try {
+          const storageKey = `sb-${new URL(supabaseUrl).hostname.split('.')[0]}-auth-token`;
+          const stored = localStorage.getItem(storageKey);
+          
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored);
+              const token = parsed.access_token;
+              if (token && typeof token === 'string') {
+                console.log('[TOKEN] Found token in localStorage');
+                cachedToken = token;
+                return token;
+              }
+            } catch (e) {
+              console.log('[TOKEN] localStorage parse failed');
             }
-          } catch (e) {
-            console.log('[TOKEN] localStorage parse failed');
           }
+        } catch (e) {
+          console.log('[TOKEN] localStorage access failed');
         }
       }
 
       console.log('[TOKEN] Trying cookies...');
-      const cookies = document.cookie.split(';');
-      const authCookie = cookies.find(c => c.trim().startsWith('sb-') && c.includes('auth-token'));
-      
-      if (authCookie) {
+      if (typeof document !== 'undefined') {
         try {
-          const cookieValue = authCookie.split('=')[1];
-          const decoded = JSON.parse(decodeURIComponent(cookieValue));
-          const token = decoded.access_token || decoded;
-          if (token && typeof token === 'string') {
-            console.log('[TOKEN] Found token in cookies');
-            cachedToken = token;
-            return token;
+          const cookies = document.cookie.split(';');
+          const authCookie = cookies.find(c => c.trim().startsWith('sb-') && c.includes('auth-token'));
+          
+          if (authCookie) {
+            try {
+              const cookieValue = authCookie.split('=')[1];
+              const decoded = JSON.parse(decodeURIComponent(cookieValue));
+              const token = decoded.access_token || decoded;
+              if (token && typeof token === 'string') {
+                console.log('[TOKEN] Found token in cookies');
+                cachedToken = token;
+                return token;
+              }
+            } catch (e) {
+              console.log('[TOKEN] Cookie parse failed');
+            }
           }
         } catch (e) {
-          console.log('[TOKEN] Cookie parse failed');
+          console.log('[TOKEN] Cookie access failed');
         }
       }
 

@@ -28,21 +28,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return false;
       }
 
-      const { error } = await supabase.auth.getSession();
+      if (typeof window === 'undefined') {
+        return false;
+      }
+
+      const { error } = await Promise.race([
+        supabase.auth.getSession(),
+        new Promise<{ error: any }>((_, reject) => 
+          setTimeout(() => reject(new Error('Health check timeout')), 5000)
+        )
+      ]) as { error: any };
       
       const isHealthy = !error;
-      if (error) {
+      if (error && error.message !== 'Health check timeout') {
         console.log('Health check error details:', error);
       }
       return isHealthy;
-    } catch (error) {
-      console.error('💥 AuthContext: Health check failed:', error);
+    } catch (error: any) {
+      if (error?.message === 'Health check timeout') {
+        console.warn('AuthContext: Health check timeout');
+      } else {
+        console.error('💥 AuthContext: Health check failed:', error);
+      }
       return false;
     }
   };
 
   const initializeAuthWithRetry = async (attempt: number = 1): Promise<void> => {
     try {
+      if (typeof window === 'undefined') {
+        setIsInitializing(false);
+        return;
+      }
+
       setLoadingStage(`Connecting... (attempt ${attempt}/3)`);
       setRetryCount(attempt);
 
@@ -53,43 +71,81 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       setLoadingStage('Checking authentication...');
       
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const sessionResult = await Promise.race([
+        supabase.auth.getSession(),
+        new Promise<{ data: { session: null }, error: { message: string } }>((_, reject) => 
+          setTimeout(() => reject(new Error('Session check timeout')), 10000)
+        )
+      ]) as { data: { session: any }, error: any };
       
-      if (error) {
+      const { data: { session }, error } = sessionResult;
+      
+      if (error && error.message !== 'Session check timeout') {
         console.error('❌ AuthContext: Session error:', error);
+        if (attempt >= 3) {
+          setUser(null);
+          setIsInitializing(false);
+          return;
+        }
         throw error;
       }
 
       if (session?.user) {
         setLoadingStage('Loading profile...');
         
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('id, name, role, created_at, is_approved, access_level')
-          .eq('id', session.user.id)
-          .single();
+        try {
+          const profileResult = await Promise.race([
+            supabase
+              .from('profiles')
+              .select('id, name, role, created_at, is_approved, access_level')
+              .eq('id', session.user.id)
+              .single(),
+            new Promise<{ data: null, error: { message: string } }>((_, reject) => 
+              setTimeout(() => reject(new Error('Profile check timeout')), 10000)
+            )
+          ]) as { data: any, error: any };
 
-        if (profileError) {
-          console.error('❌ AuthContext: Profile error:', profileError);
+          const { data: profile, error: profileError } = profileResult;
+
+          if (profileError && profileError.message !== 'Profile check timeout') {
+            console.error('❌ AuthContext: Profile error:', profileError);
+            if (attempt >= 3) {
+              setUser(null);
+              setIsInitializing(false);
+              return;
+            }
+            throw profileError;
+          }
+
+          if (profile && profile.is_approved) {
+            const userObj: User = {
+              id: profile.id,
+              email: session.user.email!,
+              password: '',
+              name: profile.name,
+              role: profile.role,
+              access_level: profile.access_level,
+              created_at: profile.created_at,
+              lastLogin: new Date(),
+              isApproved: true,
+            };
+            setUser(userObj);
+          } else {
+            setUser(null);
+            try {
+              await supabase.auth.signOut();
+            } catch (signOutError) {
+              console.error('Error signing out:', signOutError);
+            }
+          }
+        } catch (profileError: any) {
+          if (profileError?.message === 'Profile check timeout') {
+            console.warn('AuthContext: Profile check timeout');
+            setUser(null);
+            setIsInitializing(false);
+            return;
+          }
           throw profileError;
-        }
-
-        if (profile && profile.is_approved) {
-          const userObj: User = {
-            id: profile.id,
-            email: session.user.email!,
-            password: '',
-            name: profile.name,
-            role: profile.role,
-            access_level: profile.access_level,
-            created_at: profile.created_at,
-            lastLogin: new Date(),
-            isApproved: true,
-          };
-          setUser(userObj);
-        } else {
-          setUser(null);
-          await supabase.auth.signOut();
         }
       } else {
         setUser(null);
@@ -98,10 +154,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoadingStage('Almost ready...');
       setIsInitializing(false);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(`💥 AuthContext: Initialization attempt ${attempt} failed:`, error);
       
-      if (attempt < 3) {
+      if (attempt < 3 && error?.message !== 'Session check timeout' && error?.message !== 'Profile check timeout') {
         const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
         setLoadingStage(`Connection failed. Retrying in ${delay/1000}s...`);
         
@@ -111,66 +167,104 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         console.error('💀 AuthContext: All initialization attempts failed');
         setLoadingStage('Connection failed. Please refresh the page.');
+        setUser(null);
         setIsInitializing(false);
       }
     }
   };
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      setIsInitializing(false);
+      return;
+    }
+
     let initialCheckCompleted = false;
     let authSubscription: any = null;
+    let isMounted = true;
 
     const initializeAuth = async () => {
-      await initializeAuthWithRetry();
-      
-      if (!initialCheckCompleted) {
-        authSubscription = supabase.auth.onAuthStateChange(async (event, session) => {
-
-          if (session?.user) {
-            const { data: profile } = await supabase
-              .from('profiles')
-              .select('id, name, role, created_at, is_approved, access_level')
-              .eq('id', session.user.id)
-              .single();
-
-            if (profile && profile.is_approved) {
-              const userObj: User = {
-                id: profile.id,
-                email: session.user.email!,
-                password: '',
-                name: profile.name,
-                role: profile.role,
-                access_level: profile.access_level,
-                created_at: profile.created_at,
-                lastLogin: new Date(),
-                isApproved: true,
-              };
-              setUser(userObj);
-            } else {
-              setUser(null);
-              if (event !== 'SIGNED_OUT') {
-                await supabase.auth.signOut();
-              }
-            }
-          } else {
-            setUser(null);
-          }
-        });
+      try {
+        await initializeAuthWithRetry();
         
-        initialCheckCompleted = true;
+        if (!initialCheckCompleted && isMounted) {
+          authSubscription = supabase.auth.onAuthStateChange(async (event, session) => {
+            if (!isMounted) return;
+
+            try {
+              if (session?.user) {
+                const { data: profile, error: profileError } = await supabase
+                  .from('profiles')
+                  .select('id, name, role, created_at, is_approved, access_level')
+                  .eq('id', session.user.id)
+                  .single();
+
+                if (profileError) {
+                  console.error('AuthContext: Profile error in auth state change:', profileError);
+                  setUser(null);
+                  if (event !== 'SIGNED_OUT') {
+                    try {
+                      await supabase.auth.signOut();
+                    } catch (signOutError) {
+                      console.error('Error signing out:', signOutError);
+                    }
+                  }
+                  return;
+                }
+
+                if (profile && profile.is_approved) {
+                  const userObj: User = {
+                    id: profile.id,
+                    email: session.user.email!,
+                    password: '',
+                    name: profile.name,
+                    role: profile.role,
+                    access_level: profile.access_level,
+                    created_at: profile.created_at,
+                    lastLogin: new Date(),
+                    isApproved: true,
+                  };
+                  setUser(userObj);
+                } else {
+                  setUser(null);
+                  if (event !== 'SIGNED_OUT') {
+                    try {
+                      await supabase.auth.signOut();
+                    } catch (signOutError) {
+                      console.error('Error signing out:', signOutError);
+                    }
+                  }
+                }
+              } else {
+                setUser(null);
+              }
+            } catch (error) {
+              console.error('AuthContext: Error in auth state change handler:', error);
+              setUser(null);
+            }
+          });
+          
+          initialCheckCompleted = true;
+        }
+      } catch (error) {
+        console.error('AuthContext: Error initializing auth:', error);
+        if (isMounted) {
+          setIsInitializing(false);
+        }
       }
     };
 
     initializeAuth();
 
     const timeoutId = setTimeout(() => {
-      if (isInitializing) {
+      if (isInitializing && isMounted) {
         setLoadingStage('Timeout reached. Please refresh if needed.');
         setIsInitializing(false);
       }
-    }, 15000);
+    }, 20000);
 
     return () => {
+      isMounted = false;
       clearTimeout(timeoutId);
       if (authSubscription) {
         authSubscription.unsubscribe();
@@ -182,26 +276,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: credentials.email,
-        password: credentials.password,
-      });
+      if (typeof window === 'undefined') {
+        return { success: false, message: 'Login is only available on the client side.' };
+      }
+
+      const loginResult = await Promise.race([
+        supabase.auth.signInWithPassword({
+          email: credentials.email,
+          password: credentials.password,
+        }),
+        new Promise<{ data: null, error: { message: string } }>((_, reject) => 
+          setTimeout(() => reject(new Error('Login timeout')), 15000)
+        )
+      ]) as { data: any, error: any };
+
+      const { data, error } = loginResult;
 
       if (error) {
-        
         if (error.message === 'Invalid login credentials') {
-          const { data: pendingRequests } = await supabase
-            .from('registration_requests')
-            .select('id')
-            .eq('email', credentials.email);
+          try {
+            const { data: pendingRequests, error: pendingError } = await supabase
+              .from('registration_requests')
+              .select('id')
+              .eq('email', credentials.email);
 
-          if (pendingRequests && pendingRequests.length > 0) {
-            return {
-              success: false,
-              message: 'Your registration is pending approval.',
-              isPending: true,
-              requestId: pendingRequests[0].id,
-            };
+            if (!pendingError && pendingRequests && pendingRequests.length > 0) {
+              return {
+                success: false,
+                message: 'Your registration is pending approval.',
+                isPending: true,
+                requestId: pendingRequests[0].id,
+              };
+            }
+          } catch (pendingErr) {
+            console.error('Error checking pending requests:', pendingErr);
           }
         }
         
@@ -211,32 +319,62 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       }
 
-      if (data.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('id, name, role, created_at, is_approved, access_level')
-          .eq('id', data.user.id)
-          .single();
+      if (data?.user) {
+        try {
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('id, name, role, created_at, is_approved, access_level')
+            .eq('id', data.user.id)
+            .single();
           
-        if (profile && profile.is_approved) {
-          const userObj: User = {
-            id: profile.id,
-            email: data.user.email!,
-            password: '',
-            name: profile.name,
-            role: profile.role,
-            access_level: profile.access_level,
-            created_at: profile.created_at,
-            lastLogin: new Date(),
-            isApproved: true,
-          };
-          setUser(userObj);
-          return { success: true };
-        } else {
-          await supabase.auth.signOut();
+          if (profileError) {
+            console.error('Profile fetch error:', profileError);
+            try {
+              await supabase.auth.signOut();
+            } catch (signOutError) {
+              console.error('Error signing out:', signOutError);
+            }
+            return {
+              success: false,
+              message: 'Could not load user profile. Please try again.',
+            };
+          }
+          
+          if (profile && profile.is_approved) {
+            const userObj: User = {
+              id: profile.id,
+              email: data.user.email!,
+              password: '',
+              name: profile.name,
+              role: profile.role,
+              access_level: profile.access_level,
+              created_at: profile.created_at,
+              lastLogin: new Date(),
+              isApproved: true,
+            };
+            setUser(userObj);
+            return { success: true };
+          } else {
+            try {
+              await supabase.auth.signOut();
+            } catch (signOutError) {
+              console.error('Error signing out:', signOutError);
+            }
+            return {
+              success: false,
+              message: 'Your account is not approved yet.',
+            };
+          }
+        } catch (profileErr) {
+          console.error('Error processing profile:', profileErr);
+          try {
+            await supabase.auth.signOut();
+          } catch (signOutError) {
+            console.error('Error signing out:', signOutError);
+          }
           return {
             success: false,
-            message: 'Your account is not approved yet.',
+            message: 'Could not load user profile. Please try again.',
           };
         }
       }
@@ -245,8 +383,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         success: false,
         message: 'Login failed. Please try again.',
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error('💥 AuthContext: Catch block - Login error:', error);
+      if (error?.message === 'Login timeout') {
+        return { success: false, message: 'Login request timed out. Please check your internet connection and try again.' };
+      }
       return { success: false, message: 'Could not connect to the server. Check your internet connection.' };
     } finally {
       setIsLoading(false);
