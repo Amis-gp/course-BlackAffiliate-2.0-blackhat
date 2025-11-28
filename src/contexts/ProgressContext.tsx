@@ -17,6 +17,10 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return;
+    }
+
     try {
       const savedProgress = localStorage.getItem(PROGRESS_KEY);
       console.log('Loading progress from localStorage:', savedProgress);
@@ -32,11 +36,17 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error('Failed to load progress from localStorage', error);
-      localStorage.removeItem(PROGRESS_KEY);
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(PROGRESS_KEY);
+      }
     }
   }, []);
 
   const saveProgress = (newCompleted: Set<string>) => {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return;
+    }
+
     try {
       const data = JSON.stringify(Array.from(newCompleted));
       console.log('Saving progress to localStorage:', data);

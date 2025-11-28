@@ -25,6 +25,10 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
   const currentImage = images[currentIndex] || { src: '', alt: '' };
 
   useEffect(() => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       setRotation(0);
@@ -33,11 +37,17 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = 'unset';
+      }
     };
   }, [isOpen]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -45,7 +55,11 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', checkMobile);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -70,8 +84,14 @@ export default function ImageModal({ isOpen, images, currentIndex, onClose, onNa
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('keydown', handleKeyDown);
+      }
+    };
   }, [isOpen, currentIndex, images.length]);
 
 

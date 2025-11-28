@@ -14,6 +14,11 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
   const { isAuthenticated, isAdmin, isInitializing, user } = useAuth();
   const [showRegister, setShowRegister] = useState(false);
   
+  useEffect(() => {
+    if (!isAuthenticated && typeof window !== 'undefined' && user && user.access_level === 5) {
+      window.location.href = '/service-unavailable';
+    }
+  }, [isAuthenticated, user]);
 
   if (isInitializing) {
     return (
@@ -27,12 +32,6 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
   }
 
   if (!isAuthenticated) {
-    useEffect(() => {
-      if (user && user.access_level === 5) {
-        window.location.href = '/service-unavailable';
-      }
-    }, [user]);
-
     if (user && user.access_level === 5) {
       return null;
     }

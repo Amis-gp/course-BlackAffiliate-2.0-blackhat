@@ -25,7 +25,7 @@ export default function AccessControl({ children, requiredLevel, fallback }: Acc
   }
 
   useEffect(() => {
-    if (user && user.access_level === 5) {
+    if (typeof window !== 'undefined' && user && user.access_level === 5) {
       window.location.href = '/service-unavailable';
     }
   }, [user]);

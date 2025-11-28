@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ClientAuthProvider } from '@/components/ClientAuthProvider'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 const geologica = {
   className: 'font-geologica'
@@ -25,9 +26,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet" />
       </head>
       <body className={`${geologica.className} bg-background text-foreground`}>
-        <ClientAuthProvider>
-        {children}
-      </ClientAuthProvider>
+        <ErrorBoundary>
+          <ClientAuthProvider>
+            {children}
+          </ClientAuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

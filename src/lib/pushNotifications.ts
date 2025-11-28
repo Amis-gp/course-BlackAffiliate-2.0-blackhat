@@ -12,6 +12,10 @@ const urlBase64ToUint8Array = (base64String: string): Uint8Array<ArrayBuffer> =>
     .replace(/\-/g, '+')
     .replace(/_/g, '/');
 
+  if (typeof window === 'undefined') {
+    throw new Error('window is not available');
+  }
+
   const rawData = window.atob(base64);
   const buffer = new ArrayBuffer(rawData.length);
   const outputArray = new Uint8Array(buffer);
