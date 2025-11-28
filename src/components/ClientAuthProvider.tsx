@@ -39,22 +39,20 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
     setIsMounted(true);
   }, []);
   
-  if (!isMounted) {
-    console.log('⏳ ClientAuthProvider: Not mounted yet, showing loading...');
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
-          <div className="text-white text-xl">Loading...</div>
-        </div>
-      </div>
-    );
-  }
+  console.log('✅ ClientAuthProvider: Rendering, isMounted:', isMounted);
   
-  console.log('✅ ClientAuthProvider: Mounted, rendering AuthProvider');
   return (
     <AuthProvider>
-      <AuthWrapper>{children}</AuthWrapper>
+      {!isMounted ? (
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+            <div className="text-white text-xl">Loading...</div>
+          </div>
+        </div>
+      ) : (
+        <AuthWrapper>{children}</AuthWrapper>
+      )}
     </AuthProvider>
   );
 }
