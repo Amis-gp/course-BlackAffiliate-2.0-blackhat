@@ -188,10 +188,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await initializeAuthWithRetry();
         
         if (!initialCheckCompleted && isMounted) {
-          authSubscription = supabase.auth.onAuthStateChange(async (event, session) => {
+          const subscriptionResult = supabase.auth.onAuthStateChange(async (event, session) => {
             if (!isMounted) return;
 
             try {
+              if (!isMounted) return;
+              
               if (session?.user) {
                 const { data: profile, error: profileError } = await supabase
                   .from('profiles')
@@ -199,9 +201,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                   .eq('id', session.user.id)
                   .single();
 
+                if (!isMounted) return;
+
                 if (profileError) {
                   console.error('AuthContext: Profile error in auth state change:', profileError);
-                  setUser(null);
+                  if (isMounted) {
+                    setUser(null);
+                  }
                   if (event !== 'SIGNED_OUT') {
                     try {
                       await supabase.auth.signOut();
@@ -211,6 +217,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                   }
                   return;
                 }
+
+                if (!isMounted) return;
 
                 if (profile && profile.is_approved) {
                   const userObj: User = {
@@ -224,9 +232,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     lastLogin: new Date(),
                     isApproved: true,
                   };
-                  setUser(userObj);
+                  if (isMounted) {
+                    setUser(userObj);
+                  }
                 } else {
-                  setUser(null);
+                  if (isMounted) {
+                    setUser(null);
+                  }
                   if (event !== 'SIGNED_OUT') {
                     try {
                       await supabase.auth.signOut();
@@ -236,13 +248,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                   }
                 }
               } else {
-                setUser(null);
+                if (isMounted) {
+                  setUser(null);
+                }
               }
             } catch (error) {
               console.error('AuthContext: Error in auth state change handler:', error);
-              setUser(null);
+              if (isMounted) {
+                setUser(null);
+              }
             }
           });
+          
+          if (subscriptionResult) {
+            if (subscriptionResult.data?.subscription) {
+              authSubscription = subscriptionResult.data.subscription;
+            } else {
+              authSubscription = subscriptionResult as any;
+            }
+          }
           
           initialCheckCompleted = true;
         }
@@ -267,7 +291,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isMounted = false;
       clearTimeout(timeoutId);
       if (authSubscription) {
-        authSubscription.unsubscribe();
+        try {
+          const sub = authSubscription as any;
+          if (sub && typeof sub === 'object') {
+            if (typeof sub.unsubscribe === 'function') {
+              sub.unsubscribe();
+            } else if (sub.data) {
+              if (sub.data.subscription && typeof sub.data.subscription.unsubscribe === 'function') {
+                sub.data.subscription.unsubscribe();
+              } else if (typeof sub.data.unsubscribe === 'function') {
+                sub.data.unsubscribe();
+              }
+            } else if (sub.subscription && typeof sub.subscription.unsubscribe === 'function') {
+              sub.subscription.unsubscribe();
+            }
+          }
+        } catch (error) {
+          console.error('Error unsubscribing from auth state change:', error);
+        }
+        authSubscription = null;
       }
     };
   }, []);
