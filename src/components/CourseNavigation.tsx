@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight, Play, FileText, HelpCircle } from 'lucide-react';
 import { useProgress } from '@/contexts/ProgressContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface NavLesson {
   id: string;
@@ -26,6 +27,7 @@ interface CourseNavigationProps {
 export default function CourseNavigation({ courseData, currentLessonId, onLessonSelect }: CourseNavigationProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const { isLessonCompleted, completedLessons } = useProgress();
+  const { user } = useAuth();
 
   useEffect(() => {
     const section = courseData.find(s => s.lessons.some(l => l.id === currentLessonId));
@@ -55,10 +57,24 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
     }
   };
 
+  const filteredCourseData = user?.access_level === 6 
+    ? courseData
+        .map(section => {
+          if (section.id === 'section-4') {
+            return {
+              ...section,
+              lessons: section.lessons.filter(lesson => lesson.id === 'lesson-4-9')
+            };
+          }
+          return null;
+        })
+        .filter((section): section is NavSection => section !== null && section.lessons.length > 0)
+    : courseData;
+
   return (
     <div className="w-72 m-4 rounded-lg overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
       <div className="space-y-2">
-        {courseData.map((section) => {
+        {filteredCourseData.map((section) => {
           const isExpanded = expandedSections.includes(section.id);
           
           return (

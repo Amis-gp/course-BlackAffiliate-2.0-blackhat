@@ -453,9 +453,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return user?.role === 'admin';
   }, [user?.role]);
 
-  const hasAccess = useCallback((requiredLevel: AccessLevel): boolean => {
+  const hasAccess = useCallback((requiredLevel: AccessLevel, lessonId?: string): boolean => {
     if (!user) return false;
     if (user.access_level === 5) return false;
+    if (user.access_level === 6) {
+      return lessonId === 'lesson-4-9';
+    }
     return user.access_level >= requiredLevel;
   }, [user]);
 
