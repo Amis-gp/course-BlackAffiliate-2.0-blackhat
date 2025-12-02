@@ -656,7 +656,7 @@ export default function AdminPanel() {
                       <option value={3}>VIP</option>
                       <option value={4}>Without Road Map</option>
                       <option value={5}>Blocked</option>
-                      <option value={6}>Creative Method Only</option>
+                      <option value={6}>пропихання креативів only</option>
                     </select>
                   </div>
                 </div>
@@ -709,7 +709,7 @@ export default function AdminPanel() {
                               <option value={3}>VIP</option>
                               <option value={4}>Without Buttons</option>
                               <option value={5}>Blocked</option>
-                              <option value={6}>Creative Method Only</option>
+                              <option value={6}>пропихання креативів only</option>
                             </select>
                             <button
                               onClick={() => setEditingUser(null)}
@@ -812,7 +812,7 @@ export default function AdminPanel() {
                             <option value={3}>VIP</option>
                             <option value={4}>Without Buttons</option>
                             <option value={5}>Blocked</option>
-                            <option value={6}>Creative Method Only</option>
+                            <option value={6}>пропихання креативів only</option>
                           </select>
                         </div>
                         <div className="flex gap-2">
