@@ -1,6 +1,8 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface AccessRestrictionModalProps {
   isOpen: boolean;
@@ -8,9 +10,16 @@ interface AccessRestrictionModalProps {
 }
 
 export default function AccessRestrictionModal({ isOpen, onClose }: AccessRestrictionModalProps) {
-  if (!isOpen) return null;
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
+
+  const modalContent = (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       <div 
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
@@ -81,5 +90,7 @@ export default function AccessRestrictionModal({ isOpen, onClose }: AccessRestri
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
 
