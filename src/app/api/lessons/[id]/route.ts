@@ -56,7 +56,7 @@ export async function GET(
   const accessLevel = userData.user.user_metadata?.access_level || 1;
 
   if (accessLevel === 6 && id !== 'lesson-4-9') {
-    return NextResponse.json({ error: 'Access denied. Your access is limited to the Creative Method lesson only.' }, { status: 403 });
+    return NextResponse.json({ error: 'Access denied. Your access is limited to the "New method for bypassing creative moderation" lesson only. Your access level: Creative Push Only' }, { status: 403 });
   }
 
   let lesson;

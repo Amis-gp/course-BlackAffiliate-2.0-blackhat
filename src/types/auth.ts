@@ -67,7 +67,7 @@ export const ACCESS_LEVELS: Record<AccessLevel, AccessLevelInfo> = {
   },
   6: {
     level: 6,
-    name: 'пропихання креативів only'
+    name: 'Creative Push Only'
   }
 };
 

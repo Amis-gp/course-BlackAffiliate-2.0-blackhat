@@ -14,6 +14,7 @@ import { slugify } from '@/lib/utils';
 import AnnouncementsList from '@/components/AnnouncementsList';
 import { AnnouncementWithReadStatus } from '@/types/announcements';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface LessonPageClientProps {
   initialLesson: Lesson | null;
@@ -22,6 +23,7 @@ interface LessonPageClientProps {
 export default function LessonPageClient({ initialLesson: lesson }: LessonPageClientProps) {
   const { handlePreviousLesson, handleNextLesson, hasPrevious, hasNext } = useLessonContext();
   const { completeLesson, uncompleteLesson, isLessonCompleted } = useProgress();
+  const { user } = useAuth();
   
   const [content, setContent] = useState(lesson?.content || '');
   const [headings, setHeadings] = useState<{ level: number; text: string; slug: string }[]>([]);
@@ -80,6 +82,33 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
     return (
       <div className="flex-1 flex items-center justify-center text-white">
         <p>Select a lesson to start.</p>
+      </div>
+    );
+  }
+
+  const isLevel6 = user?.access_level === 6;
+  const hasAccessToLesson = !isLevel6 || lesson.id === 'lesson-4-9';
+
+  if (isLevel6 && !hasAccessToLesson) {
+    return (
+      <div className="flex-1 flex items-center justify-center text-white">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-red-600/20 border border-red-600/50 rounded-lg p-6 mb-6">
+            <h2 className="text-2xl font-bold mb-4 text-red-400">Access Restricted</h2>
+            <p className="text-gray-300 mb-4">
+              Your access is limited to the "New method for bypassing creative moderation" lesson only.
+            </p>
+            <p className="text-sm text-gray-400 mb-4">
+              Your current access level: Creative Push Only
+            </p>
+            <a
+              href="/lesson/lesson-4-9"
+              className="inline-block bg-primary hover:bg-red-700 px-6 py-3 rounded-lg transition-colors text-white font-medium"
+            >
+              Go to Your Lesson
+            </a>
+          </div>
+        </div>
       </div>
     );
   }
@@ -317,12 +346,13 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
             <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row md:items-center md:justify-between">
               <button 
                 className={`group flex items-center justify-center space-x-3 px-8 py-3 rounded-xl font-medium transition-all duration-300 w-full md:w-auto ${
-                  !hasPrevious 
-                    ? 'cursor-not-allowed text-gray-600 border border-gray-900 bg-background' 
+                  !hasPrevious || isLevel6
+                    ? 'cursor-not-allowed text-gray-600 border border-gray-900 bg-background opacity-50' 
                     : 'text-gray-400 hover:text-white bg-[#05070b] hover:bg-[#0f151c] border border-[#1e242e] hover:border-[#3a424e]'
                 }`}
-                onClick={handlePreviousLesson}
-                disabled={!hasPrevious}
+                onClick={isLevel6 ? undefined : handlePreviousLesson}
+                disabled={!hasPrevious || isLevel6}
+                title={isLevel6 ? 'Navigation between lessons is restricted for your access level' : undefined}
               >
                 <span className="transform group-hover:-translate-x-1 transition-transform duration-300 text-lg">←</span>
                 <span className="text-sm">Previous Lesson</span>
@@ -354,12 +384,13 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
               
               <button 
                 className={`group flex items-center justify-center space-x-3 px-8 py-3 rounded-xl font-medium transition-all duration-300 w-full md:w-auto ${
-                  !hasNext 
-                    ? 'cursor-not-allowed text-gray-600 border border-gray-900 bg-background' 
+                  !hasNext || isLevel6
+                    ? 'cursor-not-allowed text-gray-600 border border-gray-900 bg-background opacity-50' 
                     : 'text-gray-400 hover:text-white bg-[#05070b] hover:bg-[#0f151c] border border-[#1e242e] hover:border-[#3a424e]'
                 }`}
-                onClick={handleNextLesson}
-                disabled={!hasNext}
+                onClick={isLevel6 ? undefined : handleNextLesson}
+                disabled={!hasNext || isLevel6}
+                title={isLevel6 ? 'Navigation between lessons is restricted for your access level' : undefined}
               >
                 <span className="text-sm">Next Lesson</span>
                 <span className="transform group-hover:translate-x-1 transition-transform duration-300 text-lg">→</span>

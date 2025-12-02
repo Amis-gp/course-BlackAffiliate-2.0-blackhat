@@ -105,7 +105,15 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                     );
                     
                     return isDisabled ? (
-                      <div key={lesson.id}>
+                      <div 
+                        key={lesson.id}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          alert('Your access is limited to the "New method for bypassing creative moderation" lesson only.\n\nAccess level: Creative Push Only');
+                        }}
+                        className="cursor-not-allowed"
+                        title="Your access is limited to Creative Push Only lesson"
+                      >
                         {lessonContent}
                       </div>
                     ) : (

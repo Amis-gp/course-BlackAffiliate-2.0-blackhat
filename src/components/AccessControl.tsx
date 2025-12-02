@@ -50,7 +50,7 @@ export default function AccessControl({ children, requiredLevel, fallback, lesso
                 Your access is limited to the "New method for bypassing creative moderation" lesson only.
               </p>
               <p className="text-sm text-gray-400">
-                Your current access level: {user.access_level} - пропихання креативів only
+                Your current access level: {user.access_level} - Creative Push Only
               </p>
             </div>
           </div>

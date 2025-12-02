@@ -51,7 +51,12 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
   const pathname = usePathname();
   const currentLessonId = pathname.split('/').pop() || '';
 
+  const isLevel6 = user?.access_level === 6;
+
   const handleLessonSelect = (lessonId: string) => {
+    if (isLevel6 && lessonId !== 'lesson-4-9') {
+      return;
+    }
     router.push(`/lesson/${lessonId}`);
     setIsMobileNavOpen(false);
   };
@@ -70,19 +75,25 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
   }, [currentLessonIndex, allLessons, router]);
 
   const handlePreviousLesson = () => {
+    if (isLevel6) {
+      return;
+    }
     if (currentLessonIndex > 0) {
       router.push(`/lesson/${allLessons[currentLessonIndex - 1].id}`);
     }
   };
 
   const handleNextLesson = () => {
+    if (isLevel6) {
+      return;
+    }
     if (currentLessonIndex < allLessons.length - 1) {
       router.push(`/lesson/${allLessons[currentLessonIndex + 1].id}`);
     }
   };
 
-  const hasPrevious = currentLessonIndex > 0;
-  const hasNext = currentLessonIndex < allLessons.length - 1;
+  const hasPrevious = isLevel6 ? false : currentLessonIndex > 0;
+  const hasNext = isLevel6 ? false : currentLessonIndex < allLessons.length - 1;
 
   return (
     <LessonContext.Provider value={{ courseData, currentLessonId, handlePreviousLesson, handleNextLesson, hasPrevious, hasNext }}>
