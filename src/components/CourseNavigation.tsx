@@ -29,6 +29,8 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
   const { isLessonCompleted, completedLessons } = useProgress();
   const { user } = useAuth();
 
+  const isLevel6 = user?.access_level === 6;
+
   useEffect(() => {
     if (isLevel6) {
       const section4 = courseData.find(s => s.id === 'section-4');
@@ -46,11 +48,8 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
   }, [currentLessonId, courseData, isLevel6]);
 
   const toggleSection = (sectionId: string) => {
-    if (isLevel6) {
-      return;
-    }
     setExpandedSections(prev => 
-      prev.includes(sectionId) ? [] : [sectionId]
+      prev.includes(sectionId) ? prev.filter(id => id !== sectionId) : [...prev, sectionId]
     );
   };
 
@@ -66,8 +65,6 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
         return <Play className="w-4 h-4" />;
     }
   };
-
-  const isLevel6 = user?.access_level === 6;
 
   return (
     <div className="w-72 m-4 rounded-lg overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
