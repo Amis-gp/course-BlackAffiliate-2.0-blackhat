@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronDown, ChevronRight, Play, FileText, HelpCircle } from 'lucide-react';
 import { useProgress } from '@/contexts/ProgressContext';
 import { useAuth } from '@/contexts/AuthContext';
+import AccessRestrictionModal from '@/components/AccessRestrictionModal';
 
 interface NavLesson {
   id: string;
@@ -26,6 +27,7 @@ interface CourseNavigationProps {
 
 export default function CourseNavigation({ courseData, currentLessonId, onLessonSelect }: CourseNavigationProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
+  const [showAccessModal, setShowAccessModal] = useState(false);
   const { isLessonCompleted, completedLessons } = useProgress();
   const { user } = useAuth();
 
@@ -67,24 +69,62 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
   };
 
   return (
-    <div className="w-72 m-4 rounded-lg overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
-      <div className="space-y-2">
-        {courseData.map((section) => {
-          const isExpanded = expandedSections.includes(section.id);
-          
-          return (
-            <div key={section.id} className="border border-gray-800 rounded-lg">
-              <button
-                onClick={() => toggleSection(section.id)}
-                className="w-full p-4 text-left flex items-center justify-between hover:bg-gray-800 transition-colors duration-200 rounded-lg"
+    <>
+      <div className="w-72 m-4 rounded-lg overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
+        <div className="space-y-2">
+          {courseData.map((section) => {
+            const isExpanded = expandedSections.includes(section.id);
+            const isSection4 = section.id === 'section-4';
+            const isDimmed = isLevel6 && !isSection4;
+            
+            return (
+              <div 
+                key={section.id} 
+                className={`border rounded-lg transition-all duration-200 ${
+                  isDimmed 
+                    ? 'border-gray-900/50 opacity-50' 
+                    : isSection4 && isLevel6
+                    ? 'border-primary/50 shadow-lg shadow-primary/10'
+                    : 'border-gray-800'
+                }`}
               >
-                <span className="font-semibold text-white">{section.title}</span>
-                {isExpanded ? (
-                  <ChevronDown className="w-5 h-5 text-primary" />
-                ) : (
-                  <ChevronRight className="w-5 h-5 text-primary" />
-                )}
-              </button>
+                <button
+                  onClick={() => toggleSection(section.id)}
+                  className={`w-full p-4 text-left flex items-center justify-between transition-colors duration-200 rounded-lg ${
+                    isDimmed
+                      ? 'hover:bg-gray-900/50'
+                      : isSection4 && isLevel6
+                      ? 'bg-primary/10 hover:bg-primary/20'
+                      : 'hover:bg-gray-800'
+                  }`}
+                >
+                  <span className={`font-semibold ${
+                    isSection4 && isLevel6
+                      ? 'text-primary'
+                      : isDimmed
+                      ? 'text-gray-500'
+                      : 'text-white'
+                  }`}>
+                    {section.title}
+                  </span>
+                  {isExpanded ? (
+                    <ChevronDown className={`w-5 h-5 ${
+                      isSection4 && isLevel6
+                        ? 'text-primary'
+                        : isDimmed
+                        ? 'text-gray-600'
+                        : 'text-primary'
+                    }`} />
+                  ) : (
+                    <ChevronRight className={`w-5 h-5 ${
+                      isSection4 && isLevel6
+                        ? 'text-primary'
+                        : isDimmed
+                        ? 'text-gray-600'
+                        : 'text-primary'
+                    }`} />
+                  )}
+                </button>
               
               {isExpanded && (
                 <div className="border-t border-gray-800">
@@ -109,10 +149,10 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                         key={lesson.id}
                         onClick={(e) => {
                           e.preventDefault();
-                          alert('Your access is limited to the "New method for bypassing creative moderation" lesson only.\n\nAccess level: Creative Push Only');
+                          setShowAccessModal(true);
                         }}
-                        className="cursor-not-allowed"
-                        title="Your access is limited to Creative Push Only lesson"
+                        className="cursor-pointer"
+                        title="Click to learn more about access"
                       >
                         {lessonContent}
                       </div>
@@ -131,7 +171,13 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
             </div>
           );
         })}
+        </div>
       </div>
-    </div>
+
+      <AccessRestrictionModal
+        isOpen={showAccessModal}
+        onClose={() => setShowAccessModal(false)}
+      />
+    </>
   );
 }
