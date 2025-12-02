@@ -122,8 +122,8 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
             />
               
             <div className='px-4 pb-4 border-b border-gray-700'>
-              <div className={`grid ${user?.access_level === 4 ? 'grid-cols-2' : 'grid-cols-3'} gap-4`}>
-                {user?.access_level !== 4 && (
+              <div className={`grid ${user?.access_level === 4 || user?.access_level === 6 ? 'grid-cols-2' : 'grid-cols-3'} gap-4`}>
+                {user?.access_level !== 4 && user?.access_level !== 6 && (
                   <AccessControl requiredLevel={3} fallback={
                     <div 
                       className="flex flex-col items-center gap-1 text-xs bg-gray-600 px-2 py-2 rounded-lg text-white font-medium cursor-not-allowed opacity-50"
@@ -144,10 +144,12 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                     </a>
                   </AccessControl>
                 )}
-                <Link href="/offers" className="flex flex-col items-center justify-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
-                  <Tag className="w-4 h-4" />
-                  <span className="text-center">Offers</span>
-                </Link>
+                {user?.access_level !== 6 && (
+                  <Link href="/offers" className="flex flex-col items-center justify-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
+                    <Tag className="w-4 h-4" />
+                    <span className="text-center">Offers</span>
+                  </Link>
+                )}
                 <AccessControl requiredLevel={2} fallback={
                   <div 
                     className="flex flex-col items-center gap-1 text-xs bg-gray-600 px-2 py-2 rounded-lg text-white font-medium cursor-not-allowed opacity-50"
