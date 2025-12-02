@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { courseData } from '@/data/courseData';
 import fs from 'fs';
 import path from 'path';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 const generateSlug = (text: string): string => {
   return text
@@ -33,6 +34,30 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
+
+  const authHeader = request.headers.get('authorization');
+  if (!authHeader) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const token = authHeader.replace('Bearer ', '');
+  const { data: { user: authUser }, error: authError } = await supabaseAdmin.auth.getUser(token);
+
+  if (authError || !authUser) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(authUser.id);
+  
+  if (userError || !userData) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+  }
+
+  const accessLevel = userData.user.user_metadata?.access_level || 1;
+
+  if (accessLevel === 6 && id !== 'lesson-4-9') {
+    return NextResponse.json({ error: 'Access denied. Your access is limited to the Creative Method lesson only.' }, { status: 403 });
+  }
 
   let lesson;
   for (const section of courseData) {

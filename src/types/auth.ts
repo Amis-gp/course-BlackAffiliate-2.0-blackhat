@@ -4,7 +4,7 @@ export interface User {
   password: string;
   name: string;
   role: 'admin' | 'user';
-  access_level: 1 | 2 | 3 | 4 | 5;
+  access_level: 1 | 2 | 3 | 4 | 5 | 6;
   created_at: string;
   lastLogin?: Date;
   isApproved: boolean;
@@ -37,7 +37,7 @@ export interface AuthState {
   isLoading: boolean;
 }
 
-export type AccessLevel = 1 | 2 | 3 | 4 | 5;
+export type AccessLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface AccessLevelInfo {
   level: AccessLevel;
@@ -64,6 +64,10 @@ export const ACCESS_LEVELS: Record<AccessLevel, AccessLevelInfo> = {
   5: {
     level: 5,
     name: 'Blocked'
+  },
+  6: {
+    level: 6,
+    name: 'Creative Method Only'
   }
 };
 
@@ -74,7 +78,7 @@ export interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string; isPending?: boolean; requestId?: string }>;
   logout: () => void;
   isAdmin: () => boolean;
-  hasAccess: (requiredLevel: AccessLevel) => boolean;
+  hasAccess: (requiredLevel: AccessLevel, lessonId?: string) => boolean;
   register: (credentials: RegisterCredentials) => Promise<boolean>;
   getRegistrationRequests: () => RegistrationRequest[];
   loadRegistrationRequests: () => Promise<void>;

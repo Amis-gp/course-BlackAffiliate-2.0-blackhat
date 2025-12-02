@@ -8,9 +8,10 @@ interface AccessControlProps {
   children: ReactNode;
   requiredLevel: AccessLevel;
   fallback?: ReactNode;
+  lessonId?: string;
 }
 
-export default function AccessControl({ children, requiredLevel, fallback }: AccessControlProps) {
+export default function AccessControl({ children, requiredLevel, fallback, lessonId }: AccessControlProps) {
   const { hasAccess, user } = useAuth();
 
   if (!user) {
@@ -34,9 +35,27 @@ export default function AccessControl({ children, requiredLevel, fallback }: Acc
     return null;
   }
 
-  if (!hasAccess(requiredLevel)) {
+  if (!hasAccess(requiredLevel, lessonId)) {
     if (fallback) {
       return <>{fallback}</>;
+    }
+
+    if (user.access_level === 6) {
+      return (
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          <div className="text-center max-w-md mx-auto p-6">
+            <div className="bg-red-600/20 border border-red-600/50 rounded-lg p-6 mb-6">
+              <h2 className="text-2xl font-bold mb-4 text-red-400">Access Denied</h2>
+              <p className="text-gray-300 mb-4">
+                Your access is limited to the "New method for bypassing creative moderation" lesson only.
+              </p>
+              <p className="text-sm text-gray-400">
+                Your current access level: {user.access_level} - Creative Method Only
+              </p>
+            </div>
+          </div>
+        </div>
+      );
     }
 
     return (

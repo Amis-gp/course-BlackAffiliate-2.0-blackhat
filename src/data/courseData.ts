@@ -290,6 +290,12 @@ export const courseData: Section[] = [
         contentPath: '@/data/lessons/lesson-4-8.md'
       },
       {
+        id: 'lesson-4-9',
+        title: 'New method for bypassing creative moderation',
+        type: 'lesson',
+        contentPath: '@/data/lessons/lesson-4-9.md'
+      },
+      {
         id: 'homework-4-1',
         title: 'Homework - Questions on the general part',
         type: 'homework',
