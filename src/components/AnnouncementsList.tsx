@@ -45,7 +45,7 @@ export default function AnnouncementsList({
       <div className="bg-gradient-to-b from-[#1a1d22] to-[#0f1012] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col border border-red-900/40">
         <div className="flex items-center justify-between p-6 border-b border-red-800/40 bg-gradient-to-r from-red-900/30 via-red-800/20 to-transparent backdrop-blur-sm">
           <div>
-            <h2 className="text-2xl font-bold text-white">Announcements</h2>
+          <h2 className="text-2xl font-bold text-white">Announcements</h2>
             <p className="text-sm text-gray-400 mt-1">
               {announcements.filter(a => !a.is_read).length} unread
             </p>
@@ -97,14 +97,14 @@ export default function AnnouncementsList({
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <div className="flex items-center gap-2 flex-wrap min-w-0 flex-1">
                         <h3 className={`text-lg font-bold ${
-                          announcement.is_read ? 'text-gray-300' : 'text-white'
-                        }`}>
-                          {announcement.title}
-                        </h3>
+                        announcement.is_read ? 'text-gray-300' : 'text-white'
+                      }`}>
+                        {announcement.title}
+                      </h3>
                         {announcement.is_edited && (
                           <span className="bg-blue-600/20 text-blue-400 text-xs px-2 py-1 rounded-full border border-blue-500/30 flex-shrink-0">
                             Edited
-                          </span>
+                      </span>
                         )}
                       </div>
                       <div className="flex flex-col gap-1 text-xs text-gray-400 flex-shrink-0 text-right">

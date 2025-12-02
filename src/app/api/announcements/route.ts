@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('[API] Inserting into database...');
-    
+
     const { data: announcement, error } = await supabaseAdmin
       .from('announcements')
       .insert({

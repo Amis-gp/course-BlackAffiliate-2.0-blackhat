@@ -187,7 +187,7 @@ export default function LessonPageClient({ initialLesson: lesson }: LessonPageCl
                 <>
                   <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-red-700 text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center shadow-lg shadow-red-900/60 animate-bounce border-2 border-black">
                     {unreadCount > 99 ? '99+' : unreadCount}
-                  </span>
+                </span>
                   <span className="absolute -top-1 -right-1 bg-red-600 rounded-full w-5 h-5 animate-ping opacity-75"></span>
                 </>
               )}

@@ -37,9 +37,9 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
   
   useEffect(() => {
     if (typeof window !== 'undefined' && !hasMountedRef.current) {
-      console.log('🔧 ClientAuthProvider: Mounting on client');
+    console.log('🔧 ClientAuthProvider: Mounting on client');
       hasMountedRef.current = true;
-      setIsMounted(true);
+    setIsMounted(true);
     }
   }, []);
   

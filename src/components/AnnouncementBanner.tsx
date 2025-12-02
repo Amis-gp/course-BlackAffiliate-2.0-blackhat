@@ -78,11 +78,11 @@ export default function AnnouncementBanner({
 
         {currentAnnouncement.image_url && (
           <div className="relative">
-            <img
-              src={currentAnnouncement.image_url}
-              alt={currentAnnouncement.title}
+          <img
+            src={currentAnnouncement.image_url}
+            alt={currentAnnouncement.title}
               className="w-full max-h-48 object-cover"
-            />
+          />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
         )}
