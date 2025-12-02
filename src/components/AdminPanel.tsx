@@ -961,42 +961,42 @@ export default function AdminPanel() {
                             </div>
                           </div>
                         ) : (
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
                               <div className="flex items-center gap-2 mb-2">
                                 <h4 className="text-lg font-semibold text-white">
-                                  {announcement.title}
-                                </h4>
+                              {announcement.title}
+                            </h4>
                                 {announcement.is_edited && (
                                   <span className="bg-blue-600/20 text-blue-400 text-xs px-2 py-1 rounded-full border border-blue-500/30">
                                     Edited
                                   </span>
                                 )}
                               </div>
-                              <p className="text-gray-300 text-sm mb-3 whitespace-pre-wrap">
-                                {announcement.content}
-                              </p>
-                              {announcement.image_url && (
-                                <div className="mb-3">
-                                  <img
-                                    src={announcement.image_url}
-                                    alt={announcement.title}
+                            <p className="text-gray-300 text-sm mb-3 whitespace-pre-wrap">
+                              {announcement.content}
+                            </p>
+                            {announcement.image_url && (
+                              <div className="mb-3">
+                                <img
+                                  src={announcement.image_url}
+                                  alt={announcement.title}
                                     className="max-h-40 rounded-lg object-cover border border-gray-600 shadow-md"
-                                  />
-                                </div>
-                              )}
+                                />
+                              </div>
+                            )}
                               <div className="flex flex-wrap items-center gap-3 text-xs text-gray-400">
                                 <div className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
-                                  <span>
+                              <span>
                                     {new Date(announcement.created_at).toLocaleDateString('en-US', {
-                                      day: 'numeric',
+                                  day: 'numeric',
                                       month: 'short',
-                                      year: 'numeric',
-                                      hour: '2-digit',
-                                      minute: '2-digit'
-                                    })}
-                                  </span>
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
                                 </div>
                                 {announcement.is_edited && announcement.updated_at && (
                                   <div className="flex items-center gap-1 text-blue-400">
@@ -1011,16 +1011,16 @@ export default function AdminPanel() {
                                     </span>
                                   </div>
                                 )}
-                                {announcement.read_count !== undefined && announcement.total_users !== undefined && (
+                              {announcement.read_count !== undefined && announcement.total_users !== undefined && (
                                   <div className="flex items-center gap-1">
                                     <Bell className="w-3 h-3" />
-                                    <span>
+                                <span>
                                       {announcement.read_count} / {announcement.total_users} users read
-                                    </span>
+                                </span>
                                   </div>
-                                )}
-                              </div>
+                              )}
                             </div>
+                          </div>
                             <div className="flex gap-2">
                               <button
                                 onClick={() => handleEditAnnouncement(announcement)}
@@ -1029,14 +1029,14 @@ export default function AdminPanel() {
                               >
                                 <Edit3 className="w-4 h-4 group-hover:scale-110 transition-transform" />
                               </button>
-                              <button
-                                onClick={() => handleDeleteAnnouncement(announcement.id)}
+                          <button
+                            onClick={() => handleDeleteAnnouncement(announcement.id)}
                                 className="bg-red-600 hover:bg-red-700 p-2 rounded-lg transition-colors group"
-                                title="Delete announcement"
-                              >
+                            title="Delete announcement"
+                          >
                                 <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                              </button>
-                            </div>
+                          </button>
+                        </div>
                           </div>
                         )}
                       </div>

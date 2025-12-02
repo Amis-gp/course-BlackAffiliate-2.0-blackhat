@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 interface AccessRestrictionModalProps {
@@ -9,83 +8,75 @@ interface AccessRestrictionModalProps {
 }
 
 export default function AccessRestrictionModal({ isOpen, onClose }: AccessRestrictionModalProps) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, onClose]);
-
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div 
-        className="bg-[#0f1012] border border-gray-800 rounded-lg max-w-md w-full p-6 shadow-xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white">Access Restricted</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
-            aria-label="Close"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl max-w-md w-full mx-4 border border-red-500/20">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+        >
+          <X className="w-6 h-6" />
+        </button>
 
-        <div className="mb-6">
-          <p className="text-gray-300 mb-4">
-            Your access is limited to the "New method for bypassing creative moderation" lesson only.
-          </p>
-          <p className="text-sm text-gray-400 mb-4">
-            <span className="font-semibold">Access level:</span> Creative Push Only
-          </p>
-          <p className="text-gray-300">
-            To get access to this lesson, please contact us:
-          </p>
-        </div>
+        <div className="p-8">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center">
+              <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+          </div>
 
-        <div className="flex gap-3">
-          <a
-            href="https://t.me/Mar_ko_y"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 bg-[#0088cc] hover:bg-[#006ba3] text-white px-6 py-3 rounded-lg transition-colors text-center font-medium flex items-center justify-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.201 1.647-1.073 5.647-1.514 7.477-.172.74-.51 1.017-.837 1.041-.706.057-1.243-.465-1.928-.91-1.068-.693-1.673-1.124-2.708-1.8-1.201-.785-.423-1.216.262-1.92.179-.18 3.247-2.977 3.307-3.23.008-.031.015-.148-.057-.207-.072-.059-.177-.038-.254-.023-.109.023-1.844 1.174-5.204 3.447-.493.343-.939.509-1.34.5-.442-.011-1.29-.249-1.92-.454-.773-.254-1.388-.388-1.335-.82.028-.216.406-.438 1.117-.668 4.448-1.938 7.407-3.215 8.876-3.832 4.183-1.783 5.049-2.093 5.616-2.106.127-.003.411.029.595.172.165.129.211.302.233.421.022.119.048.39.027.601z"/>
-            </svg>
-            Contact on Telegram
-          </a>
-          <button
-            onClick={onClose}
-            className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors font-medium"
-          >
-            Close
-          </button>
+          <h2 className="text-2xl font-bold text-white text-center mb-4">
+            Access Restricted
+          </h2>
+          
+          <div className="space-y-4 mb-6">
+            <p className="text-gray-300 text-center leading-relaxed">
+              Your access is limited to the <span className="text-red-400 font-semibold">"New method for bypassing creative moderation"</span> lesson only.
+            </p>
+            
+            <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+              <p className="text-sm text-gray-400 text-center">
+                Current access level:<br />
+                <span className="text-white font-semibold">Creative Push Only</span>
+              </p>
+            </div>
+
+            <p className="text-gray-300 text-center text-sm">
+              Want to unlock full access to all lessons?
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <a
+              href="https://t.me/Mar_ko_y"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 text-center shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transform hover:scale-105"
+            >
+              <span className="flex items-center justify-center gap-2">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+                Contact on Telegram
+              </span>
+            </a>
+            
+            <button
+              onClick={onClose}
+              className="block w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>

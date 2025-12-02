@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error?.message === 'Health check timeout') {
         console.warn('AuthContext: Health check timeout');
       } else {
-        console.error('💥 AuthContext: Health check failed:', error);
+      console.error('💥 AuthContext: Health check failed:', error);
       }
       return false;
     }
@@ -96,9 +96,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
           const profileResult = await Promise.race([
             supabase
-              .from('profiles')
-              .select('id, name, role, created_at, is_approved, access_level')
-              .eq('id', session.user.id)
+          .from('profiles')
+          .select('id, name, role, created_at, is_approved, access_level')
+          .eq('id', session.user.id)
               .single(),
             new Promise<{ data: null, error: { message: string } }>((_, reject) => 
               setTimeout(() => reject(new Error('Profile check timeout')), 10000)
@@ -108,32 +108,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const { data: profile, error: profileError } = profileResult;
 
           if (profileError && profileError.message !== 'Profile check timeout') {
-            console.error('❌ AuthContext: Profile error:', profileError);
+          console.error('❌ AuthContext: Profile error:', profileError);
             if (attempt >= 3) {
               setUser(null);
               setIsInitializing(false);
               return;
             }
-            throw profileError;
-          }
+          throw profileError;
+        }
 
-          if (profile && profile.is_approved) {
-            const userObj: User = {
-              id: profile.id,
-              email: session.user.email!,
-              password: '',
-              name: profile.name,
-              role: profile.role,
-              access_level: profile.access_level,
-              created_at: profile.created_at,
-              lastLogin: new Date(),
-              isApproved: true,
-            };
-            setUser(userObj);
-          } else {
-            setUser(null);
+        if (profile && profile.is_approved) {
+          const userObj: User = {
+            id: profile.id,
+            email: session.user.email!,
+            password: '',
+            name: profile.name,
+            role: profile.role,
+            access_level: profile.access_level,
+            created_at: profile.created_at,
+            lastLogin: new Date(),
+            isApproved: true,
+          };
+          setUser(userObj);
+        } else {
+          setUser(null);
             try {
-              await supabase.auth.signOut();
+          await supabase.auth.signOut();
             } catch (signOutError) {
               console.error('Error signing out:', signOutError);
             }
@@ -185,21 +185,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const initializeAuth = async () => {
       try {
-        await initializeAuthWithRetry();
-        
+      await initializeAuthWithRetry();
+      
         if (!initialCheckCompleted && isMounted) {
           const subscriptionResult = supabase.auth.onAuthStateChange(async (event, session) => {
             if (!isMounted) return;
 
             try {
               if (!isMounted) return;
-              
-              if (session?.user) {
+
+          if (session?.user) {
                 const { data: profile, error: profileError } = await supabase
-                  .from('profiles')
-                  .select('id, name, role, created_at, is_approved, access_level')
-                  .eq('id', session.user.id)
-                  .single();
+              .from('profiles')
+              .select('id, name, role, created_at, is_approved, access_level')
+              .eq('id', session.user.id)
+              .single();
 
                 if (!isMounted) return;
 
@@ -220,28 +220,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
                 if (!isMounted) return;
 
-                if (profile && profile.is_approved) {
-                  const userObj: User = {
-                    id: profile.id,
-                    email: session.user.email!,
-                    password: '',
-                    name: profile.name,
-                    role: profile.role,
-                    access_level: profile.access_level,
-                    created_at: profile.created_at,
-                    lastLogin: new Date(),
-                    isApproved: true,
-                  };
+            if (profile && profile.is_approved) {
+              const userObj: User = {
+                id: profile.id,
+                email: session.user.email!,
+                password: '',
+                name: profile.name,
+                role: profile.role,
+                access_level: profile.access_level,
+                created_at: profile.created_at,
+                lastLogin: new Date(),
+                isApproved: true,
+              };
                   if (isMounted) {
-                    setUser(userObj);
+              setUser(userObj);
                   }
-                } else {
+            } else {
                   if (isMounted) {
-                    setUser(null);
+              setUser(null);
                   }
-                  if (event !== 'SIGNED_OUT') {
+              if (event !== 'SIGNED_OUT') {
                     try {
-                      await supabase.auth.signOut();
+                await supabase.auth.signOut();
                     } catch (signOutError) {
                       console.error('Error signing out:', signOutError);
                     }
@@ -263,12 +263,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (subscriptionResult) {
             if (subscriptionResult.data?.subscription) {
               authSubscription = subscriptionResult.data.subscription;
-            } else {
+          } else {
               authSubscription = subscriptionResult as any;
             }
           }
-          
-          initialCheckCompleted = true;
+        
+        initialCheckCompleted = true;
         }
       } catch (error) {
         console.error('AuthContext: Error initializing auth:', error);
@@ -324,8 +324,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const loginResult = await Promise.race([
         supabase.auth.signInWithPassword({
-          email: credentials.email,
-          password: credentials.password,
+        email: credentials.email,
+        password: credentials.password,
         }),
         new Promise<{ data: null, error: { message: string } }>((_, reject) => 
           setTimeout(() => reject(new Error('Login timeout')), 15000)
@@ -338,17 +338,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (error.message === 'Invalid login credentials') {
           try {
             const { data: pendingRequests, error: pendingError } = await supabase
-              .from('registration_requests')
-              .select('id')
-              .eq('email', credentials.email);
+            .from('registration_requests')
+            .select('id')
+            .eq('email', credentials.email);
 
             if (!pendingError && pendingRequests && pendingRequests.length > 0) {
-              return {
-                success: false,
-                message: 'Your registration is pending approval.',
-                isPending: true,
-                requestId: pendingRequests[0].id,
-              };
+            return {
+              success: false,
+              message: 'Your registration is pending approval.',
+              isPending: true,
+              requestId: pendingRequests[0].id,
+            };
             }
           } catch (pendingErr) {
             console.error('Error checking pending requests:', pendingErr);
@@ -364,10 +364,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data?.user) {
         try {
           const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('id, name, role, created_at, is_approved, access_level')
-            .eq('id', data.user.id)
-            .single();
+          .from('profiles')
+          .select('id, name, role, created_at, is_approved, access_level')
+          .eq('id', data.user.id)
+          .single();
           
           if (profileError) {
             console.error('Profile fetch error:', profileError);
@@ -382,21 +382,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             };
           }
           
-          if (profile && profile.is_approved) {
-            const userObj: User = {
-              id: profile.id,
-              email: data.user.email!,
-              password: '',
-              name: profile.name,
-              role: profile.role,
-              access_level: profile.access_level,
-              created_at: profile.created_at,
-              lastLogin: new Date(),
-              isApproved: true,
-            };
-            setUser(userObj);
-            return { success: true };
-          } else {
+        if (profile && profile.is_approved) {
+          const userObj: User = {
+            id: profile.id,
+            email: data.user.email!,
+            password: '',
+            name: profile.name,
+            role: profile.role,
+            access_level: profile.access_level,
+            created_at: profile.created_at,
+            lastLogin: new Date(),
+            isApproved: true,
+          };
+          setUser(userObj);
+          return { success: true };
+        } else {
             try {
               await supabase.auth.signOut();
             } catch (signOutError) {
@@ -410,7 +410,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (profileErr) {
           console.error('Error processing profile:', profileErr);
           try {
-            await supabase.auth.signOut();
+          await supabase.auth.signOut();
           } catch (signOutError) {
             console.error('Error signing out:', signOutError);
           }
@@ -439,8 +439,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     try {
       setIsLoading(true);
-      await supabase.auth.signOut();
-      setUser(null);
+    await supabase.auth.signOut();
+    setUser(null);
     } catch (error) {
       console.error('Logout error:', error);
       setUser(null);
