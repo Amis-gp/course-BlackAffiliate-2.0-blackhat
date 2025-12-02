@@ -83,8 +83,6 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                 className={`border rounded-lg transition-all duration-200 ${
                   isDimmed 
                     ? 'border-gray-900/50 opacity-50' 
-                    : isSection4 && isLevel6
-                    ? 'border-primary/50 shadow-lg shadow-primary/10'
                     : 'border-gray-800'
                 }`}
               >
@@ -93,15 +91,11 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                   className={`w-full p-4 text-left flex items-center justify-between transition-colors duration-200 rounded-lg ${
                     isDimmed
                       ? 'hover:bg-gray-900/50'
-                      : isSection4 && isLevel6
-                      ? 'bg-primary/10 hover:bg-primary/20'
                       : 'hover:bg-gray-800'
                   }`}
                 >
                   <span className={`font-semibold ${
-                    isSection4 && isLevel6
-                      ? 'text-primary'
-                      : isDimmed
+                    isDimmed
                       ? 'text-gray-500'
                       : 'text-white'
                   }`}>
@@ -109,17 +103,13 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                   </span>
                   {isExpanded ? (
                     <ChevronDown className={`w-5 h-5 ${
-                      isSection4 && isLevel6
-                        ? 'text-primary'
-                        : isDimmed
+                      isDimmed
                         ? 'text-gray-600'
                         : 'text-primary'
                     }`} />
                   ) : (
                     <ChevronRight className={`w-5 h-5 ${
-                      isSection4 && isLevel6
-                        ? 'text-primary'
-                        : isDimmed
+                      isDimmed
                         ? 'text-gray-600'
                         : 'text-primary'
                     }`} />
