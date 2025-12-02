@@ -126,7 +126,7 @@ export default function Home() {
                   <div className="text-white mb-8 md:mb-12">
                     <span className="text-sm text-gray-300">Package: </span>
                     <span className="text-sm font-bold text-white">
-                      {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : user?.access_level === 3 ? 'VIP' : user?.access_level === 6 ? 'пропихання креативів only' : ''}
+                      {user?.access_level === 1 ? 'Basic' : user?.access_level === 2 ? 'Premium' : user?.access_level === 3 ? 'VIP' : user?.access_level === 6 ? 'Creative Push Only' : ''}
                     </span>
                   </div>
                 )}
