@@ -82,25 +82,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       };
       
-      // Перевіряємо чи є інший лідер
+      // Швидке визначення лідера (скорочені таймаути)
+      broadcastChannel.current?.postMessage({
+        type: 'LEADER_CHECK',
+        senderId: tabId.current
+      });
+      
+      // Якщо за 100ms немає відповіді - стаємо лідером
       setTimeout(() => {
         if (!isLeaderTab.current) {
+          isLeaderTab.current = true;
+          console.log(`👑 [Tab ${tabId.current}] Became leader (no response)`);
           broadcastChannel.current?.postMessage({
-            type: 'LEADER_CHECK',
+            type: 'LEADER_ANNOUNCE',
             senderId: tabId.current
           });
-          
-          // Якщо за 200ms немає відповіді - стаємо лідером
-          setTimeout(() => {
-            if (!isLeaderTab.current) {
-              isLeaderTab.current = true;
-              console.log(`👑 [Tab ${tabId.current}] Became leader (no response)`);
-              broadcastChannel.current?.postMessage({
-                type: 'LEADER_ANNOUNCE',
-                senderId: tabId.current
-              });
-            }
-          }, 200);
         }
       }, 100);
       
@@ -127,6 +123,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // Очищення невалідної сесії
+  const clearInvalidSession = useCallback(async () => {
+    console.log('🧹 Clearing invalid session...');
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.error('Error during signOut:', e);
+    }
+    // Очищаємо localStorage від старих токенів
+    if (typeof window !== 'undefined') {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      if (supabaseUrl) {
+        try {
+          const storageKey = `sb-${new URL(supabaseUrl).hostname.split('.')[0]}-auth-token`;
+          localStorage.removeItem(storageKey);
+        } catch (e) {
+          console.error('Error clearing localStorage:', e);
+        }
+      }
+    }
+    setUser(null);
+    broadcastAuthState(null);
+  }, [broadcastAuthState]);
+
   const checkSupabaseHealth = async (): Promise<boolean> => {
     try {
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -144,9 +164,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await Promise.race([
         supabase.auth.getSession(),
         new Promise<{ error: any }>((_, reject) => 
-          setTimeout(() => reject(new Error('Health check timeout')), 8000)
+          setTimeout(() => reject(new Error('Health check timeout')), 5000)
         )
       ]) as { error: any };
+      
+      // Обробка помилки Invalid Refresh Token
+      if (error && (
+        error.message?.includes('Invalid Refresh Token') ||
+        error.message?.includes('Refresh Token Not Found') ||
+        error.code === 'refresh_token_not_found'
+      )) {
+        console.warn('🔑 Invalid refresh token detected, clearing session');
+        await clearInvalidSession();
+        return true; // Повертаємо true, щоб продовжити ініціалізацію (без сесії)
+      }
       
       const isHealthy = !error;
       if (error && error.message !== 'Health check timeout') {
@@ -202,6 +233,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ]) as { data: { session: any }, error: any };
       
       const { data: { session }, error } = sessionResult;
+      
+      // Обробка помилки Invalid Refresh Token
+      if (error && (
+        error.message?.includes('Invalid Refresh Token') ||
+        error.message?.includes('Refresh Token Not Found') ||
+        error.code === 'refresh_token_not_found'
+      )) {
+        console.warn('🔑 Invalid refresh token in session check, clearing session');
+        await clearInvalidSession();
+        setIsInitializing(false);
+        return;
+      }
       
       if (error && error.message !== 'Session check timeout') {
         console.error('❌ AuthContext: Session error:', error);
@@ -312,7 +355,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Ініціалізуємо BroadcastChannel першим
     initBroadcastChannel();
     
-    // Визначаємо лідера перед ініціалізацією
+    // Визначаємо лідера перед ініціалізацією (швидкий таймаут)
     const checkLeaderTimeout = setTimeout(() => {
       if (!isLeaderTab.current) {
         isLeaderTab.current = true;
@@ -324,18 +367,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           });
         }
       }
-    }, 500);
+    }, 150);
 
     const initializeAuth = async () => {
       try {
-        // Чекаємо, поки визначиться лідер
-        await new Promise(resolve => setTimeout(resolve, 600));
+        // Чекаємо, поки визначиться лідер (скорочено з 600ms до 200ms)
+        await new Promise(resolve => setTimeout(resolve, 200));
         
       await initializeAuthWithRetry();
       
         if (!initialCheckCompleted && isMounted) {
           const subscriptionResult = supabase.auth.onAuthStateChange(async (event, session) => {
             if (!isMounted) return;
+            
+            console.log(`🔔 [Tab ${tabId.current}] Auth state change: ${event}`);
+            
+            // Обробка помилки токена для всіх вкладок
+            if (event === 'TOKEN_REFRESHED' && !session) {
+              console.warn('🔑 Token refresh failed, clearing session');
+              setUser(null);
+              broadcastAuthState(null);
+              return;
+            }
             
             // Тільки leader обробляє auth state changes
             if (!isLeaderTab.current) {
