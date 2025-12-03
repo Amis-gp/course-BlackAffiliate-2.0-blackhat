@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { User, LoginCredentials, AuthContextType, RegisterCredentials, RegistrationRequest, AccessLevel } from '@/types/auth';
 import { supabase } from '@/lib/supabase';
 import type { AuthUser } from '@supabase/supabase-js';
@@ -10,6 +10,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID || '';
 
+// BroadcastChannel для синхронізації між вкладками
+const AUTH_CHANNEL_NAME = 'blackaffiliate-auth-sync';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
@@ -17,6 +20,112 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
   const [loadingStage, setLoadingStage] = useState('Connecting...');
   const [retryCount, setRetryCount] = useState(0);
+  
+  // Refs для синхронізації між вкладками
+  const broadcastChannel = useRef<BroadcastChannel | null>(null);
+  const isLeaderTab = useRef<boolean>(false);
+  const tabId = useRef<string>(Math.random().toString(36).substring(7));
+
+  // Ініціалізація BroadcastChannel для синхронізації між вкладками
+  const initBroadcastChannel = useCallback(() => {
+    if (typeof window === 'undefined' || typeof BroadcastChannel === 'undefined') {
+      console.log('🌐 BroadcastChannel not supported, running in single-tab mode');
+      isLeaderTab.current = true;
+      return;
+    }
+
+    try {
+      broadcastChannel.current = new BroadcastChannel(AUTH_CHANNEL_NAME);
+      
+      // Слухаємо повідомлення від інших вкладок
+      broadcastChannel.current.onmessage = (event) => {
+        const { type, data, senderId } = event.data;
+        
+        // Ігноруємо власні повідомлення
+        if (senderId === tabId.current) return;
+        
+        console.log(`📨 [Tab ${tabId.current}] Received message:`, type);
+        
+        switch (type) {
+          case 'LEADER_ANNOUNCE':
+            // Інша вкладка стала лідером
+            isLeaderTab.current = false;
+            console.log(`👑 [Tab ${tabId.current}] Leader is now: ${senderId}`);
+            break;
+            
+          case 'AUTH_STATE_UPDATE':
+            // Оновлення стану користувача від лідера
+            console.log(`🔄 [Tab ${tabId.current}] Syncing auth state from leader`);
+            if (data.user) {
+              setUser(data.user);
+            } else {
+              setUser(null);
+            }
+            setIsInitializing(false);
+            break;
+            
+          case 'LOGOUT':
+            // Вилогінення з іншої вкладки
+            console.log(`🚪 [Tab ${tabId.current}] Logout from another tab`);
+            setUser(null);
+            break;
+            
+          case 'LEADER_CHECK':
+            // Перевірка чи є лідер
+            if (isLeaderTab.current) {
+              broadcastChannel.current?.postMessage({
+                type: 'LEADER_ANNOUNCE',
+                senderId: tabId.current
+              });
+            }
+            break;
+        }
+      };
+      
+      // Перевіряємо чи є інший лідер
+      setTimeout(() => {
+        if (!isLeaderTab.current) {
+          broadcastChannel.current?.postMessage({
+            type: 'LEADER_CHECK',
+            senderId: tabId.current
+          });
+          
+          // Якщо за 200ms немає відповіді - стаємо лідером
+          setTimeout(() => {
+            if (!isLeaderTab.current) {
+              isLeaderTab.current = true;
+              console.log(`👑 [Tab ${tabId.current}] Became leader (no response)`);
+              broadcastChannel.current?.postMessage({
+                type: 'LEADER_ANNOUNCE',
+                senderId: tabId.current
+              });
+            }
+          }, 200);
+        }
+      }, 100);
+      
+      console.log(`🌐 [Tab ${tabId.current}] BroadcastChannel initialized`);
+    } catch (error) {
+      console.error('Failed to initialize BroadcastChannel:', error);
+      isLeaderTab.current = true; // Fallback до single-tab режиму
+    }
+  }, []);
+
+  // Відправка оновлення стану всім вкладкам
+  const broadcastAuthState = useCallback((userData: User | null) => {
+    if (broadcastChannel.current && isLeaderTab.current) {
+      try {
+        broadcastChannel.current.postMessage({
+          type: 'AUTH_STATE_UPDATE',
+          data: { user: userData },
+          senderId: tabId.current
+        });
+        console.log(`📤 [Tab ${tabId.current}] Broadcasted auth state`);
+      } catch (error) {
+        console.error('Failed to broadcast auth state:', error);
+      }
+    }
+  }, []);
 
   const checkSupabaseHealth = async (): Promise<boolean> => {
     try {
@@ -35,7 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await Promise.race([
         supabase.auth.getSession(),
         new Promise<{ error: any }>((_, reject) => 
-          setTimeout(() => reject(new Error('Health check timeout')), 5000)
+          setTimeout(() => reject(new Error('Health check timeout')), 8000)
         )
       ]) as { error: any };
       
@@ -61,6 +170,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
+      // Тільки leader вкладка ініціалізує auth
+      if (!isLeaderTab.current) {
+        console.log(`⏳ [Tab ${tabId.current}] Waiting for leader to initialize auth...`);
+        setLoadingStage('Syncing with other tabs...');
+        // Інші вкладки чекають на повідомлення від leader
+        setTimeout(() => {
+          if (isInitializing) {
+            setLoadingStage('Waiting for sync... (this may take a moment)');
+          }
+        }, 3000);
+        return;
+      }
+
+      console.log(`👑 [Tab ${tabId.current}] Leader initializing auth (attempt ${attempt}/3)`);
       setLoadingStage(`Connecting... (attempt ${attempt}/3)`);
       setRetryCount(attempt);
 
@@ -74,7 +197,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const sessionResult = await Promise.race([
         supabase.auth.getSession(),
         new Promise<{ data: { session: null }, error: { message: string } }>((_, reject) => 
-          setTimeout(() => reject(new Error('Session check timeout')), 10000)
+          setTimeout(() => reject(new Error('Session check timeout')), 20000)
         )
       ]) as { data: { session: any }, error: any };
       
@@ -130,8 +253,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             isApproved: true,
           };
           setUser(userObj);
+          // Транслюємо стан іншим вкладкам
+          broadcastAuthState(userObj);
         } else {
           setUser(null);
+          broadcastAuthState(null);
             try {
           await supabase.auth.signOut();
             } catch (signOutError) {
@@ -183,13 +309,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let authSubscription: any = null;
     let isMounted = true;
 
+    // Ініціалізуємо BroadcastChannel першим
+    initBroadcastChannel();
+    
+    // Визначаємо лідера перед ініціалізацією
+    const checkLeaderTimeout = setTimeout(() => {
+      if (!isLeaderTab.current) {
+        isLeaderTab.current = true;
+        console.log(`👑 [Tab ${tabId.current}] Became leader (timeout)`);
+        if (broadcastChannel.current) {
+          broadcastChannel.current.postMessage({
+            type: 'LEADER_ANNOUNCE',
+            senderId: tabId.current
+          });
+        }
+      }
+    }, 500);
+
     const initializeAuth = async () => {
       try {
+        // Чекаємо, поки визначиться лідер
+        await new Promise(resolve => setTimeout(resolve, 600));
+        
       await initializeAuthWithRetry();
       
         if (!initialCheckCompleted && isMounted) {
           const subscriptionResult = supabase.auth.onAuthStateChange(async (event, session) => {
             if (!isMounted) return;
+            
+            // Тільки leader обробляє auth state changes
+            if (!isLeaderTab.current) {
+              console.log(`⏭️ [Tab ${tabId.current}] Skipping auth state change (not leader)`);
+              return;
+            }
 
             try {
               if (!isMounted) return;
@@ -207,6 +359,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                   console.error('AuthContext: Profile error in auth state change:', profileError);
                   if (isMounted) {
                     setUser(null);
+                    broadcastAuthState(null);
                   }
                   if (event !== 'SIGNED_OUT') {
                     try {
@@ -234,10 +387,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               };
                   if (isMounted) {
               setUser(userObj);
+                    broadcastAuthState(userObj);
                   }
             } else {
                   if (isMounted) {
               setUser(null);
+                    broadcastAuthState(null);
                   }
               if (event !== 'SIGNED_OUT') {
                     try {
@@ -250,12 +405,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               } else {
                 if (isMounted) {
                   setUser(null);
+                  broadcastAuthState(null);
                 }
               }
             } catch (error) {
               console.error('AuthContext: Error in auth state change handler:', error);
               if (isMounted) {
                 setUser(null);
+                broadcastAuthState(null);
               }
             }
           });
@@ -290,6 +447,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
+      clearTimeout(checkLeaderTimeout);
+      
+      // Закриваємо BroadcastChannel
+      if (broadcastChannel.current) {
+        try {
+          broadcastChannel.current.close();
+          console.log(`🌐 [Tab ${tabId.current}] BroadcastChannel closed`);
+        } catch (error) {
+          console.error('Error closing BroadcastChannel:', error);
+        }
+        broadcastChannel.current = null;
+      }
+      
       if (authSubscription) {
         try {
           const sub = authSubscription as any;
@@ -312,7 +482,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         authSubscription = null;
       }
     };
-  }, []);
+  }, [initBroadcastChannel]);
 
   const login = async (credentials: LoginCredentials): Promise<{ success: boolean; message?: string; isPending?: boolean; requestId?: string }> => {
     setIsLoading(true);
@@ -328,7 +498,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password: credentials.password,
         }),
         new Promise<{ data: null, error: { message: string } }>((_, reject) => 
-          setTimeout(() => reject(new Error('Login timeout')), 15000)
+          setTimeout(() => reject(new Error('Login timeout')), 30000)
         )
       ]) as { data: any, error: any };
 
@@ -395,6 +565,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             isApproved: true,
           };
           setUser(userObj);
+          // Транслюємо стан іншим вкладкам
+          broadcastAuthState(userObj);
           return { success: true };
         } else {
             try {
@@ -441,6 +613,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
     await supabase.auth.signOut();
     setUser(null);
+      
+      // Транслюємо вилогінення всім вкладкам
+      if (broadcastChannel.current) {
+        broadcastChannel.current.postMessage({
+          type: 'LOGOUT',
+          senderId: tabId.current
+        });
+      }
     } catch (error) {
       console.error('Logout error:', error);
       setUser(null);
