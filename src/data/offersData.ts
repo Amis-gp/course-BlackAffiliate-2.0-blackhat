@@ -163,6 +163,24 @@ export const offersData: Offer[] = [
     acceptedGeos: 'BE, DE, ES, IT, PL, CZ, IE, LU, CA, AU, HU, SK, CH, AT, SI, GR',
     traffic: 'All sources',
     notes: 'BE: Crash 150 / Slot 180 / Mix 150 | DE: Crash 150 / Slot 180 / Mix 160 | ES: Crash 120 / Slot 170 / Mix 140 | IT: Crash 120 / Slot 170 / Mix 140 | PL: Crash 90 / Slot 140 / Mix 110 | CZ: Crash 90 / Slot 120 / Mix 100 | IE: Crash 120 / Slot 150 / Mix 130 | LU: Crash 120 / Slot 150 / Mix 130 | CA: Crash 120 / Slot 170 / Mix 140 | AU: Crash 120 / Slot 190 / Mix 150 | HU: Crash 75 / Slot 110 / Mix 90 | SK: Crash 90 / Slot 130 / Mix 110 | CH: Crash 190 / Slot 230 / Mix 210 | AT: Crash 150 / Slot 180 / Mix 150 | SI: Crash 90 / Slot 130 / Mix 110 | GR: Crash 90 / Slot 130 / Mix 100'
+  },
+  {
+    id: '10',
+    name: 'Brazil (Exclusive)',
+    category: 'Gambling',
+    payout: '$15 CPA',
+    country: 'Brazil',
+    network: 'Direct',
+    metrics: 'Reg2Dep: 27–32% (Very Strong)',
+    website: '',
+    offerTypes: 'CPA',
+    targetAction: 'First Deposit',
+    testCap: 'Discussed separately',
+    hold: 'To be confirmed',
+    kpi: 'ROI +66% at $9 CPA',
+    acceptedGeos: 'Brazil',
+    traffic: 'Meta (Facebook) Traffic',
+    notes: 'CPC: $0.25–$0.45 | CPI: $0.70–$1.40 | CPR: $3.2–$4.5 | CPA: $7–$12 | Inst2Reg: ~25% | Reg2Dep: 27–32% (Strong) | Click2Dep: ~3.5% (1 dep per 28.5 clicks)'
   }
 ];
 
