@@ -89,7 +89,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-white mb-2">Course Login</h2>
+          <h2 className="text-3xl font-bold text-white mb-2">Login</h2>
           <p className="text-gray-400">Enter your credentials to access</p>
         </div>
 

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3, Megaphone } from 'lucide-react';
+import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3, Megaphone, Key, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { User as UserType, RegistrationRequest, ACCESS_LEVELS, AccessLevel } from '@/types/auth';
 import { AnnouncementWithReadStatus, CreateAnnouncementRequest } from '@/types/announcements';
@@ -131,8 +131,19 @@ export default function AdminPanel() {
     image_url: ''
   });
   const [isCreating, setIsCreating] = useState(false);
+  
+  // Стани для завантаження
+  const [isLoadingUsers, setIsLoadingUsers] = useState(true);
+  const [isLoadingRequests, setIsLoadingRequests] = useState(true);
+  const [isLoadingAnnouncements, setIsLoadingAnnouncements] = useState(true);
+  
+  // Стани для зміни пароля
+  const [changingPassword, setChangingPassword] = useState<string | null>(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
+    setIsLoadingUsers(true);
     try {
       const response = await fetch('/api/admin/users', {
         cache: 'no-store',
@@ -147,10 +158,13 @@ export default function AdminPanel() {
       }
     } catch (error) {
       console.error('Error loading users:', error);
+    } finally {
+      setIsLoadingUsers(false);
     }
-  };
+  }, []);
 
-  const loadAnnouncements = async () => {
+  const loadAnnouncements = useCallback(async () => {
+    setIsLoadingAnnouncements(true);
     try {
       console.log('[ADMIN] Loading announcements...');
       const token = await getAuthToken();
@@ -171,18 +185,26 @@ export default function AdminPanel() {
       }
     } catch (error) {
       console.error('Error loading announcements:', error);
+    } finally {
+      setIsLoadingAnnouncements(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
+      setIsLoadingRequests(true);
+      try {
       await loadRegistrationRequests();
       setRegistrationRequests(getRegistrationRequests());
+      } finally {
+        setIsLoadingRequests(false);
+      }
       loadUsers();
       loadAnnouncements();
     };
     loadData();
-  }, [loadRegistrationRequests, getRegistrationRequests]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -295,6 +317,40 @@ export default function AdminPanel() {
     } catch (error) {
       console.error('Error updating user access:', error);
       alert('Error updating user access level');
+    }
+  };
+
+  const handleChangePassword = async (userId: string) => {
+    if (!newPassword || newPassword.length < 6) {
+      alert('Password must be at least 6 characters');
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    try {
+      const response = await fetch('/api/admin/users', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
+        },
+        body: JSON.stringify({ id: userId, password: newPassword }),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        alert('Password updated successfully');
+        setChangingPassword(null);
+        setNewPassword('');
+      } else {
+        alert(data.message || 'Error updating password');
+      }
+    } catch (error) {
+      console.error('Error updating password:', error);
+      alert('Error updating password');
+    } finally {
+      setIsUpdatingPassword(false);
     }
   };
 
@@ -681,7 +737,17 @@ export default function AdminPanel() {
 
           {activeTab === 'users' && (
             <div className="space-y-4">
-              {users.map((userItem) => (
+              {isLoadingUsers ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                  <span className="ml-3 text-gray-400">Loading users...</span>
+                </div>
+              ) : users.length === 0 ? (
+                <div className="text-center py-8">
+                  <User className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+                  <p className="text-gray-400">No users found</p>
+                </div>
+              ) : users.map((userItem) => (
                 <div key={userItem.id} className="bg-gray-800 rounded-lg p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   <div className="flex items-start gap-4 w-full">
                     <div className="bg-gray-700 p-3 rounded-lg mt-1">
@@ -756,6 +822,17 @@ export default function AdminPanel() {
                       </button>
                     )}
                     <button
+                      onClick={() => {
+                        setChangingPassword(userItem.id);
+                        setNewPassword('');
+                      }}
+                      className="bg-yellow-600 hover:bg-yellow-700 p-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      title="Change password"
+                    >
+                      <Key className="w-4 h-4" />
+                      <span className="md:hidden">Password</span>
+                    </button>
+                    <button
                       onClick={() => handleDeleteUser(userItem.id)}
                       disabled={userItem.id === user?.id}
                       className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed p-2 rounded-lg transition-colors flex items-center justify-center gap-2"
@@ -765,6 +842,46 @@ export default function AdminPanel() {
                       <span className="md:hidden">Delete</span>
                     </button>
                   </div>
+                  
+                  {/* Форма зміни пароля */}
+                  {changingPassword === userItem.id && (
+                    <div className="mt-4 p-4 bg-gray-700 rounded-lg w-full">
+                      <h4 className="text-sm font-medium text-gray-300 mb-3">Change Password for {userItem.email}</h4>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <input
+                          type="password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          placeholder="New password (min 6 chars)"
+                          className="flex-1 px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleChangePassword(userItem.id)}
+                            disabled={isUpdatingPassword || newPassword.length < 6}
+                            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                          >
+                            {isUpdatingPassword ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <Check className="w-4 h-4" />
+                            )}
+                            Save
+                          </button>
+                          <button
+                            onClick={() => {
+                              setChangingPassword(null);
+                              setNewPassword('');
+                            }}
+                            className="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                          >
+                            <X className="w-4 h-4" />
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -772,7 +889,12 @@ export default function AdminPanel() {
 
           {activeTab === 'requests' && (
             <div className="space-y-4">
-              {registrationRequests.length === 0 ? (
+              {isLoadingRequests ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                  <span className="ml-3 text-gray-400">Loading requests...</span>
+                </div>
+              ) : registrationRequests.length === 0 ? (
                 <div className="text-center py-8">
                   <Clock className="w-12 h-12 text-gray-500 mx-auto mb-4" />
                   <p className="text-gray-400">No registration requests</p>
@@ -900,7 +1022,12 @@ export default function AdminPanel() {
               <div className="bg-gray-800 rounded-lg p-6">
                 <h3 className="text-xl font-semibold mb-4">Existing Announcements</h3>
                 <div className="space-y-4">
-                  {announcements.length === 0 ? (
+                  {isLoadingAnnouncements ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                      <span className="ml-3 text-gray-400">Loading announcements...</span>
+                    </div>
+                  ) : announcements.length === 0 ? (
                     <p className="text-gray-400 text-center py-8">No announcements yet</p>
                   ) : (
                     announcements.map((announcement) => (

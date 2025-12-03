@@ -82,32 +82,60 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { id, access_level, role } = await request.json();
+    const { id, access_level, role, password } = await request.json();
     
     if (!id) {
       return NextResponse.json({ success: false, message: 'User ID not specified' }, { status: 400 });
     }
     
+    // Зміна пароля через Supabase Auth Admin API
+    if (password) {
+      const { error: authError } = await supabaseAdmin.auth.admin.updateUserById(id, {
+        password: password
+      });
+      
+      if (authError) {
+        console.error('Error updating password:', authError);
+        return NextResponse.json({ success: false, message: 'Failed to update password' }, { status: 500 });
+      }
+      
+      // Якщо тільки пароль - повертаємо успіх
+      if (access_level === undefined && role === undefined) {
+        return NextResponse.json({ 
+          success: true, 
+          message: 'Password updated successfully'
+        });
+      }
+    }
+    
+    // Оновлення профілю (access_level, role)
     const updateData: any = {};
     if (access_level !== undefined) updateData.access_level = access_level;
     if (role !== undefined) updateData.role = role;
     
-    const { data: updatedProfile, error: profileError } = await supabaseAdmin
-      .from('profiles')
-      .update(updateData)
-      .eq('id', id)
-      .select()
-      .single();
-    
-    if (profileError) {
-      console.error('Error updating profile:', profileError);
-      return NextResponse.json({ success: false, message: 'Failed to update user profile' }, { status: 500 });
+    if (Object.keys(updateData).length > 0) {
+      const { data: updatedProfile, error: profileError } = await supabaseAdmin
+        .from('profiles')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (profileError) {
+        console.error('Error updating profile:', profileError);
+        return NextResponse.json({ success: false, message: 'Failed to update user profile' }, { status: 500 });
+      }
+      
+      return NextResponse.json({ 
+        success: true, 
+        message: password ? 'User and password updated' : 'User updated',
+        user: updatedProfile
+      });
     }
     
     return NextResponse.json({ 
       success: true, 
-      message: 'User updated',
-      user: updatedProfile
+      message: 'User updated'
     });
   } catch (error) {
     console.error('Error updating user:', error);
