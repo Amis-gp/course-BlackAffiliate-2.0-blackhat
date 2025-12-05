@@ -558,31 +558,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data, error } = loginResult;
 
       if (error) {
-        if (error.message === 'Invalid login credentials') {
-          try {
-            const checkResponse = await fetch('/api/admin/requests', {
-              method: 'GET',
-              cache: 'no-store',
-            });
-            
-            if (checkResponse.ok) {
-              const checkData = await checkResponse.json();
-              const pendingRequest = checkData.requests?.find((req: any) => req.email === credentials.email);
-              
-              if (pendingRequest) {
-                return {
-                  success: false,
-                  message: 'Your registration is pending approval.',
-                  isPending: true,
-                  requestId: pendingRequest.id,
-                };
-              }
-            }
-          } catch (pendingErr) {
-            console.error('Error checking pending requests:', pendingErr);
-          }
-        }
-        
         return {
           success: false,
           message: error.message || 'Login error. Please try again.',
@@ -776,11 +751,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadRegistrationRequests = useCallback(async () => {
     try {
       console.log('📋 AuthContext: Loading registration requests via API...');
+      
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      if (!token) {
+        console.error('❌ AuthContext: No access token available');
+        return;
+      }
+      
       const response = await fetch('/api/admin/requests', {
         method: 'GET',
         cache: 'no-store',
         headers: {
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache',
+          'Authorization': `Bearer ${token}`
         }
       });
       

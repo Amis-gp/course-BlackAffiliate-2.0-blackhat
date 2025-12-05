@@ -1,20 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { cookies } from 'next/headers';
 
 export async function GET(request: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const authCookie = cookieStore.getAll().find(cookie => cookie.name.includes('auth-token'));
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
     
-    if (!authCookie) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!token) {
+      const cookieStore = await cookies();
+      const allCookies = cookieStore.getAll();
+      const authCookie = allCookies.find(cookie => 
+        cookie.name.includes('auth-token') || cookie.name.includes('access-token')
+      );
+      
+      if (!authCookie) {
+        console.log('❌ No auth token found in header or cookies');
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
     
-    if (!user) {
+    if (userError || !user) {
+      console.log('❌ Invalid token or user not found:', userError?.message);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -25,10 +34,11 @@ export async function GET(request: NextRequest) {
       .single();
 
     if (!profile || profile.role !== 'admin') {
+      console.log('❌ User is not admin:', user.email);
       return NextResponse.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
     
-    console.log('📋 API: Fetching registration requests');
+    console.log('📋 API: Fetching registration requests for admin:', user.email);
     const { data: requests, error } = await supabaseAdmin
       .from('registration_requests')
       .select('*')
