@@ -560,18 +560,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) {
         if (error.message === 'Invalid login credentials') {
           try {
-            const { data: pendingRequests, error: pendingError } = await supabase
-            .from('registration_requests')
-            .select('id')
-            .eq('email', credentials.email);
-
-            if (!pendingError && pendingRequests && pendingRequests.length > 0) {
-            return {
-              success: false,
-              message: 'Your registration is pending approval.',
-              isPending: true,
-              requestId: pendingRequests[0].id,
-            };
+            const checkResponse = await fetch('/api/admin/requests', {
+              method: 'GET',
+              cache: 'no-store',
+            });
+            
+            if (checkResponse.ok) {
+              const checkData = await checkResponse.json();
+              const pendingRequest = checkData.requests?.find((req: any) => req.email === credentials.email);
+              
+              if (pendingRequest) {
+                return {
+                  success: false,
+                  message: 'Your registration is pending approval.',
+                  isPending: true,
+                  requestId: pendingRequest.id,
+                };
+              }
             }
           } catch (pendingErr) {
             console.error('Error checking pending requests:', pendingErr);
@@ -732,35 +737,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     
     try {
-      const { data: existingRequests, error: existingRequestError } = await supabase
-        .from('registration_requests')
-        .select('id')
-        .eq('email', credentials.email);
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: credentials.email,
+          password: credentials.password,
+          name: credentials.name,
+        }),
+      });
 
-      if (existingRequestError) {
-        console.error('Error checking for existing registration request:', existingRequestError);
-        setIsLoading(false);
-        return false;
-      }
-        
-      if (existingRequests && existingRequests.length > 0) {
-        setIsLoading(false);
-        return false;
-      }
+      const data = await response.json();
       
-      const { error } = await supabase
-        .from('registration_requests')
-        .insert([
-          {
-            email: credentials.email,
-            password: credentials.password,
-            name: credentials.name,
-            created_at: new Date().toISOString(),
-          }
-        ]);
-      
-      if (error) {
-        console.error('Registration error:', error);
+      if (!data.success) {
+        console.error('Registration error:', data.message);
         setIsLoading(false);
         return false;
       }
@@ -770,9 +762,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       setIsLoading(false);
       return true;
-      
-      setIsLoading(false);
-      return false;
     } catch (error) {
       console.error('Registration error:', error);
       setIsLoading(false);
@@ -786,18 +775,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loadRegistrationRequests = useCallback(async () => {
     try {
-      const { data, error } = await supabase
-        .from('registration_requests')
-        .select('*')
-        .order('created_at', { ascending: false });
+      console.log('📋 AuthContext: Loading registration requests via API...');
+      const response = await fetch('/api/admin/requests', {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
       
-      if (error) {
-        console.error('❌ AuthContext: Error loading requests:', error);
+      if (!response.ok) {
+        console.error('❌ AuthContext: API error:', response.status, response.statusText);
         return;
       }
       
-      if (data) {
-        const formattedRequests = data.map((req: any) => ({
+      const result = await response.json();
+      
+      if (result.success && result.requests) {
+        const formattedRequests = result.requests.map((req: any) => ({
           id: req.id,
           email: req.email,
           password: req.password,
@@ -805,7 +800,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           createdAt: req.created_at,
           status: 'pending' as const
         }));
+        console.log('✅ AuthContext: Loaded requests:', formattedRequests.length);
         setRegistrationRequests(formattedRequests);
+      } else {
+        console.warn('⚠️ AuthContext: No requests in response');
       }
     } catch (error) {
       console.error('💥 AuthContext: Catch block - Error loading requests:', error);
@@ -814,20 +812,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const remindAdmin = async (requestId: string): Promise<{ success: boolean; message: string }> => {
     try {
-      const { data: request, error: requestError } = await supabase
-        .from('registration_requests')
-        .select('email')
-        .eq('id', requestId)
-        .single();
+      const response = await fetch('/api/auth/remind', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ requestId }),
+      });
 
-      if (requestError || !request) {
-        console.error('Error fetching request for reminder:', requestError);
-        return { success: false, message: 'Request not found.' };
+      const data = await response.json();
+
+      if (!data.success) {
+        console.error('Error sending reminder:', data.message);
+        return { success: false, message: data.message || 'Failed to send reminder.' };
       }
 
-      const message = `🔔 Reminder: Registration Approval Needed\n\n📧 Email: ${request.email}\n\nPlease review the pending registration.`;
-      await sendTelegramNotification(message);
-      return { success: true, message: 'A reminder has been sent to the administrator.' };
+      return { success: true, message: data.message || 'A reminder has been sent to the administrator.' };
     } catch (error) {
       console.error('Error sending reminder:', error);
       return { success: false, message: 'Failed to send reminder.' };
@@ -836,29 +836,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const rejectRegistration = async (requestId: string): Promise<boolean> => {
     try {
-      const { data: request } = await supabase
-        .from('registration_requests')
-        .select('*')
-        .eq('id', requestId)
-        .single();
+      const response = await fetch('/api/admin/reject', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ requestId }),
+      });
+
+      const data = await response.json();
         
-      if (!request) {
-        return false;
-      }
-      
-      const { error } = await supabase
-        .from('registration_requests')
-        .delete()
-        .eq('id', requestId);
-        
-      if (error) {
-        console.error('Error deleting request:', error);
+      if (!data.success) {
+        console.error('Error rejecting request:', data.message);
         return false;
       }
       
       setRegistrationRequests(prev => prev.filter(r => r.id !== requestId));
       
-      const message = `❌ <b>Registration rejected</b>\n\n📧 Email: ${request.email}`;
+      const message = `❌ <b>Registration rejected</b>\n\n📧 Email: ${data.request.email}`;
       await sendTelegramNotification(message);
       
       return true;

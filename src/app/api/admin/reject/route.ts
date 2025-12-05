@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export async function POST(request: NextRequest) {
   try {
     const { requestId } = await request.json();
     
-    const { data: requestToReject, error: fetchError } = await supabase
+    const { data: requestToReject, error: fetchError } = await supabaseAdmin
       .from('registration_requests')
       .select('*')
       .eq('id', requestId)
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'Request not found' }, { status: 404 });
     }
     
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await supabaseAdmin
       .from('registration_requests')
       .delete()
       .eq('id', requestId);

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID;
@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     const { requestId } = await request.json();
     console.log('Received requestId:', requestId);
     
-    const { data: registrationRequest, error: requestError } = await supabase
+    const { data: registrationRequest, error: requestError } = await supabaseAdmin
       .from('registration_requests')
       .select('*')
       .eq('id', requestId)

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export async function POST(request: NextRequest) {
   console.log('🔐 API Login: Request received');
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
       
       if (authError.message.includes('Invalid login credentials')) {
         console.log('🔍 API Login: Checking registration requests');
-        const { data: registrationRequest, error: requestError } = await supabase
+        const { data: registrationRequest, error: requestError } = await supabaseAdmin
           .from('registration_requests')
           .select('*')
           .eq('email', email)
