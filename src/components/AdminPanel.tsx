@@ -193,7 +193,6 @@ export default function AdminPanel() {
   const loadRequests = useCallback(async () => {
     setIsLoadingRequests(true);
     try {
-      console.log('📋 AdminPanel: Loading registration requests...');
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
       
@@ -227,10 +226,8 @@ export default function AdminPanel() {
           createdAt: req.created_at,
           status: 'pending' as const
         }));
-        console.log('✅ AdminPanel: Loaded requests:', formattedRequests.length);
         setRegistrationRequests(formattedRequests);
       } else {
-        console.warn('⚠️ AdminPanel: No requests in response');
         setRegistrationRequests([]);
       }
     } catch (error) {
@@ -928,9 +925,6 @@ export default function AdminPanel() {
 
           {activeTab === 'requests' && (
             <div className="space-y-4">
-              <div className="text-xs text-gray-500 mb-2">
-                Debug: {registrationRequests.length} requests loaded, loading: {isLoadingRequests ? 'yes' : 'no'}
-              </div>
               {isLoadingRequests ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -940,7 +934,6 @@ export default function AdminPanel() {
                 <div className="text-center py-8">
                   <Clock className="w-12 h-12 text-gray-500 mx-auto mb-4" />
                   <p className="text-gray-400">No registration requests</p>
-                  <p className="text-xs text-gray-500 mt-2">Loaded: {registrationRequests.length} requests</p>
                 </div>
               ) : (
                 registrationRequests.map((request) => (
