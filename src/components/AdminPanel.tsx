@@ -104,7 +104,7 @@ async function getAuthToken(): Promise<string | null> {
 }
 
 export default function AdminPanel() {
-  const { user, logout, getRegistrationRequests, loadRegistrationRequests, rejectRegistration } = useAuth();
+  const { user, logout, rejectRegistration } = useAuth();
   const [registrationRequests, setRegistrationRequests] = useState<RegistrationRequest[]>([]);
   const [users, setUsers] = useState<UserType[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -190,19 +190,60 @@ export default function AdminPanel() {
     }
   }, []);
 
-  useEffect(() => {
-    const loadData = async () => {
-      setIsLoadingRequests(true);
-      try {
-      await loadRegistrationRequests();
-      setRegistrationRequests(getRegistrationRequests());
-      } finally {
-        setIsLoadingRequests(false);
+  const loadRequests = useCallback(async () => {
+    setIsLoadingRequests(true);
+    try {
+      console.log('📋 AdminPanel: Loading registration requests...');
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
+      if (!token) {
+        console.error('❌ AdminPanel: No access token available');
+        return;
       }
-      loadUsers();
-      loadAnnouncements();
-    };
-    loadData();
+      
+      const response = await fetch('/api/admin/requests', {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        console.error('❌ AdminPanel: API error:', response.status, response.statusText);
+        return;
+      }
+      
+      const result = await response.json();
+      
+      if (result.success && result.requests) {
+        const formattedRequests = result.requests.map((req: any) => ({
+          id: req.id,
+          email: req.email,
+          password: req.password,
+          name: req.name,
+          createdAt: req.created_at,
+          status: 'pending' as const
+        }));
+        console.log('✅ AdminPanel: Loaded requests:', formattedRequests.length);
+        setRegistrationRequests(formattedRequests);
+      } else {
+        console.warn('⚠️ AdminPanel: No requests in response');
+        setRegistrationRequests([]);
+      }
+    } catch (error) {
+      console.error('💥 AdminPanel: Error loading requests:', error);
+    } finally {
+      setIsLoadingRequests(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadRequests();
+    loadUsers();
+    loadAnnouncements();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -275,8 +316,7 @@ export default function AdminPanel() {
       const data = await response.json();
 
       if (data.success) {
-        await loadRegistrationRequests();
-        setRegistrationRequests(getRegistrationRequests());
+        await loadRequests();
         await loadUsers();
       } else {
         alert(data.message || 'Error approving request');
@@ -290,8 +330,7 @@ export default function AdminPanel() {
   const handleRejectRequest = async (requestId: string) => {
     const success = await rejectRegistration(requestId);
     if (success) {
-      await loadRegistrationRequests();
-      setRegistrationRequests(getRegistrationRequests());
+      await loadRequests();
     }
   };
 
@@ -889,6 +928,9 @@ export default function AdminPanel() {
 
           {activeTab === 'requests' && (
             <div className="space-y-4">
+              <div className="text-xs text-gray-500 mb-2">
+                Debug: {registrationRequests.length} requests loaded, loading: {isLoadingRequests ? 'yes' : 'no'}
+              </div>
               {isLoadingRequests ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -898,6 +940,7 @@ export default function AdminPanel() {
                 <div className="text-center py-8">
                   <Clock className="w-12 h-12 text-gray-500 mx-auto mb-4" />
                   <p className="text-gray-400">No registration requests</p>
+                  <p className="text-xs text-gray-500 mt-2">Loaded: {registrationRequests.length} requests</p>
                 </div>
               ) : (
                 registrationRequests.map((request) => (
