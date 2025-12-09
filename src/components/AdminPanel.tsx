@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3, Megaphone, Key, Loader2 } from 'lucide-react';
+import { User, Plus, Trash2, Mail, Shield, Calendar, ArrowLeft, Clock, Check, X, Bell, Edit3, Megaphone, Key, Loader2, Circle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { User as UserType, RegistrationRequest, ACCESS_LEVELS, AccessLevel } from '@/types/auth';
 import { AnnouncementWithReadStatus, CreateAnnouncementRequest } from '@/types/announcements';
@@ -842,6 +842,31 @@ export default function AdminPanel() {
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
                           <span>Created: {new Date(userItem.created_at).toLocaleDateString('en-US')}</span>
+                        </div>
+                        {userItem.last_seen ? (
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4" />
+                            <span>Last seen: {new Date(userItem.last_seen).toLocaleString('en-US', {
+                              timeZone: 'Europe/Warsaw',
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              hour12: false
+                            })}</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-gray-500" />
+                            <span className="text-gray-500">Never</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2">
+                          <Circle className={`w-3 h-3 ${userItem.is_active ? 'text-green-500 fill-green-500' : 'text-gray-500 fill-gray-500'}`} />
+                          <span className={userItem.is_active ? 'text-green-400' : 'text-gray-500'}>
+                            {userItem.is_active ? 'Active' : 'Offline'}
+                          </span>
                         </div>
                       </div>
                     </div>

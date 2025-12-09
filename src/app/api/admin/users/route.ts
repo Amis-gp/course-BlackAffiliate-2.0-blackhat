@@ -5,8 +5,22 @@ export async function GET(request: NextRequest) {
   try {
     const { data: users, error } = await supabaseAdmin
       .from('profiles')
-      .select('id, email, name, role, created_at, access_level')
+      .select('id, email, name, role, created_at, access_level, last_seen, is_active')
       .order('created_at', { ascending: false });
+    
+    if (users) {
+      const now = new Date();
+      const twoMinutesAgo = new Date(now.getTime() - 2 * 60 * 1000);
+      
+      users.forEach((user: any) => {
+        if (user.last_seen) {
+          const lastSeen = new Date(user.last_seen);
+          user.is_active = lastSeen > twoMinutesAgo;
+        } else {
+          user.is_active = false;
+        }
+      });
+    }
     
     if (error) {
       console.error('Error fetching users:', error);
@@ -114,22 +128,22 @@ export async function PUT(request: NextRequest) {
     if (role !== undefined) updateData.role = role;
     
     if (Object.keys(updateData).length > 0) {
-      const { data: updatedProfile, error: profileError } = await supabaseAdmin
-        .from('profiles')
-        .update(updateData)
-        .eq('id', id)
-        .select()
-        .single();
-      
-      if (profileError) {
-        console.error('Error updating profile:', profileError);
-        return NextResponse.json({ success: false, message: 'Failed to update user profile' }, { status: 500 });
-      }
-      
-      return NextResponse.json({ 
-        success: true, 
+    const { data: updatedProfile, error: profileError } = await supabaseAdmin
+      .from('profiles')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (profileError) {
+      console.error('Error updating profile:', profileError);
+      return NextResponse.json({ success: false, message: 'Failed to update user profile' }, { status: 500 });
+    }
+    
+    return NextResponse.json({ 
+      success: true, 
         message: password ? 'User and password updated' : 'User updated',
-        user: updatedProfile
+      user: updatedProfile
       });
     }
     

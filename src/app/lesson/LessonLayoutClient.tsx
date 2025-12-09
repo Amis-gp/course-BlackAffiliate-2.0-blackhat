@@ -153,10 +153,10 @@ export default function LessonLayoutClient({ courseData, children }: LessonLayou
                     <span className="text-center">Offers</span>
                   </div>
                 }>
-                  <Link href="/offers" className="flex flex-col items-center justify-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
-                    <Tag className="w-4 h-4" />
-                    <span className="text-center">Offers</span>
-                  </Link>
+                <Link href="/offers" className="flex flex-col items-center justify-center gap-1 text-xs bg-orange-600 hover:bg-orange-700 px-2 py-2 rounded-lg transition-colors text-white font-medium">
+                  <Tag className="w-4 h-4" />
+                  <span className="text-center">Offers</span>
+                </Link>
                 </AccessControl>
                 <AccessControl requiredLevel={2} fallback={
                   <div 

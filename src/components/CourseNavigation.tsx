@@ -40,12 +40,12 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
         setExpandedSections(['section-4']);
       }
     } else {
-      const section = courseData.find(s => s.lessons.some(l => l.id === currentLessonId));
-      if (section) {
-        setExpandedSections([section.id]);
-      } else if (courseData.length > 0) {
-        setExpandedSections([courseData[0].id]);
-      }
+    const section = courseData.find(s => s.lessons.some(l => l.id === currentLessonId));
+    if (section) {
+      setExpandedSections([section.id]);
+    } else if (courseData.length > 0) {
+      setExpandedSections([courseData[0].id]);
+    }
     }
   }, [currentLessonId, courseData, isLevel6]);
 
@@ -70,14 +70,14 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
 
   return (
     <>
-      <div className="w-72 m-4 rounded-lg overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
-        <div className="space-y-2">
-          {courseData.map((section) => {
-            const isExpanded = expandedSections.includes(section.id);
+    <div className="w-72 m-4 rounded-lg overflow-y-auto h-[calc(100vh-350px)] lg:h-auto">
+      <div className="space-y-2">
+        {courseData.map((section) => {
+          const isExpanded = expandedSections.includes(section.id);
             const isSection4 = section.id === 'section-4';
             const isDimmed = isLevel6 && !isSection4;
-            
-            return (
+          
+          return (
               <div 
                 key={section.id} 
                 className={`border rounded-lg transition-all duration-200 ${
@@ -86,14 +86,14 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                     : 'border-gray-800'
                 }`}
               >
-                <button
-                  onClick={() => toggleSection(section.id)}
+              <button
+                onClick={() => toggleSection(section.id)}
                   className={`w-full p-4 text-left flex items-center justify-between transition-colors duration-200 rounded-lg ${
                     isDimmed
                       ? 'hover:bg-gray-900/50'
                       : 'hover:bg-gray-800'
                   }`}
-                >
+              >
                   <span className={`font-semibold ${
                     isDimmed
                       ? 'text-gray-500'
@@ -101,20 +101,20 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                   }`}>
                     {section.title}
                   </span>
-                  {isExpanded ? (
+                {isExpanded ? (
                     <ChevronDown className={`w-5 h-5 ${
                       isDimmed
                         ? 'text-gray-600'
                         : 'text-primary'
                     }`} />
-                  ) : (
+                ) : (
                     <ChevronRight className={`w-5 h-5 ${
                       isDimmed
                         ? 'text-gray-600'
                         : 'text-primary'
                     }`} />
-                  )}
-                </button>
+                )}
+              </button>
               
               {isExpanded && (
                 <div className="border-t border-gray-800">
@@ -125,10 +125,10 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                     const lessonContent = (
                       <div className={`w-full p-3 text-left flex items-center space-x-3 transition-colors duration-200 ${isDisabled ? 'opacity-50 cursor-not-allowed' : isActive ? 'bg-primary/20 border-r-2 border-primary' : 'hover:bg-gray-800'} ${isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'}`}>
                         <span className={`${isDisabled || isLessonCompleted(lesson.id) ? 'text-gray-600' : 'text-primary'}`}>
-                          {getLessonIcon(lesson.type)}
-                        </span>
-                        <div className="flex-1">
-                          <div className="text-sm text-gray-400">#{index + 1}</div>
+                        {getLessonIcon(lesson.type)}
+                      </span>
+                      <div className="flex-1">
+                        <div className="text-sm text-gray-400">#{index + 1}</div>
                           <div className={`text-sm ${isDisabled || isLessonCompleted(lesson.id) ? 'text-gray-500' : 'text-white'}`}>{lesson.title}</div>
                         </div>
                       </div>
@@ -153,7 +153,7 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
                         onClick={() => onLessonSelect && onLessonSelect(lesson.id)}
                       >
                         {lessonContent}
-                      </Link>
+                    </Link>
                     );
                   })}
                 </div>
@@ -161,8 +161,8 @@ export default function CourseNavigation({ courseData, currentLessonId, onLesson
             </div>
           );
         })}
-        </div>
       </div>
+    </div>
 
       <AccessRestrictionModal
         isOpen={showAccessModal}

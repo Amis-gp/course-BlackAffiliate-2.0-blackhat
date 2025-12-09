@@ -537,6 +537,74 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [initBroadcastChannel]);
 
+  useEffect(() => {
+    if (!user || typeof window === 'undefined') return;
+
+    let heartbeatInterval: NodeJS.Timeout;
+    let visibilityHandler: () => void;
+    let beforeUnloadHandler: () => void;
+
+    const updateActivity = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.access_token) return;
+
+        await fetch('/api/activity', {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        });
+      } catch (error) {
+        console.error('Error updating activity:', error);
+      }
+    };
+
+    const markInactive = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.access_token) return;
+
+        await fetch('/api/activity/inactive', {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        }).catch(() => {});
+      } catch (error) {
+        console.error('Error marking inactive:', error);
+      }
+    };
+
+    updateActivity();
+
+    heartbeatInterval = setInterval(updateActivity, 60000);
+
+    visibilityHandler = () => {
+      if (document.visibilityState === 'visible') {
+        updateActivity();
+      } else {
+        markInactive();
+      }
+    };
+
+    beforeUnloadHandler = () => {
+      markInactive();
+    };
+
+    document.addEventListener('visibilitychange', visibilityHandler);
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+
+    return () => {
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval);
+      }
+      document.removeEventListener('visibilitychange', visibilityHandler);
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+      markInactive();
+    };
+  }, [user]);
+
   const login = async (credentials: LoginCredentials): Promise<{ success: boolean; message?: string; isPending?: boolean; requestId?: string }> => {
     setIsLoading(true);
     

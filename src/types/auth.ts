@@ -8,6 +8,8 @@ export interface User {
   created_at: string;
   lastLogin?: Date;
   isApproved: boolean;
+  last_seen?: string;
+  is_active?: boolean;
 }
 
 export interface LoginCredentials {
